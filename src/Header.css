@@ -1,0 +1,124 @@
+.pill-header-container {
+  position: fixed;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: auto;
+  max-width: 90vw;
+}
+
+.pill-header {
+  background: rgba(18, 18, 22, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 10px;
+  padding: 7px 14px;
+  box-shadow: none;
+}
+
+.pill-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pill-nav-item {
+  margin: 0;
+  padding: 0;
+}
+
+.pill-nav-link {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: rgba(255, 221, 221, 0.85);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 6px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+  transition: color 250ms ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.pill-nav-link.active {
+  color: #ffffff;
+}
+
+.nav-item-text {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  margin-right: -0.05em;
+}
+
+.bracket {
+  font-family: 'Yatra One', serif;
+  font-size: 1.15rem;
+  opacity: 0;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  position: relative;
+  top: 2px;
+  transition: color 250ms ease-in-out;
+}
+
+.pill-nav-link.active .bracket {
+  color: #ffffff;
+}
+
+.bracket.left {
+  margin-right: 8px;
+}
+
+.bracket.right {
+  margin-left: 8px;
+}
+
+.pill-nav-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .pill-header-container {
+    top: 18px;
+    max-width: 95vw;
+  }
+
+  .pill-nav-list {
+    gap: 10px;
+  }
+
+  .pill-nav-link {
+    font-size: 0.75rem;
+    padding: 4px 2px;
+  }
+
+  .bracket {
+    font-size: 0.85rem;
+    top: 1px;
+  }
+
+  .bracket.left {
+    margin-right: 6px;
+  }
+
+  .bracket.right {
+    margin-left: 6px;
+  }
+}
