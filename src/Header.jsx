@@ -14,63 +14,52 @@ export default function Header() {
   const itemsRef = useRef([]);
 
   useEffect(() => {
-    const anims = [];
-
     itemsRef.current.forEach((li) => {
       if (!li) return;
       const left = li.querySelector('.bracket.left');
       const right = li.querySelector('.bracket.right');
       if (!left || !right) return;
-
       gsap.set(left, { x: 15, opacity: 0 });
       gsap.set(right, { x: -15, opacity: 0 });
-
-      const bracketAnim = gsap.to([left, right], {
-        x: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power4.out',
-        paused: true,
-      });
-
-      const handleMouseEnter = () => {
-        if (window.innerWidth > 624) {
-          bracketAnim.timeScale(1).play();
-        }
-      };
-
-      const handleMouseLeave = () => {
-        bracketAnim.timeScale(3).reverse();
-      };
-
-      li.addEventListener('mouseenter', handleMouseEnter);
-      li.addEventListener('mouseleave', handleMouseLeave);
-
-      anims.push({ li, handleMouseEnter, handleMouseLeave, bracketAnim });
     });
-
-    return () => {
-      anims.forEach(({ li, handleMouseEnter, handleMouseLeave, bracketAnim }) => {
-        if (li) {
-          li.removeEventListener('mouseenter', handleMouseEnter);
-          li.removeEventListener('mouseleave', handleMouseLeave);
-        }
-        if (bracketAnim) {
-          bracketAnim.kill();
-        }
-      });
-    };
   }, []);
+
+  const handleItemMouseEnter = (index) => {
+    const li = itemsRef.current[index];
+    if (!li) return;
+    const left = li.querySelector('.bracket.left');
+    const right = li.querySelector('.bracket.right');
+    if (!left || !right) return;
+
+    gsap.to(left, { x: 0, opacity: 1, duration: 0.35, ease: 'power3.out', overwrite: 'auto' });
+    gsap.to(right, { x: 0, opacity: 1, duration: 0.35, ease: 'power3.out', overwrite: 'auto' });
+  };
+
+  const handleItemMouseLeave = (index) => {
+    const li = itemsRef.current[index];
+    if (!li) return;
+    const left = li.querySelector('.bracket.left');
+    const right = li.querySelector('.bracket.right');
+    if (!left || !right) return;
+
+    gsap.to(left, { x: 15, opacity: 0, duration: 0.2, ease: 'power2.in', overwrite: 'auto' });
+    gsap.to(right, { x: -15, opacity: 0, duration: 0.2, ease: 'power2.in', overwrite: 'auto' });
+  };
 
   return (
     <header className="pill-header-container">
       <nav className="pill-header" aria-label="Main Navigation">
+        <div className="pill-header-brand">
+          <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" />
+        </div>
         <ul className="pill-nav-list">
           {navItems.map((item, index) => (
             <li
               key={item.id}
               className="pill-nav-item"
               ref={(el) => (itemsRef.current[index] = el)}
+              onMouseEnter={() => handleItemMouseEnter(index)}
+              onMouseLeave={() => handleItemMouseLeave(index)}
             >
               <button
                 id={item.id}

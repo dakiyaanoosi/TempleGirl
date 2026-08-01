@@ -125,7 +125,7 @@ export default function Hero({ onOpenQrSidebar }) {
             rel="noopener noreferrer"
             className="store-btn-link"
           >
-            <img src="/appStore.svg.svg" alt="Download on the App Store" className="store-btn-img" />
+            <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" />
           </a>
           <a
             href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
@@ -133,7 +133,7 @@ export default function Hero({ onOpenQrSidebar }) {
             rel="noopener noreferrer"
             className="store-btn-link"
           >
-            <img src="/googlePlay.svg.svg" alt="Get it on Play Store" className="store-btn-img" />
+            <img src="/googlePlay.svg" alt="Get it on Play Store" className="store-btn-img" />
           </a>
           <button
             type="button"

@@ -4,8 +4,8 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
-  width: auto;
-  max-width: 90vw;
+  width: 70vw;
+  max-width: 1280px;
 }
 
 .pill-header {
@@ -13,8 +13,27 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 10px;
-  padding: 7px 14px;
+  padding: 12px 16px;
   box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pill-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  padding-left: 16px;
+}
+
+.header-brand-svg {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .pill-nav-list {
@@ -34,7 +53,7 @@
 .pill-nav-link {
   font-family: 'Manrope', sans-serif;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   color: rgba(255, 221, 221, 0.85);
   background: transparent;
@@ -67,6 +86,7 @@
 .bracket {
   font-family: 'Yatra One', serif;
   font-size: 1.15rem;
+  font-weight: 500;
   opacity: 0;
   user-select: none;
   display: inline-flex;
