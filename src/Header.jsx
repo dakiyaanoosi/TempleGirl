@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { handleRadialMouseMove } from './Hero';
 import './Header.css';
 
 export default function Header() {
@@ -56,7 +57,7 @@ export default function Header() {
           {navItems.map((item, index) => (
             <li
               key={item.id}
-              className="pill-nav-item"
+              className="pill-nav-item desktop-only"
               ref={(el) => (itemsRef.current[index] = el)}
               onMouseEnter={() => handleItemMouseEnter(index)}
               onMouseLeave={() => handleItemMouseLeave(index)}
@@ -73,7 +74,26 @@ export default function Header() {
               </button>
             </li>
           ))}
+          <li className="pill-nav-item subscribe-item">
+            <button
+              id="nav-subscribe"
+              type="button"
+              className={`subscribe-btn ${activeNav === 'SUBSCRIBE' ? 'active' : ''}`}
+              onClick={() => setActiveNav('SUBSCRIBE')}
+              onMouseMove={handleRadialMouseMove}
+              onMouseEnter={handleRadialMouseMove}
+              onMouseLeave={handleRadialMouseMove}
+            >
+              <span className="subscribe-btn-text">SUBSCRIBE</span>
+            </button>
+          </li>
         </ul>
+        <button type="button" className="mobile-menu-toggle" aria-label="Open Menu">
+          <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="1" y1="2" x2="21" y2="2" />
+            <line x1="1" y1="12" x2="21" y2="12" />
+          </svg>
+        </button>
       </nav>
     </header>
   );

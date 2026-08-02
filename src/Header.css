@@ -12,13 +12,14 @@
   background: rgba(18, 18, 22, 0.2);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: 10px;
-  padding: 12px 16px;
+  border-radius: 9999px;
+  padding: 10px 16px;
   box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  position: relative;
 }
 
 .pill-header-brand {
@@ -26,7 +27,7 @@
   align-items: center;
   gap: 8px;
   user-select: none;
-  padding-left: 16px;
+  margin: 0 16px;
 }
 
 .header-brand-svg {
@@ -39,7 +40,7 @@
 .pill-nav-list {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 8px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -114,7 +115,87 @@
   outline-offset: 4px;
 }
 
-@media (max-width: 640px) {
+.subscribe-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  border: none;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+  padding: 12px 20px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  white-space: nowrap;
+  isolation: isolate;
+  --x: 50%;
+  --y: 50%;
+  transition: color 0.35s ease;
+  margin-right: 8px;
+}
+
+.subscribe-btn::before {
+  content: '';
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: 0;
+  height: 0;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.subscribe-btn:hover::before {
+  width: 250px;
+  height: 250px;
+}
+
+.subscribe-btn:hover {
+  color: #000000;
+}
+
+.subscribe-btn.active {
+  background: #ffffff;
+  color: #000000;
+}
+
+.subscribe-btn-text {
+  position: relative;
+  z-index: 2;
+  transition: color 0.35s ease;
+}
+
+.subscribe-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 4px;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 6px 8px;
+  margin-left: 8px;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+@media (max-width: 1096px) {
   .pill-header-container {
     top: 18px;
     max-width: 95vw;
@@ -140,5 +221,43 @@
 
   .bracket.right {
     margin-left: 6px;
+  }
+
+  .subscribe-btn {
+    font-size: 0.75rem;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 896px) {
+  .pill-header-container {
+    top: 18px;
+    width: 90vw;
+    max-width: 95vw;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  .pill-header-brand {
+    position: static;
+    transform: none;
+    margin: 0 0 0 8px;
+  }
+
+  .pill-nav-list {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .subscribe-btn {
+    margin-right: 0;
   }
 }

@@ -12,6 +12,14 @@ const WORDS = [
   'bedtime.',
 ];
 
+export const handleRadialMouseMove = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  e.currentTarget.style.setProperty('--x', `${x}px`);
+  e.currentTarget.style.setProperty('--y', `${y}px`);
+};
+
 export default function Hero({ onOpenQrSidebar }) {
   const [index, setIndex] = useState(0);
   const wordRef = useRef(null);
@@ -88,14 +96,6 @@ export default function Hero({ onOpenQrSidebar }) {
     };
   }, [index]);
 
-  const handleQrMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    e.currentTarget.style.setProperty('--x', `${x}px`);
-    e.currentTarget.style.setProperty('--y', `${y}px`);
-  };
-
   const currentWord = WORDS[index];
 
   return (
@@ -139,8 +139,9 @@ export default function Hero({ onOpenQrSidebar }) {
             type="button"
             className="qr-code-btn"
             aria-label="QR Code"
-            onMouseEnter={handleQrMouseMove}
-            onMouseLeave={handleQrMouseMove}
+            onMouseMove={handleRadialMouseMove}
+            onMouseEnter={handleRadialMouseMove}
+            onMouseLeave={handleRadialMouseMove}
             onClick={onOpenQrSidebar}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon">
