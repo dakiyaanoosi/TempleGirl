@@ -12,8 +12,8 @@
   background: rgba(18, 18, 22, 0.2);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: 9999px;
-  padding: 10px 16px;
+  border-radius: 14px;
+  padding: 8px 8px 8px 16px;
   box-shadow: none;
   display: flex;
   align-items: center;
@@ -123,7 +123,7 @@
   justify-content: center;
   background: #000000;
   border: none;
-  border-radius: 20px;
+  border-radius: 14px;
   color: #ffffff;
   cursor: pointer;
   outline: none;
@@ -139,7 +139,7 @@
   --x: 50%;
   --y: 50%;
   transition: color 0.35s ease;
-  margin-right: 8px;
+  margin-right: 0;
 }
 
 .subscribe-btn::before {
@@ -226,6 +226,7 @@
   .subscribe-btn {
     font-size: 0.75rem;
     padding: 8px 16px;
+    border-radius: 8px;
   }
 }
 
@@ -238,19 +239,22 @@
 
   .mobile-menu-toggle {
     display: inline-flex;
-    margin-left: 4px;
-    margin-right: 4px;
+    order: 1;
+    margin: 0;
   }
 
   .pill-header-brand {
-    position: static;
-    transform: none;
-    margin: 0 0 0 8px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    order: 2;
   }
 
   .pill-nav-list {
+    order: 3;
     margin-left: auto;
-    gap: 8px;
+    gap: 0;
   }
 
   .desktop-only {
@@ -259,5 +263,6 @@
 
   .subscribe-btn {
     margin-right: 0;
+    border-radius: 8px;
   }
 }
