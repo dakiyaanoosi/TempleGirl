@@ -182,8 +182,8 @@ export default function Header() {
         if (subscribeBtnEl) {
           tl.fromTo(
             subscribeBtnEl,
-            { opacity: 0, y: 15 },
-            { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' },
+            { opacity: 0 },
+            { opacity: 1, duration: 0.32, ease: 'power2.out' },
             0.38
           );
         }

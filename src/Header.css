@@ -310,17 +310,17 @@
 }
 
 .mobile-nav-item .pill-nav-link {
-  color: rgba(18, 18, 22, 0.75);
+  color: rgba(18, 18, 22, 0.65);
   padding: 4px 0;
 }
 
 .mobile-nav-item .pill-nav-link.active,
 .mobile-nav-item .pill-nav-link:hover {
-  color: #121216;
+  color: #000;
 }
 
 .mobile-nav-item .pill-nav-link .bracket {
-  color: #121216;
+  color: #000;
 }
 
 .mobile-menu-brand {
