@@ -64,7 +64,7 @@ export default function QrSidebar({ isOpen, onClose }) {
               )}
             </div>
             <p className="qr-card-text">
-              Scan the QR code on the left to automatically open the App Store or Google Play, depending on your device.
+              Scan the QR code to automatically open the App Store or Google Play, depending on your device.
             </p>
           </div>
         </div>
