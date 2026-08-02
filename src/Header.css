@@ -244,15 +244,16 @@
   }
 
   .pill-header-brand {
-    position: static;
-    transform: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     margin: 0;
     order: 2;
   }
 
   .pill-nav-list {
     order: 3;
-    margin-left: 0;
+    margin-left: auto;
     gap: 0;
   }
 
