@@ -168,16 +168,6 @@ export default function Header() {
           0.32
         );
 
-        const mobileNavItems = menuContentEl.querySelectorAll('.mobile-nav-item');
-        if (mobileNavItems.length > 0) {
-          tl.fromTo(
-            mobileNavItems,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.32, stagger: 0.06, ease: 'power2.out' },
-            0.32
-          );
-        }
-
         const subscribeBtnEl = menuContentEl.querySelector('.mobile-subscribe-btn');
         if (subscribeBtnEl) {
           tl.fromTo(

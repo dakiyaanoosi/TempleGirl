@@ -14,7 +14,7 @@ body,
   background-color: #24100e;
 }
 
-canvas#shader6-canvas {
+canvas#shader4-canvas {
   display: block;
   width: 100vw;
   height: 100vh;
@@ -22,5 +22,16 @@ canvas#shader6-canvas {
   top: 0;
   left: 0;
   z-index: 0;
-  pointer-events: auto;
+  pointer-events: none;
+}
+
+canvas#shader6-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
 }
