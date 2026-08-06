@@ -218,7 +218,17 @@ export default function Header() {
             </button>
 
             <div className="pill-header-brand">
-              <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" />
+              <button
+                type="button"
+                className="pill-header-brand-btn"
+                onClick={() => {
+                  setActiveNav('Home');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                aria-label="Home"
+              >
+                <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" />
+              </button>
             </div>
 
             <ul className="pill-nav-list">
@@ -287,7 +297,18 @@ export default function Header() {
                 </ul>
 
                 <div className="mobile-menu-brand">
-                  <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="mobile-brand-svg" />
+                  <button
+                    type="button"
+                    className="mobile-menu-brand-btn"
+                    onClick={() => {
+                      setActiveNav('Home');
+                      closeMenu();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    aria-label="Home"
+                  >
+                    <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="mobile-brand-svg" />
+                  </button>
                 </div>
               </div>
 
