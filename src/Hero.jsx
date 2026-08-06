@@ -90,7 +90,6 @@ export default function Hero({ onOpenQrSidebar }) {
         'erase'
       );
 
-
     return () => {
       tl.kill();
     };
@@ -100,63 +99,81 @@ export default function Hero({ onOpenQrSidebar }) {
 
   return (
     <section className="hero-section">
-      <div className="hero-left-content">
-        <h1 className="hero-heading">
-          Bringing temples to life <br />
-          through{' '}
-          <span className="word-wrapper">
-            <span ref={wordRef} className="rotating-word">
-              {currentWord.split('').map((char, i) => (
-                <span key={`${index}-${i}`} className="letter">
-                  {char}
-                </span>
-              ))}
+      <div className="hero-top-container">
+        <div className="hero-left-content">
+          <h1 className="hero-heading">
+            Bringing temples to life <br />
+            through{' '}
+            <span className="word-wrapper">
+              <span ref={wordRef} className="rotating-word">
+                {currentWord.split('').map((char, i) => (
+                  <span key={`${index}-${i}`} className="letter">
+                    {char}
+                  </span>
+                ))}
+              </span>
             </span>
-          </span>
-        </h1>
-        <p className="hero-subtext">
-          <span className="subtext-line">Bedtime stories inspired by India's timeless temples,</span>{' '}
-          <span className="subtext-line">lovingly narrated by <span className="text-highlight">The Temple Girl</span> for curious young minds.</span>
-        </p>
-        <div className="hero-store-buttons">
-          <a
-            href="https://apps.apple.com/us/app/temple-girl-kids/id6772048283"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="store-btn-link"
-          >
-            <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" />
-          </a>
-          <a
-            href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="store-btn-link"
-          >
-            <img src="/googlePlay.svg" alt="Get it on Play Store" className="store-btn-img" />
-          </a>
-          <button
-            type="button"
-            className="qr-code-btn"
-            aria-label="QR Code"
-            onMouseMove={handleRadialMouseMove}
-            onMouseEnter={handleRadialMouseMove}
-            onMouseLeave={handleRadialMouseMove}
-            onClick={onOpenQrSidebar}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon">
-              <path fill="currentColor" d="M24 10.667H13.34V0H24v10.667Zm-2.665-8h-5.33V8h5.33V2.667ZM24 24H13.34V13.333H24V24Zm-2.665-8h-5.33v5.333h5.33V16ZM10.675 0v10.667H.012V0h10.661ZM2.678 8h5.33V2.667h-5.33V8Zm7.982 5.333H7.996V16h2.665v-2.667ZM7.996 16H5.33v2.667h2.666V16Zm2.665 2.667H7.996v2.666h2.665v-2.666Zm-5.33 0H2.664v2.666H5.33v-2.666Zm-2.666 2.666H0V24h2.665v-2.667Zm5.33 0H5.33V24h2.666v-2.667Zm-2.665-8H2.665V16H5.33v-2.667ZM2.665 16H0v2.667h2.665V16Z" />
-            </svg>
-          </button>
+          </h1>
+          <p className="hero-subtext">
+            <span className="subtext-line">Bedtime stories inspired by India's timeless temples,</span>{' '}
+            <span className="subtext-line">lovingly narrated by <span className="text-highlight">The Temple Girl</span> for curious young minds.</span>
+          </p>
+          <div className="hero-store-buttons">
+            <a
+              href="https://apps.apple.com/us/app/temple-girl-kids/id6772048283"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="store-btn-link"
+            >
+              <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" />
+            </a>
+            <a
+              href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="store-btn-link"
+            >
+              <img src="/googlePlay.svg" alt="Get it on Play Store" className="store-btn-img" />
+            </a>
+            <button
+              type="button"
+              className="qr-code-btn"
+              aria-label="QR Code"
+              onMouseMove={handleRadialMouseMove}
+              onMouseEnter={handleRadialMouseMove}
+              onMouseLeave={handleRadialMouseMove}
+              onClick={onOpenQrSidebar}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon">
+                <path fill="currentColor" d="M24 10.667H13.34V0H24v10.667Zm-2.665-8h-5.33V8h5.33V2.667ZM24 24H13.34V13.333H24V24Zm-2.665-8h-5.33v5.333h5.33V16ZM10.675 0v10.667H.012V0h10.661ZM2.678 8h5.33V2.667h-5.33V8Zm7.982 5.333H7.996V16h2.665v-2.667ZM7.996 16H5.33v2.667h2.666V16Zm2.665 2.667H7.996v2.666h2.665v-2.666Zm-5.33 0H2.664v2.666H5.33v-2.666Zm-2.666 2.666H0V24h2.665v-2.667Zm5.33 0H5.33V24h2.666v-2.667Zm-2.665-8H2.665V16H5.33v-2.667ZM2.665 16H0v2.667h2.665V16Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div className="hero-right-content">
+          <img src="/color.png" alt="Temple Girl Art" className="hero-image" />
         </div>
       </div>
-      <div className="hero-right-content">
-        <img src="/image.png" alt="Temple Girl Art" className="hero-image" />
+
+      {/* Bottom Stats Section */}
+      <div className="hero-stats-container">
+        <div className="stat-card">
+          <span className="stat-number">0</span>
+          <span className="stat-label">SCREEN TIME</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-number">2</span>
+          <span className="stat-label">NEW STORIES EVERY WEEK</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-number">2M+</span>
+          <span className="stat-label">FAMILIES TRUST US</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-number">0</span>
+          <span className="stat-label">ADS. EVER.</span>
+        </div>
       </div>
     </section>
   );
 }
-
-
-
-
