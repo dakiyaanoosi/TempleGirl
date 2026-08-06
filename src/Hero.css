@@ -1,14 +1,12 @@
 .hero-section {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   z-index: 10;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 100px 6vw 40px 6vw;
+  justify-content: space-between;
+  padding: 120px 6vw 36px 6vw;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -16,7 +14,7 @@
 .hero-top-container {
   width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
+  margin: auto auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -190,7 +188,7 @@
 .hero-stats-container {
   width: 100%;
   max-width: 820px;
-  margin: 32px auto 0 auto;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
@@ -240,7 +238,6 @@
   .hero-stats-container {
     max-width: 740px;
     gap: 10px;
-    margin-top: 24px;
   }
   .stat-card {
     padding: 10px 10px;
@@ -302,25 +299,37 @@
   }
   .hero-top-container {
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     gap: 32px;
+    margin: 0 auto 32px auto;
   }
   .hero-left-content {
-    max-width: 100%;
+    max-width: 500px;
     width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
   }
   .hero-right-content {
     max-width: 100%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .hero-heading {
     font-size: 2.2rem;
     white-space: normal;
+    text-align: left;
   }
   .hero-subtext {
     font-size: 0.95rem;
     margin-top: 16px;
     max-width: 100%;
+    text-align: left;
   }
   .subtext-line {
     display: inline;
@@ -330,6 +339,9 @@
     margin-top: 20px;
     gap: 12px;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    align-self: flex-start;
+    width: 100%;
   }
   .store-btn-img {
     height: 38px;
@@ -351,7 +363,6 @@
     grid-template-columns: repeat(2, 1fr);
     max-width: 500px;
     gap: 10px;
-    margin-top: 24px;
   }
   .stat-card {
     padding: 10px 8px;
@@ -365,6 +376,10 @@
 }
 
 @media (max-width: 480px) {
+  .hero-store-buttons {
+    justify-content: center;
+    align-self: center;
+  }
   .hero-stats-container {
     grid-template-columns: repeat(2, 1fr);
     max-width: 100%;
