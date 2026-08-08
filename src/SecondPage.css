@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 48px 0;
+  padding: 40px 0;
 }
 
 .wave-container {
@@ -37,9 +37,34 @@
 
 .second-page-content {
   flex: 1;
-  width: 100%;
+  width: 86vw;
+  max-width: 1240px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  margin: 0 auto;
+}
+
+.second-page-layout {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 48px;
+  width: 100%;
+  align-items: center;
+}
+
+.music-player-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.second-page-right-col {
+  flex: 1;
+}
+
+@media (max-width: 992px) {
+  .second-page-layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
 }
