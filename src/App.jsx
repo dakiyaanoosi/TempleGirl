@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from './Header';
 import ShaderBackground from './ShaderBackground';
 import Hero from './Hero';
+import SecondPage from './SecondPage';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
 
@@ -23,6 +24,7 @@ function App() {
     <main>
       <Header />
       <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+      <SecondPage />
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>
