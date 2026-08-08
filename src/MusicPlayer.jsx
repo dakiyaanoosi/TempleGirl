@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Play, Pause } from 'lucide-react';
 import './MusicPlayer.css';
 
-export default function MusicPlayer() {
+export default function MusicPlayer({ onPlayStateChange }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -13,9 +13,11 @@ export default function MusicPlayer() {
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
+      if (onPlayStateChange) onPlayStateChange(false);
     } else {
       audioRef.current.play();
       setIsPlaying(true);
+      if (onPlayStateChange) onPlayStateChange(true);
     }
   };
 
@@ -69,7 +71,10 @@ export default function MusicPlayer() {
         src="/krishna_the_little_butter_thief.aac"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={() => {
+          setIsPlaying(false);
+          if (onPlayStateChange) onPlayStateChange(false);
+        }}
       />
 
       {/* Cover Art Image with Gradient Overlay & Track Info */}
