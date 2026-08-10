@@ -142,68 +142,78 @@ export default function SecondPage() {
       </div>
 
       <div className="second-page-content">
-        <div className="second-page-centered-layout">
-          {/* Centered Music Player */}
-          <div className="music-player-wrapper">
-            <MusicPlayer onPlayStateChange={setIsPlaying} />
+        {/* 2-Column Split Layout matching Hero styling */}
+        <div className="second-page-split-layout">
+          {/* Left Column: Music Player */}
+          <div className="second-page-left-col">
+            <div className="music-player-wrapper">
+              <MusicPlayer onPlayStateChange={setIsPlaying} />
+            </div>
           </div>
 
-          {/* Full-width Vertical Lines SVG Wave Container */}
-          <div className="full-width-lines-wrapper">
-            <div className="vertical-lines-container">
-              <svg
-                className="vertical-lines-svg"
-                viewBox={`0 -38 ${containerWidth} 338`}
-                preserveAspectRatio="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Vertical Stem Lines: 1 SVG unit = 1 px, strokeWidth="2" constant */}
-                {Array.from({ length: totalLines }).map((_, index) => {
-                  const x = totalLines > 1
-                    ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
-                    : containerWidth / 2;
-                  return (
-                    <line
-                      key={`line-${index}`}
-                      ref={(el) => (linesRef.current[index] = el)}
-                      x1={x}
-                      y1="0"
-                      x2={x}
-                      y2="300"
-                      stroke="#8eb331ff"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  );
-                })}
+          {/* Right Column: Title */}
+          <div className="second-page-right-col">
+            <h2 className="second-page-title">
+              Hear <span className="text-highlight">Namratha</span> tell a story
+            </h2>
+          </div>
+        </div>
 
-                {/* Lotus Flowers: 32px x 32px constant size */}
-                {Array.from({ length: totalLines }).map((_, index) => {
-                  const x = totalLines > 1
-                    ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
-                    : containerWidth / 2;
-                  return (
-                    <svg
-                      key={`lotus-${index}`}
-                      ref={(el) => (lotusesRef.current[index] = el)}
-                      x={x - 16}
-                      y={-28}
-                      width="32"
-                      height="32"
-                      viewBox="0 0 512 512"
-                      preserveAspectRatio="xMidYMid meet"
-                    >
-                      <path fill="#E07188" d="M217.651,138.607c-39.431-29.705-78.175-43.486-79.804-44.059c-11.187-3.927-23.548,1.19-28.683,11.882c-0.748,1.558-18.398,38.703-25.277,87.595c-1.79,12.728,7.076,24.495,19.805,26.286c1.1,0.155,2.191,0.23,3.269,0.23l115.276-49.345C229.97,160.932,227.917,146.341,217.651,138.607z"/>
-                      <path fill="#DC4161" d="M279.237,419.078c-0.709-12.833-11.706-22.663-24.517-21.954c-0.169,0.009-3.17,0.154-8.294,0.116l-61.215-147.793c3.973-1.641,7.548-4.384,10.19-8.174c7.351-10.542,4.763-25.048-5.782-32.4c-70.354-49.053-163.52-44.524-167.459-44.306c-11.845,0.653-21.301,10.111-21.956,21.954c-0.27,4.924-5.836,121.398,64.921,192.157c60.029,60.026,152.952,65.124,182.766,65.124c5.331,0,8.645-0.163,9.394-0.205C270.116,442.888,279.946,431.91,279.237,419.078z"/>
-                      <path fill="#E07188" d="M271.525,74.134c-8.835-7.914-22.21-7.914-31.047,0c-3.675,3.289-89.97,81.712-89.97,181.782c0,100.069,86.295,178.49,89.97,181.779c4.418,3.956,9.969,5.934,15.524,5.934c5.551,0,11.105-1.978,15.524-5.934c3.672-3.289,89.97-81.71,89.97-181.779C361.495,155.846,275.197,77.423,271.525,74.134z"/>
-                      <path fill="#DC4161" d="M428.116,194.025c-6.879-48.892-24.533-86.037-25.281-87.593c-5.137-10.692-17.489-15.811-28.683-11.881c-1.631,0.571-40.37,14.352-79.802,44.057c-10.266,7.732-12.32,22.323-4.588,32.589l115.279,49.345c1.078,0,2.172-0.074,3.272-0.23C421.04,218.521,429.907,206.752,428.116,194.025z"/>
-                      <path fill="#E07188" d="M511.796,186.518c-0.655-11.844-10.112-21.3-21.953-21.953c-3.936-0.217-97.113-4.746-167.459,44.307c-10.542,7.351-13.13,21.856-5.779,32.4c2.642,3.789,6.215,6.532,10.19,8.173l-61.205,147.769c-5.157,0.051-8.176-0.084-8.345-0.093c-12.778-0.686-23.771,9.136-24.48,21.956c-0.706,12.832,9.124,23.81,21.956,24.517c0.745,0.042,4.057,0.205,9.394,0.205c29.82,0,122.738-5.101,182.763-65.124C517.638,307.917,512.069,191.442,511.796,186.518z"/>
-                      <path fill="#DC4161" d="M271.525,74.134c-4.418-3.956-9.973-5.934-15.524-5.934v375.431c5.551,0,11.105-1.978,15.524-5.934c3.672-3.289,89.97-81.711,89.97-181.779C361.495,155.846,275.197,77.423,271.525,74.134z"/>
-                    </svg>
-                  );
-                })}
-              </svg>
-            </div>
+        {/* Bottom: Full-width Vertical Lines SVG Wave Container */}
+        <div className="full-width-lines-wrapper">
+          <div className="vertical-lines-container">
+            <svg
+              className="vertical-lines-svg"
+              viewBox={`0 -38 ${containerWidth} 338`}
+              preserveAspectRatio="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Vertical Stem Lines */}
+              {Array.from({ length: totalLines }).map((_, index) => {
+                const x = totalLines > 1
+                  ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
+                  : containerWidth / 2;
+                return (
+                  <line
+                    key={`line-${index}`}
+                    ref={(el) => (linesRef.current[index] = el)}
+                    x1={x}
+                    y1="0"
+                    x2={x}
+                    y2="300"
+                    stroke="#8eb331ff"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                );
+              })}
+
+              {/* Lotus Flowers */}
+              {Array.from({ length: totalLines }).map((_, index) => {
+                const x = totalLines > 1
+                  ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
+                  : containerWidth / 2;
+                return (
+                  <svg
+                    key={`lotus-${index}`}
+                    ref={(el) => (lotusesRef.current[index] = el)}
+                    x={x - 16}
+                    y={-28}
+                    width="32"
+                    height="32"
+                    viewBox="0 0 512 512"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <path fill="#E07188" d="M217.651,138.607c-39.431-29.705-78.175-43.486-79.804-44.059c-11.187-3.927-23.548,1.19-28.683,11.882c-0.748,1.558-18.398,38.703-25.277,87.595c-1.79,12.728,7.076,24.495,19.805,26.286c1.1,0.155,2.191,0.23,3.269,0.23l115.276-49.345C229.97,160.932,227.917,146.341,217.651,138.607z"/>
+                    <path fill="#DC4161" d="M279.237,419.078c-0.709-12.833-11.706-22.663-24.517-21.954c-0.169,0.009-3.17,0.154-8.294,0.116l-61.215-147.793c3.973-1.641,7.548-4.384,10.19-8.174c7.351-10.542,4.763-25.048-5.782-32.4c-70.354-49.053-163.52-44.524-167.459-44.306c-11.845,0.653-21.301,10.111-21.956,21.954c-0.27,4.924-5.836,121.398,64.921,192.157c60.029,60.026,152.952,65.124,182.766,65.124c5.331,0,8.645-0.163,9.394-0.205C270.116,442.888,279.946,431.91,279.237,419.078z"/>
+                    <path fill="#E07188" d="M271.525,74.134c-8.835-7.914-22.21-7.914-31.047,0c-3.675,3.289-89.97,81.712-89.97,181.779c0,100.069,86.295,178.49,89.97,181.779c4.418,3.956,9.969,5.934,15.524,5.934c5.551,0,11.105-1.978,15.524-5.934c3.672-3.289,89.97-81.71,89.97-181.779C361.495,155.846,275.197,77.423,271.525,74.134z"/>
+                    <path fill="#DC4161" d="M428.116,194.025c-6.879-48.892-24.533-86.037-25.281-87.593c-5.137-10.692-17.489-15.811-28.683-11.881c-1.631,0.571-40.37,14.352-79.802,44.057c-10.266,7.732-12.32,22.323-4.588,32.589l115.279,49.345c1.078,0,2.172-0.074,3.272-0.23C421.04,218.521,429.907,206.752,428.116,194.025z"/>
+                    <path fill="#E07188" d="M511.796,186.518c-0.655-11.844-10.112-21.3-21.953-21.953c-3.936-0.217-97.113-4.746-167.459,44.307c-10.542,7.351-13.13,21.856-5.779,32.4c2.642,3.789,6.215,6.532,10.19,8.173l-61.205,147.769c-5.157,0.051-8.176-0.084-8.345-0.093c-12.778-0.686-23.771,9.136-24.48,21.956c-0.706,12.832,9.124,23.81,21.956,24.517c0.745,0.042,4.057,0.205,9.394,0.205c29.82,0,122.738-5.101,182.763-65.124C517.638,307.917,512.069,191.442,511.796,186.518z"/>
+                    <path fill="#DC4161" d="M271.525,74.134c-4.418-3.956-9.973-5.934-15.524-5.934v375.431c5.551,0,11.105-1.978,15.524-5.934c3.672-3.289,89.97-81.711,89.97-181.779C361.495,155.846,275.197,77.423,271.525,74.134z"/>
+                  </svg>
+                );
+              })}
+            </svg>
           </div>
         </div>
       </div>
