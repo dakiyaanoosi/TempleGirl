@@ -6,16 +6,6 @@ import './Header.css';
 export default function Header() {
   const [activeNav, setActiveNav] = useState('Home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
-
-  const lastScrollY = useRef(0);
-  const itemsRef = useRef([]);
-  const mobileItemsRef = useRef([]);
-  const headerRef = useRef(null);
-  const menuContentRef = useRef(null);
-  const closeBtnRef = useRef(null);
-  const backdropRef = useRef(null);
-  const timelineRef = useRef(null);
 
   const navItems = [
     { id: 'nav-home', label: 'Home' },
@@ -23,30 +13,13 @@ export default function Header() {
     { id: 'nav-subscriptions', label: 'Manage Subscriptions' },
   ];
 
-  // Scroll direction listener: collapse header upwards on scroll down, slide back in on scroll up
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (isMenuOpen) {
-        setIsHeaderHidden(false);
-        return;
-      }
-
-      if (currentScrollY <= 50) {
-        setIsHeaderHidden(false);
-      } else if (currentScrollY > lastScrollY.current + 6) {
-        setIsHeaderHidden(true);
-      } else if (currentScrollY < lastScrollY.current - 6) {
-        setIsHeaderHidden(false);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMenuOpen]);
+  const itemsRef = useRef([]);
+  const mobileItemsRef = useRef([]);
+  const headerRef = useRef(null);
+  const menuContentRef = useRef(null);
+  const closeBtnRef = useRef(null);
+  const backdropRef = useRef(null);
+  const timelineRef = useRef(null);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -156,6 +129,7 @@ export default function Header() {
         },
       });
 
+      // Exact QR sidebar backdrop opacity transition concurrently at t = 0
       if (backdropRef.current) {
         tl.fromTo(
           backdropRef.current,
@@ -228,7 +202,7 @@ export default function Header() {
           aria-hidden="true"
         />
       )}
-      <header className={`pill-header-container ${isHeaderHidden ? 'header-hidden' : ''}`}>
+      <header className="pill-header-container">
         <nav ref={headerRef} className="pill-header" aria-label="Main Navigation">
           <div className="pill-header-top">
             <button
