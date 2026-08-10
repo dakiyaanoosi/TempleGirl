@@ -87,7 +87,7 @@ export default function SecondPage() {
             const wave = Math.sin(phase - index * spatialFreq);
             const dip = amplitude * 0.1875 * (1 - wave);
             const heightFactor = 1.0 - dip;
-            const targetY1 = 300 * (1 - heightFactor);
+            const targetY1 = 180 * (1 - heightFactor);
             line.setAttribute('y1', targetY1.toFixed(2));
 
             const lotus = lotusesRef.current[index];
@@ -164,7 +164,7 @@ export default function SecondPage() {
           <div className="vertical-lines-container">
             <svg
               className="vertical-lines-svg"
-              viewBox={`0 -38 ${containerWidth} 338`}
+              viewBox={`0 -38 ${containerWidth} 218`}
               preserveAspectRatio="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -180,7 +180,7 @@ export default function SecondPage() {
                     x1={x}
                     y1="0"
                     x2={x}
-                    y2="300"
+                    y2="180"
                     stroke="#8eb331ff"
                     strokeWidth="2"
                     strokeLinecap="round"
@@ -188,7 +188,7 @@ export default function SecondPage() {
                 );
               })}
 
-              {/* Lotus Flowers */}
+              {/* Lotus Flowers: 32px x 32px constant un-squashed size */}
               {Array.from({ length: totalLines }).map((_, index) => {
                 const x = totalLines > 1
                   ? 20 + index * ((containerWidth - 40) / (totalLines - 1))

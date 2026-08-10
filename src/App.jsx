@@ -3,6 +3,7 @@ import Header from './Header';
 import ShaderBackground from './ShaderBackground';
 import Hero from './Hero';
 import SecondPage from './SecondPage';
+import ThirdPage from './ThirdPage';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
 
@@ -25,6 +26,7 @@ function App() {
       <Header />
       <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
       <SecondPage />
+      <ThirdPage />
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>

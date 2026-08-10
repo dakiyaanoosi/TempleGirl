@@ -1,0 +1,28 @@
+.third-page-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+}
+
+.third-page-wave {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.third-page-content {
+  flex: 1;
+  width: 86vw;
+  max-width: 1240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
