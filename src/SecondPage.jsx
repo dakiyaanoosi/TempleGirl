@@ -154,7 +154,7 @@ export default function SecondPage({ onOpenQrSidebar }) {
           {/* Right Column: Title */}
           <div className="second-page-right-col">
             <h2 className="second-page-title">
-              Hear <span className="text-highlight">Namratha</span> tell a Story.
+              Hear <span className="text-highlight">Namratha</span> bring a story to life.
             </h2>
           </div>
         </div>
