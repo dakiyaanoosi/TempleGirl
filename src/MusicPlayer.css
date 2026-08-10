@@ -6,6 +6,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transition: max-width 0.3s ease;
 }
 
 .player-cover-wrapper {
@@ -15,7 +16,7 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .player-cover-image {
@@ -69,7 +70,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 4px;
+  margin-bottom: 16px;
 }
 
 .progress-bar-container {
@@ -124,6 +125,7 @@
   justify-content: center;
   gap: 28px;
   width: 100%;
+  transition: gap 0.3s ease;
 }
 
 .control-btn,
@@ -142,10 +144,89 @@
   box-shadow: none;
   flex-shrink: 0;
   cursor: pointer;
+  transition: width 0.3s ease, height 0.3s ease;
 }
 
 .control-btn svg,
 .play-pause-btn svg,
 .skip-btn svg {
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .music-player-layout {
+    max-width: 270px;
+  }
+  .control-btn,
+  .play-pause-btn,
+  .skip-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .control-btn svg,
+  .play-pause-btn svg,
+  .skip-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+  .player-controls {
+    gap: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .music-player-layout {
+    max-width: 240px;
+  }
+  .control-btn,
+  .play-pause-btn,
+  .skip-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .control-btn svg,
+  .play-pause-btn svg,
+  .skip-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .player-controls {
+    gap: 18px;
+  }
+  .player-cover-wrapper {
+    margin-bottom: 14px;
+  }
+  .player-track-title {
+    font-size: 0.95rem;
+  }
+  .player-track-artist {
+    font-size: 0.8rem;
+  }
+  .player-timeline {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .music-player-layout {
+    max-width: 210px;
+  }
+  .control-btn,
+  .play-pause-btn,
+  .skip-btn {
+    width: 28px;
+    height: 28px;
+  }
+  .control-btn svg,
+  .play-pause-btn svg,
+  .skip-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .player-controls {
+    gap: 14px;
+  }
 }

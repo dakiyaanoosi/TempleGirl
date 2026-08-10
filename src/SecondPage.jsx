@@ -6,21 +6,54 @@ import './SecondPage.css';
 export default function SecondPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const linesRef = useRef([]);
+  const lotusesRef = useRef([]);
   const phaseRef = useRef(0);
   const amplitudeRef = useRef(0);
 
-  const wavePath = "M 0 12 Q 15 3, 30 12 T 60 12 T 90 12 T 120 12 T 150 12 T 180 12 T 210 12 T 240 12 T 270 12 T 300 12 T 330 12 T 360 12 T 390 12 T 420 12 T 450 12 T 480 12 T 510 12 T 540 12 T 570 12 T 600 12 T 630 12 T 660 12 T 690 12 T 720 12 T 750 12 T 780 12 T 810 12 T 840 12 T 870 12 T 900 12 T 930 12 T 960 12 T 990 12 T 1020 12 T 1050 12 T 1080 12 T 1110 12 T 1140 12 T 1170 12 T 1200 12";
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(1200);
 
-  // Generate gold dots nestled inside each upper curve and lower curve
+  // Dynamic responsive width listener for Kolam wave border and vertical lines
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth || 1200);
+      }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  // Responsive Kolam border calculation
+  const waveSegmentWidth = 30;
+  const numWaves = Math.max(4, Math.floor(containerWidth / waveSegmentWidth));
+  const kolamSvgWidth = numWaves * waveSegmentWidth;
+
+  // Dynamic vertical stem line count maintaining constant ~46px spacing
+  const targetLineSpacing = 46;
+  const totalLines = Math.max(4, Math.floor((containerWidth - 40) / targetLineSpacing) + 1);
+
+  // Generate path string dynamically for numWaves
+  const generateWavePath = () => {
+    let d = "M 0 12 Q 15 3, 30 12";
+    for (let i = 1; i < numWaves; i++) {
+      d += ` T ${(i + 1) * waveSegmentWidth} 12`;
+    }
+    return d;
+  };
+
+  // Generate gold dots dynamically based on number of waves
   const renderDots = () => {
     const dots = [];
     let isUpper = true;
-    for (let x = 15; x <= 1185; x += 30) {
+    for (let i = 0; i < numWaves; i++) {
+      const cx = i * waveSegmentWidth + 15;
       const cy = isUpper ? 15.5 : 8.5;
       dots.push(
         <circle
-          key={x}
-          cx={x}
+          key={i}
+          cx={cx}
           cy={cy}
           r="2.2"
           fill="#F2B84B"
@@ -31,20 +64,19 @@ export default function SecondPage() {
     return dots;
   };
 
-  const totalLines = 26;
-
-  // GSAP Ticker wave animation: tight opacity modulation on wave motion
+  // GSAP Ticker wave animation: dynamic spatial frequency for responsive totalLines
   useEffect(() => {
     let phase = phaseRef.current;
     let amplitude = amplitudeRef.current;
-    const spatialFreq = (2 * Math.PI) / totalLines;
     const waveSpeed = 0.035;
 
     const onTick = () => {
-      // Smoothly interpolate amplitude: 0 when paused, 1 when playing
       const targetAmp = isPlaying ? 1 : 0;
       amplitude += (targetAmp - amplitude) * 0.06;
       amplitudeRef.current = amplitude;
+
+      const activeLineCount = linesRef.current.filter(Boolean).length || totalLines;
+      const spatialFreq = (2 * Math.PI) / activeLineCount;
 
       if (isPlaying || amplitude > 0.001) {
         phase += waveSpeed;
@@ -58,17 +90,22 @@ export default function SecondPage() {
             const targetY1 = 300 * (1 - heightFactor);
             line.setAttribute('y1', targetY1.toFixed(2));
 
-            // Shorter opacity fade duration: stays visible longer, min opacity 0.25
-            const opacityVal = Math.max(0.25, Math.min(1, (heightFactor - 0.7) / 0.3));
-            line.setAttribute('opacity', opacityVal.toFixed(2));
+            const lotus = lotusesRef.current[index];
+            if (lotus) {
+              const lotusY = targetY1 - 28;
+              lotus.setAttribute('y', lotusY.toFixed(2));
+            }
           }
         });
       } else {
-        // Complete rest state (all lines at default height y1 = 0 and opacity = 1)
-        linesRef.current.forEach((line) => {
+        // Complete rest state (all stems at y1 = 0 and lotus flowers at top y = -28)
+        linesRef.current.forEach((line, index) => {
           if (line) {
             line.setAttribute('y1', '0');
-            line.setAttribute('opacity', '1');
+          }
+          const lotus = lotusesRef.current[index];
+          if (lotus) {
+            lotus.setAttribute('y', '-28');
           }
         });
       }
@@ -79,21 +116,21 @@ export default function SecondPage() {
     return () => {
       gsap.ticker.remove(onTick);
     };
-  }, [isPlaying]);
+  }, [isPlaying, totalLines]);
 
   return (
     <section className="second-page-section" id="second-page">
-      {/* Top Kolam Wave Border Only */}
-      <div className="wave-container top-wave-container">
+      {/* Responsive Top Kolam Wave Border */}
+      <div ref={containerRef} className="wave-container top-wave-container">
         <svg
           className="second-page-wave"
-          viewBox="0 0 1200 24"
-          preserveAspectRatio="none"
+          viewBox={`0 0 ${kolamSvgWidth} 24`}
+          preserveAspectRatio="xMidYMid meet"
           xmlns="http://www.w3.org/2000/svg"
         >
           <g>
             <path
-              d={wavePath}
+              d={generateWavePath()}
               stroke="#ffffff"
               strokeWidth="2"
               strokeLinecap="round"
@@ -116,25 +153,53 @@ export default function SecondPage() {
             <div className="vertical-lines-container">
               <svg
                 className="vertical-lines-svg"
-                viewBox="0 0 1200 300"
+                viewBox={`0 -38 ${containerWidth} 338`}
                 preserveAspectRatio="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
+                {/* Vertical Stem Lines: 1 SVG unit = 1 px, strokeWidth="2" constant */}
                 {Array.from({ length: totalLines }).map((_, index) => {
-                  const x = 20 + index * ((1200 - 40) / (totalLines - 1));
+                  const x = totalLines > 1
+                    ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
+                    : containerWidth / 2;
                   return (
                     <line
-                      key={index}
+                      key={`line-${index}`}
                       ref={(el) => (linesRef.current[index] = el)}
                       x1={x}
                       y1="0"
                       x2={x}
                       y2="300"
-                      stroke="#ffffff"
+                      stroke="#8eb331ff"
                       strokeWidth="2"
                       strokeLinecap="round"
-                      opacity="1"
                     />
+                  );
+                })}
+
+                {/* Lotus Flowers: 32px x 32px constant size */}
+                {Array.from({ length: totalLines }).map((_, index) => {
+                  const x = totalLines > 1
+                    ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
+                    : containerWidth / 2;
+                  return (
+                    <svg
+                      key={`lotus-${index}`}
+                      ref={(el) => (lotusesRef.current[index] = el)}
+                      x={x - 16}
+                      y={-28}
+                      width="32"
+                      height="32"
+                      viewBox="0 0 512 512"
+                      preserveAspectRatio="xMidYMid meet"
+                    >
+                      <path fill="#E07188" d="M217.651,138.607c-39.431-29.705-78.175-43.486-79.804-44.059c-11.187-3.927-23.548,1.19-28.683,11.882c-0.748,1.558-18.398,38.703-25.277,87.595c-1.79,12.728,7.076,24.495,19.805,26.286c1.1,0.155,2.191,0.23,3.269,0.23l115.276-49.345C229.97,160.932,227.917,146.341,217.651,138.607z"/>
+                      <path fill="#DC4161" d="M279.237,419.078c-0.709-12.833-11.706-22.663-24.517-21.954c-0.169,0.009-3.17,0.154-8.294,0.116l-61.215-147.793c3.973-1.641,7.548-4.384,10.19-8.174c7.351-10.542,4.763-25.048-5.782-32.4c-70.354-49.053-163.52-44.524-167.459-44.306c-11.845,0.653-21.301,10.111-21.956,21.954c-0.27,4.924-5.836,121.398,64.921,192.157c60.029,60.026,152.952,65.124,182.766,65.124c5.331,0,8.645-0.163,9.394-0.205C270.116,442.888,279.946,431.91,279.237,419.078z"/>
+                      <path fill="#E07188" d="M271.525,74.134c-8.835-7.914-22.21-7.914-31.047,0c-3.675,3.289-89.97,81.712-89.97,181.782c0,100.069,86.295,178.49,89.97,181.779c4.418,3.956,9.969,5.934,15.524,5.934c5.551,0,11.105-1.978,15.524-5.934c3.672-3.289,89.97-81.71,89.97-181.779C361.495,155.846,275.197,77.423,271.525,74.134z"/>
+                      <path fill="#DC4161" d="M428.116,194.025c-6.879-48.892-24.533-86.037-25.281-87.593c-5.137-10.692-17.489-15.811-28.683-11.881c-1.631,0.571-40.37,14.352-79.802,44.057c-10.266,7.732-12.32,22.323-4.588,32.589l115.279,49.345c1.078,0,2.172-0.074,3.272-0.23C421.04,218.521,429.907,206.752,428.116,194.025z"/>
+                      <path fill="#E07188" d="M511.796,186.518c-0.655-11.844-10.112-21.3-21.953-21.953c-3.936-0.217-97.113-4.746-167.459,44.307c-10.542,7.351-13.13,21.856-5.779,32.4c2.642,3.789,6.215,6.532,10.19,8.173l-61.205,147.769c-5.157,0.051-8.176-0.084-8.345-0.093c-12.778-0.686-23.771,9.136-24.48,21.956c-0.706,12.832,9.124,23.81,21.956,24.517c0.745,0.042,4.057,0.205,9.394,0.205c29.82,0,122.738-5.101,182.763-65.124C517.638,307.917,512.069,191.442,511.796,186.518z"/>
+                      <path fill="#DC4161" d="M271.525,74.134c-4.418-3.956-9.973-5.934-15.524-5.934v375.431c5.551,0,11.105-1.978,15.524-5.934c3.672-3.289,89.97-81.711,89.97-181.779C361.495,155.846,275.197,77.423,271.525,74.134z"/>
+                    </svg>
                   );
                 })}
               </svg>
