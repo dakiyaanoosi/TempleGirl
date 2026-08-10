@@ -190,7 +190,6 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 0px;
 }
 
 .progress-bar-container {
@@ -303,9 +302,6 @@
   }
   .player-track-artist {
     font-size: 0.82rem;
-  }
-  .player-timeline {
-    margin-bottom: 14px;
   }
   .music-player-layout.ended-hidden .player-controls-content {
     transform: translateY(-120px);
