@@ -1,6 +1,6 @@
 .music-player-layout {
   width: 100%;
-  max-width: 380px;
+  max-width: 310px;
   background: transparent;
   padding: 0;
   box-sizing: border-box;
@@ -154,27 +154,6 @@
   height: 24px;
   cursor: pointer;
   transition: width 0.3s ease, height 0.3s ease;
-}
-
-@media (max-width: 1024px) {
-  .music-player-layout {
-    max-width: 360px;
-  }
-  .control-btn,
-  .play-pause-btn,
-  .skip-btn {
-    width: 38px;
-    height: 38px;
-  }
-  .control-btn svg,
-  .play-pause-btn svg,
-  .skip-btn svg {
-    width: 23px;
-    height: 23px;
-  }
-  .player-controls {
-    gap: 24px;
-  }
 }
 
 @media (max-width: 768px) {
