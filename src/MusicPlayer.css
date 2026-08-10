@@ -5,17 +5,20 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative;
   transition: max-width 0.3s ease;
 }
 
 .player-cover-wrapper {
   position: relative;
+  z-index: 2;
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
   margin-bottom: 20px;
+  cursor: default;
 }
 
 .player-cover-image {
@@ -35,6 +38,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  z-index: 1;
 }
 
 .player-track-info {
@@ -61,6 +65,123 @@
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Bottom Area: Unified Lockstep Upward Motion */
+.player-bottom-area {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-controls-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease, visibility 0.65s step-end;
+}
+
+.music-player-layout.ended-hidden .player-controls-content {
+  transform: translateY(-135px);
+  opacity: 0;
+  pointer-events: none !important;
+  visibility: hidden;
+}
+
+/* Explore More Content: Slides UP from bottom to top simultaneously with controls moving up */
+.explore-more-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(90px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease, visibility 0.65s step-end;
+}
+
+.music-player-layout.ended-hidden .explore-more-content {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease, visibility 0s 0s;
+}
+
+.explore-more-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  background: #000000;
+  border: 1.5px solid #A6A6A6;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 0 24px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  isolation: isolate;
+  --x: 50%;
+  --y: 50%;
+  transition: color 0.35s ease;
+}
+
+.explore-more-btn::before {
+  content: '';
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: 0;
+  height: 0;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.explore-more-btn:hover::before {
+  width: 480px;
+  height: 480px;
+}
+
+.explore-more-btn:hover {
+  color: #000000;
+}
+
+.explore-btn-text {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.35s ease;
+}
+
+.explore-arrow-icon {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .player-timeline {
@@ -186,6 +307,9 @@
   .player-timeline {
     margin-bottom: 14px;
   }
+  .music-player-layout.ended-hidden .player-controls-content {
+    transform: translateY(-120px);
+  }
 }
 
 @media (max-width: 480px) {
@@ -206,5 +330,8 @@
   }
   .player-controls {
     gap: 18px;
+  }
+  .music-player-layout.ended-hidden .player-controls-content {
+    transform: translateY(-110px);
   }
 }

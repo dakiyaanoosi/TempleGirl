@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import MusicPlayer from './MusicPlayer';
 import './SecondPage.css';
 
-export default function SecondPage() {
+export default function SecondPage({ onOpenQrSidebar }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const linesRef = useRef([]);
   const lotusesRef = useRef([]);
@@ -147,7 +147,7 @@ export default function SecondPage() {
           {/* Left Column: Music Player */}
           <div className="second-page-left-col">
             <div className="music-player-wrapper">
-              <MusicPlayer onPlayStateChange={setIsPlaying} />
+              <MusicPlayer onPlayStateChange={setIsPlaying} onOpenQrSidebar={onOpenQrSidebar} />
             </div>
           </div>
 

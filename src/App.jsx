@@ -25,7 +25,7 @@ function App() {
     <main>
       <Header />
       <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-      <SecondPage />
+      <SecondPage onOpenQrSidebar={() => setIsSidebarOpen(true)} />
       <ThirdPage />
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
