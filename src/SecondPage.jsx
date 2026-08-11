@@ -153,7 +153,14 @@ export default function SecondPage({ onOpenQrSidebar }) {
 
           {/* Right Column: Title */}
           <div className="second-page-right-col">
+            {/* Headline with Headphone SVG Icon before "Hear" */}
             <h2 className="second-page-title">
+              <span className="title-inline-svg title-prefix-svg">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 178 184" fill="none">
+                  <path fill="currentColor" d="M177 135.742c0 21.857-17.942 39.576-40.074 39.576-22.132 0-40.073-17.719-40.073-39.576s17.941-39.575 40.073-39.575S177 113.885 177 135.742ZM89.427 1C53.121 1 23.69 31.024 23.69 68.06c0 5.435.635 12.59 1.832 17.65h2.816c-.512-3.128-.78-8.225-.78-11.522 0-29.047 20.775-52.594 46.403-52.594 25.627 0 46.403 23.547 46.403 52.594 0 2.76-.188 8.278-.55 10.924h33.865c.974-4.59 1.487-12.164 1.487-17.052C155.165 31.024 125.733 1 89.427 1ZM1 135.742c0 22.146 17.552 40.098 39.202 40.098V95.644C18.552 95.644 1 113.597 1 135.742ZM76.305 88.253l14.57 47.489L76.305 183l-13.713-47.258 13.713-47.489Z"></path>
+                  <path fill="currentColor" d="m55.69 110.302 7.737 25.44-7.738 25.785-9.407-25.785 9.407-25.44Z"></path>
+                </svg>
+              </span>
               Hear <span className="text-highlight">Namratha</span> bring a story to life.
             </h2>
           </div>
