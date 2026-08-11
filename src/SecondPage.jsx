@@ -9,6 +9,7 @@ export default function SecondPage({ onOpenQrSidebar }) {
   const lotusesRef = useRef([]);
   const phaseRef = useRef(0);
   const amplitudeRef = useRef(0);
+  const swayPhaseRef = useRef(0);
 
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(1200);
@@ -64,10 +65,11 @@ export default function SecondPage({ onOpenQrSidebar }) {
     return dots;
   };
 
-  // GSAP Ticker wave animation: dynamic spatial frequency for responsive totalLines
+  // GSAP Ticker wave animation: dynamic spatial frequency & organic stem sway
   useEffect(() => {
     let phase = phaseRef.current;
     let amplitude = amplitudeRef.current;
+    let swayPhase = swayPhaseRef.current;
     const waveSpeed = 0.035;
 
     const onTick = () => {
@@ -75,39 +77,47 @@ export default function SecondPage({ onOpenQrSidebar }) {
       amplitude += (targetAmp - amplitude) * 0.06;
       amplitudeRef.current = amplitude;
 
+      swayPhase += 0.015; // Gentle continuous organic stem sway
+      swayPhaseRef.current = swayPhase;
+
       const activeLineCount = linesRef.current.filter(Boolean).length || totalLines;
       const spatialFreq = (2 * Math.PI) / activeLineCount;
+
+      linesRef.current.forEach((line, index) => {
+        if (line) {
+          const x = totalLines > 1
+            ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
+            : containerWidth / 2;
+
+          const wave = Math.sin(phase - index * spatialFreq);
+          const dip = amplitude * 0.1875 * (1 - wave);
+          const heightFactor = 1.0 - dip;
+          const targetY1 = 180 * (1 - heightFactor);
+
+          // Subtle organic wavy curvature (S-curve Bezier control points)
+          const swayAmp = 3.5 + amplitude * 4.5; // 3.5px subtle curve at rest, up to 8px when playing
+          const offset1 = Math.sin(swayPhase + index * 0.45) * swayAmp;
+          const offset2 = Math.cos(swayPhase + index * 0.45) * swayAmp;
+
+          const cp1x = (x + offset1).toFixed(2);
+          const cp1y = (targetY1 + (180 - targetY1) * 0.33).toFixed(2);
+          const cp2x = (x - offset2).toFixed(2);
+          const cp2y = (targetY1 + (180 - targetY1) * 0.66).toFixed(2);
+
+          const pathD = `M ${x.toFixed(2)} ${targetY1.toFixed(2)} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x.toFixed(2)} 180`;
+          line.setAttribute('d', pathD);
+
+          const lotus = lotusesRef.current[index];
+          if (lotus) {
+            const lotusY = targetY1 - 28;
+            lotus.setAttribute('y', lotusY.toFixed(2));
+          }
+        }
+      });
 
       if (isPlaying || amplitude > 0.001) {
         phase += waveSpeed;
         phaseRef.current = phase;
-
-        linesRef.current.forEach((line, index) => {
-          if (line) {
-            const wave = Math.sin(phase - index * spatialFreq);
-            const dip = amplitude * 0.1875 * (1 - wave);
-            const heightFactor = 1.0 - dip;
-            const targetY1 = 180 * (1 - heightFactor);
-            line.setAttribute('y1', targetY1.toFixed(2));
-
-            const lotus = lotusesRef.current[index];
-            if (lotus) {
-              const lotusY = targetY1 - 28;
-              lotus.setAttribute('y', lotusY.toFixed(2));
-            }
-          }
-        });
-      } else {
-        // Complete rest state (all stems at y1 = 0 and lotus flowers at top y = -28)
-        linesRef.current.forEach((line, index) => {
-          if (line) {
-            line.setAttribute('y1', '0');
-          }
-          const lotus = lotusesRef.current[index];
-          if (lotus) {
-            lotus.setAttribute('y', '-28');
-          }
-        });
       }
     };
 
@@ -116,7 +126,7 @@ export default function SecondPage({ onOpenQrSidebar }) {
     return () => {
       gsap.ticker.remove(onTick);
     };
-  }, [isPlaying, totalLines]);
+  }, [isPlaying, totalLines, containerWidth]);
 
   return (
     <section className="second-page-section" id="second-page">
@@ -175,22 +185,21 @@ export default function SecondPage({ onOpenQrSidebar }) {
               preserveAspectRatio="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Vertical Stem Lines */}
+              {/* Vertical Stem Lines - Subtle Wavy Cubic Bezier Paths */}
               {Array.from({ length: totalLines }).map((_, index) => {
                 const x = totalLines > 1
                   ? 20 + index * ((containerWidth - 40) / (totalLines - 1))
                   : containerWidth / 2;
+                const defaultPath = `M ${x} 0 C ${x + 3.5} 60, ${x - 3.5} 120, ${x} 180`;
                 return (
-                  <line
+                  <path
                     key={`line-${index}`}
                     ref={(el) => (linesRef.current[index] = el)}
-                    x1={x}
-                    y1="0"
-                    x2={x}
-                    y2="180"
+                    d={defaultPath}
                     stroke="#8eb331ff"
                     strokeWidth="2"
                     strokeLinecap="round"
+                    fill="none"
                   />
                 );
               })}
