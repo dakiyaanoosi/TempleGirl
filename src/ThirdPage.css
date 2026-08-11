@@ -188,19 +188,10 @@
   .third-page-title {
     font-size: 2.2rem;
   }
-  .review-card {
-    flex: 0 0 300px;
-    width: 300px;
-    padding: 24px 20px;
-  }
 }
 
 @media (max-width: 480px) {
   .third-page-title {
     font-size: 1.85rem;
   }
-  /* .review-card {
-    flex: 0 0 270px;
-    width: 270px;
-  } */
 }
