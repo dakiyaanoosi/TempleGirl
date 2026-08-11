@@ -105,17 +105,26 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
         }}
       />
 
-      {/* Cover Art Image with Gradient Overlay & Track Info */}
-      <div className="player-cover-wrapper">
-        <img
-          src="/krishna_the_little_butter_thief.png"
-          alt="Krishna - The Little Butter Thief"
-          className="player-cover-image"
-        />
-        <div className="cover-overlay-gradient">
-          <div className="player-track-info">
-            <h2 className="player-track-title">Krishna - The Little Butter Thief</h2>
-            <p className="player-track-artist">Krishna Tales - Guruvayur</p>
+      {/* Fanned Stacked Card Thumbnail Container */}
+      <div className={`player-cover-wrapper ${hasEnded ? 'is-stacked-3d' : ''}`}>
+        {/* Neutral Left Background Card (Tilted Left from Bottom-Center) */}
+        <div className="bg-stacked-card card-left" />
+
+        {/* Neutral Right Background Card (Tilted Right from Bottom-Center) */}
+        <div className="bg-stacked-card card-right" />
+
+        {/* Main Front Thumbnail Card */}
+        <div className="main-thumbnail-card">
+          <img
+            src="/krishna_the_little_butter_thief.png"
+            alt="Krishna - The Little Butter Thief"
+            className="player-cover-image"
+          />
+          <div className="cover-overlay-gradient">
+            <div className="player-track-info">
+              <h2 className="player-track-title">Krishna - The Little Butter Thief</h2>
+              <p className="player-track-artist">Krishna Tales - Guruvayur</p>
+            </div>
           </div>
         </div>
       </div>

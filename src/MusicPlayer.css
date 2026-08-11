@@ -9,16 +9,69 @@
   transition: max-width 0.3s ease;
 }
 
+/* Fanned Stack Cover Container */
 .player-cover-wrapper {
   position: relative;
   z-index: 2;
   width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 12px;
+  margin-bottom: 28px;
+}
+
+/* Common Background Stacked Cards Base (Hidden directly behind thumbnail by default) */
+.bg-stacked-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 92%; /* Length (height) slightly smaller than main thumbnail */
+  border-radius: 24px;
+  transform-origin: 50% 100%;
+  transform: translateY(0) rotate(0deg) scale(0.98);
+  opacity: 0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease;
+  will-change: transform, opacity;
+}
+
+/* Left Card (Solid Crimson Red) */
+.bg-stacked-card.card-left {
+  background: #6e1629;
+  z-index: 1;
+}
+
+/* Right Card (Solid Playful Amber Gold) */
+.bg-stacked-card.card-right {
+  background: #F2B84B;
+  z-index: 2;
+}
+
+/* When Audio Finishes Playing: Fan out simultaneously with controls sliding up */
+.player-cover-wrapper.is-stacked-3d .bg-stacked-card.card-left,
+.music-player-layout.ended-hidden .bg-stacked-card.card-left {
+  transform: translateY(-8px) rotate(-10deg) scale(1);
+  opacity: 1;
+}
+
+.player-cover-wrapper.is-stacked-3d .bg-stacked-card.card-right,
+.music-player-layout.ended-hidden .bg-stacked-card.card-right {
+  transform: translateY(-8px) rotate(10deg) scale(1);
+  opacity: 1;
+}
+
+/* Main Front Thumbnail Card */
+.main-thumbnail-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
-  margin-bottom: 20px;
-  cursor: default;
+  z-index: 3;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  transform: rotate(0deg);
+  transform-origin: 50% 100%;
 }
 
 .player-cover-image {
@@ -295,13 +348,7 @@
     gap: 22px;
   }
   .player-cover-wrapper {
-    margin-bottom: 16px;
-  }
-  .player-track-title {
-    font-size: 1rem;
-  }
-  .player-track-artist {
-    font-size: 0.82rem;
+    margin-bottom: 20px;
   }
   .music-player-layout.ended-hidden .player-controls-content {
     transform: translateY(-120px);
