@@ -12,7 +12,12 @@ export default function FourthPage() {
   const underlineRef = useRef(null);
 
   const [qnaData, setQnaData] = useState([]);
+  const [openIndex, setOpenIndex] = useState(null);
   const marqueeItems = Array(8).fill("Questions ? *");
+
+  const toggleAccordion = (index) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  };
 
   // Fetch Q&A data from public/qna.json
   useEffect(() => {
@@ -42,13 +47,13 @@ export default function FourthPage() {
     };
   }, []);
 
-  // GSAP ScrollTrigger: Desktop pin & right column scroll logic
+  // GSAP ScrollTrigger: Desktop pin & right column scroll logic (>824px)
   useEffect(() => {
     if (!sectionRef.current || !qnaRightRef.current) return;
 
     let ctx = gsap.context(() => {
-      // Only pin & scrub on desktop/tablet screens (>768px)
-      if (window.innerWidth > 768) {
+      // Only pin & scrub on desktop screens (>824px)
+      if (window.innerWidth > 824) {
         const rightCol = qnaRightRef.current;
         const rightWrapper = rightCol.parentElement;
 
@@ -174,12 +179,40 @@ export default function FourthPage() {
           {/* Right Column: Q&A List inside overflow wrapper */}
           <div className="qna-right-wrapper">
             <div ref={qnaRightRef} className="qna-right-col">
-              {qnaData.map((item, index) => (
-                <div key={index} className="qna-item">
-                  <h3 className="qna-question">{item.q}</h3>
-                  <p className="qna-answer">{item.a}</p>
-                </div>
-              ))}
+              {qnaData.map((item, index) => {
+                const isOpen = openIndex === index;
+                return (
+                  <div
+                    key={index}
+                    className={`qna-item ${isOpen ? 'is-open' : ''}`}
+                    onClick={() => toggleAccordion(index)}
+                  >
+                    <div className="qna-question-header">
+                      <h3 className="qna-question">{item.q}</h3>
+                      <span className="qna-accordion-icon" aria-hidden="true">
+                        <svg
+                          className={`qna-chevron ${isOpen ? 'is-open' : ''}`}
+                          width="22"
+                          height="22"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </span>
+                    </div>
+                    <div className="qna-answer-wrapper">
+                      <div className="qna-answer-content">
+                        <p className="qna-answer">{item.a}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
