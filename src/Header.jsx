@@ -6,6 +6,48 @@ import './Header.css';
 export default function Header() {
   const [activeNav, setActiveNav] = useState('Home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
+  const lastScrollYRef = useRef(0);
+  const tickingRef = useRef(false);
+
+  // Optimized hide-on-scroll listener with requestAnimationFrame & threshold check
+  useEffect(() => {
+    const threshold = 15;
+
+    const updateScroll = () => {
+      const currentScrollY = window.scrollY;
+      const prevScrollY = lastScrollYRef.current;
+      const diff = currentScrollY - prevScrollY;
+
+      if (currentScrollY <= 60) {
+        setIsHidden(false);
+        lastScrollYRef.current = currentScrollY;
+      } else if (!isMenuOpen) {
+        if (diff > threshold) {
+          setIsHidden(true);
+          lastScrollYRef.current = currentScrollY;
+        } else if (diff < -threshold) {
+          setIsHidden(false);
+          lastScrollYRef.current = currentScrollY;
+        }
+      }
+
+      tickingRef.current = false;
+    };
+
+    const handleScroll = () => {
+      if (!tickingRef.current) {
+        requestAnimationFrame(updateScroll);
+        tickingRef.current = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMenuOpen]);
 
   const navItems = [
     { id: 'nav-home', label: 'Home' },
@@ -202,7 +244,7 @@ export default function Header() {
           aria-hidden="true"
         />
       )}
-      <header className="pill-header-container">
+      <header className={`pill-header-container ${isHidden ? 'header-hidden' : ''}`}>
         <nav ref={headerRef} className="pill-header" aria-label="Main Navigation">
           <div className="pill-header-top">
             <button

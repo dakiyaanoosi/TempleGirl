@@ -172,6 +172,27 @@ export default function ThirdPage() {
           ))}
         </div>
       </div>
+
+      {/* Responsive Bottom Kolam Wave Border */}
+      <div ref={containerRef} className="wave-container bottom-wave-container">
+        <svg
+          className="third-page-wave"
+          viewBox={`0 0 ${kolamSvgWidth} 24`}
+          preserveAspectRatio="xMidYMid meet"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g>
+            <path
+              d={generateWavePath()}
+              stroke="#ffffff"
+              strokeWidth="2"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {renderDots()}
+          </g>
+        </svg>
+      </div>
     </section>
   );
 }

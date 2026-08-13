@@ -73,7 +73,7 @@
 .second-page-title {
   font-family: 'Manrope', sans-serif;
   font-size: 3.2rem;
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1.20;
   letter-spacing: -0.03em;
   color: #ffffff;
@@ -92,16 +92,18 @@
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
-  width: 46px;
+  width: 48px;
   height: 48px;
   margin-right: 14px;
   color: #F2B84B;
   animation: subtleFloat 4.5s ease-in-out infinite;
 }
 
+.title-inline-svg img,
 .title-inline-svg svg {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   display: block;
 }
 
