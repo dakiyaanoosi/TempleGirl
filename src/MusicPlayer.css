@@ -7,6 +7,7 @@
   flex-direction: column;
   position: relative;
   transition: max-width 0.3s ease;
+  padding-top: 26px;
 }
 
 /* Fanned Stack Cover Container */
@@ -22,8 +23,8 @@
 .bg-stacked-card {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 2.5%;
+  width: 95%;
   height: 92%; /* Length (height) slightly smaller than main thumbnail */
   border-radius: 24px;
   transform-origin: 50% 100%;
