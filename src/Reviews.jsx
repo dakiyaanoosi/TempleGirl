@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
-import './ThirdPage.css';
+import './Reviews.css';
 
-export default function ThirdPage() {
+export default function Reviews() {
   const containerRef = useRef(null);
   const sliderRef = useRef(null);
 

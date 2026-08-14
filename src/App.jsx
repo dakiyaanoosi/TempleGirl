@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import Header from './Header';
 import ShaderBackground from './ShaderBackground';
 import Hero from './Hero';
-import SecondPage from './SecondPage';
-import ThirdPage from './ThirdPage';
-import FourthPage from './FourthPage';
-import FifthPage from './FifthPage';
+import Music from './Music';
+import Reviews from './Reviews';
+import Questions from './Questions';
+import Footer from './Footer';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
 
@@ -27,10 +27,10 @@ function App() {
     <main>
       <Header />
       <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-      <SecondPage onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-      <ThirdPage />
-      <FourthPage />
-      <FifthPage />
+      <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+      <Reviews />
+      <Questions />
+      <Footer />
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>

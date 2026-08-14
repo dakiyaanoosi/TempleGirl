@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import './FourthPage.css';
+import './Questions.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FourthPage() {
+export default function Questions() {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const qnaRightRef = useRef(null);

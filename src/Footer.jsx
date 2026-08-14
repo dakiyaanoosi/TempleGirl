@@ -1,7 +1,7 @@
 import KolamBorder from './KolamBorder';
-import './FifthPage.css';
+import './Footer.css';
 
-export default function FifthPage() {
+export default function Footer() {
   return (
     <section className="fifth-page-section" id="fifth-page">
       <KolamBorder />

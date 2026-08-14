@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import MusicPlayer from './MusicPlayer';
-import './SecondPage.css';
+import './Music.css';
 
-export default function SecondPage({ onOpenQrSidebar }) {
+export default function Music({ onOpenQrSidebar }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const linesRef = useRef([]);
   const lotusesRef = useRef([]);
