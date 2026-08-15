@@ -245,7 +245,6 @@
     height: auto;
     min-height: 100vh;
     overflow: visible;
-    padding: 0 0 60px 0;
   }
   .fourth-page-content {
     height: auto;
@@ -349,9 +348,6 @@
 }
 
 @media (max-width: 480px) {
-  .fourth-page-section {
-    padding: 0 0 60px 0;
-  }
   .qna-question {
     font-size: 1.25rem;
   }
