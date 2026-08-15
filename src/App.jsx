@@ -3,6 +3,7 @@ import Header from './Header';
 import ShaderBackground from './ShaderBackground';
 import Hero from './Hero';
 import Music from './Music';
+import Why from './Why';
 import Reviews from './Reviews';
 import Questions from './Questions';
 import Footer from './Footer';
@@ -28,6 +29,7 @@ function App() {
       <Header />
       <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
       <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+      <Why />
       <Reviews />
       <Questions />
       <Footer />

@@ -5,6 +5,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+img, svg, picture {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-drag: none;
+}
+
 html,
 body,
 #root {

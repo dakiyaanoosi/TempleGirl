@@ -1,0 +1,299 @@
+.why-page-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.wave-container {
+  width: 86vw;
+  max-width: 1240px;
+  height: 24px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.wave-container.top-wave-container {
+  margin-top: 24px;
+  margin-bottom: 28px;
+}
+
+.why-page-wave {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Header Block */
+.why-header-block {
+  text-align: center;
+  max-width: 800px;
+  padding: 0 20px;
+  margin-bottom: 24px;
+}
+
+/* Eight Club Style 100vw Full-Bleed Slider Layout */
+.slider {
+  width: 100vw;
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.slider__carrousel {
+  width: 100vw;
+  max-width: 100vw;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.carousel {
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+  height: 680px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel__viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.carousel__viewport--dragging {
+  cursor: grabbing;
+}
+
+.carousel__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+}
+
+/* 3D Flip Card Container - Exact Eight Club Aspect Ratio & Dimensions */
+.carousel__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 350px;
+  aspect-ratio: 375 / 605;
+  margin-left: -175px;
+  margin-top: -282.5px;
+  perspective: 1200px;
+  transition: z-index 0s;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.card__face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* Back Face (Pattern) */
+.card__face--back {
+  background: linear-gradient(145deg, #180508, #3b0d17);
+  border: 1.5px solid rgba(242, 184, 75, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(0deg);
+}
+
+/* Front Face (Artwork with Generous #F2B84B Matted Frame) */
+.card__face--front {
+  transform: rotateY(180deg);
+  background: #F2B84B;
+  padding: 14px;
+  box-sizing: border-box;
+  border: 1.5px solid #000;
+  display: flex;
+}
+
+.card-frame-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid #000;
+  background: #fff;
+}
+
+.card-frame-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(242, 184, 75, 0.65) 5%,
+    rgba(242, 184, 75, 0.25) 15%,
+    transparent 70%,
+    rgba(242, 184, 75, 0.35) 80%,
+    rgba(242, 184, 75, 0.85) 95%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+  display: block;
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 16px 16px 16px;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.card-title {
+  font-family: 'Dancing Script', 'Caveat', cursive;
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+  line-height: 1.15;
+  text-align: center;
+  width: 100%;
+}
+
+/* Nav Arrows - Positioned directly beside middle card (Exact Eight Club Style) */
+.button-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 150;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #FAF6EE;
+  border: none;
+  color: #1e090d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.button-arrow:disabled,
+.button-arrow.is-disabled {
+  opacity: 0.15;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: translateY(-50%) !important;
+}
+
+.button-arrow-icon-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.button-arrow svg.arrow-icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  stroke-width: 3;
+  will-change: transform;
+}
+
+/* Left Arrow floating right next to left edge of middle card */
+.slider__nav--prev {
+  left: calc(50% - 245px);
+}
+
+/* Right Arrow floating right next to right edge of middle card */
+.slider__nav--next {
+  right: calc(50% - 245px);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 834px) {
+  .carousel {
+    height: 480px;
+  }
+  .carousel__card {
+    width: 260px;
+    margin-left: -130px;
+    margin-top: -208px;
+  }
+  .card__face--front {
+    padding: 10px;
+  }
+  .card-frame-inner {
+    border-radius: 9px;
+  }
+  .card-title {
+    font-size: 1.15rem;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+  }
+  .button-arrow {
+    width: 28px;
+    height: 28px;
+  }
+  .button-arrow svg.arrow-icon {
+    width: 14px;
+    height: 14px;
+  }
+  .slider__nav--prev {
+    left: 16px;
+  }
+  .slider__nav--next {
+    right: 16px;
+  }
+}
