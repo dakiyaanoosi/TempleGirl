@@ -34,7 +34,7 @@ function App() {
       <Steps />
       <Reviews />
       <Questions />
-      <Footer />
+      <Footer onOpenQrSidebar={() => setIsSidebarOpen(true)} />
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>
