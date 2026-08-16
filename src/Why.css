@@ -35,7 +35,34 @@
   text-align: center;
   max-width: 800px;
   padding: 0 20px;
-  margin-bottom: 24px;
+  z-index: 10;
+}
+
+.why-main-title {
+  font-size: 3.2rem;
+  margin: 0;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* gap: 14px; */
+  flex-wrap: wrap;
+}
+
+.why-cursive {
+  font-family: 'Dancing Script', 'Caveat', cursive;
+  font-size: 3rem;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.why-highlight {
+  font-family: 'Outfit', sans-serif;
+  color: #F2B84B;
+  font-weight: 600;
+  font-size: 3rem;
+  letter-spacing: -0.02em;
 }
 
 /* Eight Club Style 100vw Full-Bleed Slider Layout */
@@ -220,7 +247,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
 
@@ -262,6 +288,15 @@
 
 /* Responsive Media Queries */
 @media (max-width: 834px) {
+  .why-main-title {
+    gap: 8px;
+  }
+  .why-cursive {
+    font-size: 2.3rem;
+  }
+  .why-highlight {
+    font-size: 2rem;
+  }
   .carousel {
     height: 480px;
   }

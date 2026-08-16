@@ -270,6 +270,14 @@ export default function Why() {
         </svg>
       </div>
 
+      {/* Section Heading */}
+      <div className="why-header-block">
+        <h2 className="why-main-title">
+          <span className="why-cursive">Why</span>{" "}
+          <span className="why-highlight">Temple Girl Kids</span>
+        </h2>
+      </div>
+
       {/* Eight Club Style 3D Card Carousel */}
       <div className="slider">
         <div className="slider__carrousel">
