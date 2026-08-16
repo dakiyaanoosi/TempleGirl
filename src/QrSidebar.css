@@ -52,11 +52,17 @@
   cursor: pointer;
   color: #111111;
   opacity: 1;
-  padding: 0;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   outline: none;
+  border-radius: 6px;
+}
+
+.qr-sidebar-close:focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 2px;
 }
 
 .qr-sidebar-content {

@@ -12,13 +12,18 @@ import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
 
 function App() {
-  const [isDownloadRoute, setIsDownloadRoute] = useState(false);
+  const [isDownloadRoute, setIsDownloadRoute] = useState(
+    () => window.location.pathname.startsWith('/download')
+  );
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Keep route detection reactive on client-side navigation
   useEffect(() => {
-    if (window.location.pathname === '/download' || window.location.pathname === '/download/') {
-      setIsDownloadRoute(true);
-    }
+    const handlePopState = () => {
+      setIsDownloadRoute(window.location.pathname.startsWith('/download'));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   if (isDownloadRoute) {

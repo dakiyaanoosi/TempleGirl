@@ -1,12 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
+import KolamBorder from './KolamBorder';
 import './Reviews.css';
 
 export default function Reviews() {
-  const containerRef = useRef(null);
   const sliderRef = useRef(null);
 
   const [reviewsData, setReviewsData] = useState([]);
-  const [containerWidth, setContainerWidth] = useState(1200);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
@@ -22,51 +21,6 @@ export default function Reviews() {
       })
       .catch((err) => console.error("Failed to load review data:", err));
   }, []);
-
-  // Dynamic responsive width listener for Kolam wave border
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.clientWidth || 1200);
-      }
-    };
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
-
-  // Responsive Kolam border calculation
-  const waveSegmentWidth = 30;
-  const numWaves = Math.max(4, Math.floor(containerWidth / waveSegmentWidth));
-  const kolamSvgWidth = numWaves * waveSegmentWidth;
-
-  const generateWavePath = () => {
-    let d = "M 0 12 Q 15 3, 30 12";
-    for (let i = 1; i < numWaves; i++) {
-      d += ` T ${(i + 1) * waveSegmentWidth} 12`;
-    }
-    return d;
-  };
-
-  const renderDots = () => {
-    const dots = [];
-    let isUpper = true;
-    for (let i = 0; i < numWaves; i++) {
-      const cx = i * waveSegmentWidth + 15;
-      const cy = isUpper ? 15.5 : 8.5;
-      dots.push(
-        <circle
-          key={i}
-          cx={cx}
-          cy={cy}
-          r="2.2"
-          fill="#F2B84B"
-        />
-      );
-      isUpper = !isUpper;
-    }
-    return dots;
-  };
 
   // Mouse Drag to Scroll handlers
   const handleMouseDown = (e) => {
@@ -100,6 +54,7 @@ export default function Reviews() {
         <span
           key={i}
           className={`star-icon ${i < rating ? 'star-filled' : 'star-empty'}`}
+          aria-hidden="true"
         >
           ★
         </span>
@@ -110,26 +65,8 @@ export default function Reviews() {
 
   return (
     <section className="third-page-section" id="third-page">
-      {/* Responsive Top Kolam Wave Border */}
-      <div ref={containerRef} className="wave-container top-wave-container">
-        <svg
-          className="third-page-wave"
-          viewBox={`0 0 ${kolamSvgWidth} 24`}
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <path
-              d={generateWavePath()}
-              stroke="#ffffff"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {renderDots()}
-          </g>
-        </svg>
-      </div>
+      {/* Responsive Top Kolam Wave Border — shared component */}
+      <KolamBorder svgClassName="third-page-wave" />
 
       {/* Headline Container (86vw max-width 1240px) */}
       <div className="third-page-content">
@@ -137,7 +74,7 @@ export default function Reviews() {
           <h2 className="third-page-title">
             <span className="text-white">What do families think of Temple Girl?</span>{' '}
             <span className="text-muted">
-              Discover why parents are bringing the stories of India’s temples into their children’s bedtime.
+              Discover why parents are bringing the stories of India's temples into their children's bedtime.
             </span>
           </h2>
         </div>
@@ -152,12 +89,16 @@ export default function Reviews() {
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
+          role="region"
+          aria-label="Customer reviews"
         >
           {reviewsData.map((review, index) => (
-            <div key={index} className="review-card">
+            <article key={index} className="review-card">
               {/* Header Row: Stars Left, Date Right */}
               <div className="card-top-row">
-                <div className="card-stars">{renderStars(review.stars || 5)}</div>
+                <div className="card-stars" aria-label={`${review.stars ?? 5} out of 5 stars`}>
+                  {renderStars(review.stars || 5)}
+                </div>
                 <div className="card-date">{review.date}</div>
               </div>
 
@@ -168,31 +109,13 @@ export default function Reviews() {
 
               {/* Review Body */}
               <p className="card-review-text">{review.comment}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>
 
-      {/* Responsive Bottom Kolam Wave Border */}
-      <div ref={containerRef} className="wave-container bottom-wave-container">
-        <svg
-          className="third-page-wave"
-          viewBox={`0 0 ${kolamSvgWidth} 24`}
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <path
-              d={generateWavePath()}
-              stroke="#ffffff"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {renderDots()}
-          </g>
-        </svg>
-      </div>
+      {/* Responsive Bottom Kolam Wave Border — separate instance with its own internal ref */}
+      <KolamBorder svgClassName="third-page-wave" />
     </section>
   );
 }

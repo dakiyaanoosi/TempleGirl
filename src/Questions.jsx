@@ -3,8 +3,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Questions.css';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function Questions() {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
@@ -13,11 +11,17 @@ export default function Questions() {
 
   const [qnaData, setQnaData] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
-  const marqueeItems = Array(8).fill("Questions ? *");
+  // Array(8) value is never used — only the index matters for the key
+  const marqueeItems = Array(8).fill(null);
 
   const toggleAccordion = (index) => {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
+
+  // Register plugin once inside an effect (not at module level)
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
 
   // Fetch Q&A data from public/qna.json
   useEffect(() => {
@@ -47,14 +51,16 @@ export default function Questions() {
     };
   }, []);
 
-  // GSAP ScrollTrigger: Desktop pin & right column scroll logic (>824px)
+  // GSAP ScrollTrigger: Desktop pin using matchMedia for reactive breakpoint handling
   useEffect(() => {
     if (!sectionRef.current || !qnaRightRef.current) return;
 
     let ctx = gsap.context(() => {
-      // Only pin & scrub on desktop screens (>824px)
-      if (window.innerWidth > 824) {
+      const mm = gsap.matchMedia();
+
+      mm.add('(min-width: 825px)', () => {
         const rightCol = qnaRightRef.current;
+        if (!rightCol) return;
         const rightWrapper = rightCol.parentElement;
 
         const getScrollDistance = () => {
@@ -80,7 +86,9 @@ export default function Questions() {
             }
           });
         }
-      }
+
+        // Returning cleanup from matchMedia callback automatically reverts on breakpoint exit
+      });
     }, sectionRef);
 
     return () => {
@@ -88,7 +96,7 @@ export default function Questions() {
     };
   }, [qnaData]);
 
-  // GSAP Mouse Enter Underline Animation (Slides to Right -> Returns from Left)
+  // GSAP Mouse Enter Underline Animation
   const handleLinkMouseEnter = () => {
     if (!underlineRef.current) return;
     gsap.killTweensOf(underlineRef.current);
@@ -109,7 +117,7 @@ export default function Questions() {
     });
   };
 
-  // GSAP Mouse Leave Underline Animation (Slides to Left -> Returns from Right - Reverse)
+  // GSAP Mouse Leave Underline Animation
   const handleLinkMouseLeave = () => {
     if (!underlineRef.current) return;
     gsap.killTweensOf(underlineRef.current);
@@ -133,7 +141,7 @@ export default function Questions() {
   return (
     <section ref={sectionRef} className="fourth-page-section" id="fourth-page">
       {/* Infinite Moving Marquee Header powered by GSAP */}
-      <div className="fourth-page-marquee-wrapper">
+      <div className="fourth-page-marquee-wrapper" aria-hidden="true">
         <div ref={trackRef} className="fourth-page-marquee-track">
           {/* Track Group 1 */}
           <div className="marquee-group">
@@ -185,9 +193,15 @@ export default function Questions() {
                   <div
                     key={index}
                     className={`qna-item ${isOpen ? 'is-open' : ''}`}
-                    onClick={() => toggleAccordion(index)}
                   >
-                    <div className="qna-question-header">
+                    {/* Semantic button for keyboard accessibility and proper ARIA */}
+                    <button
+                      type="button"
+                      className="qna-question-header"
+                      onClick={() => toggleAccordion(index)}
+                      aria-expanded={isOpen}
+                      aria-controls={`qna-answer-${index}`}
+                    >
                       <h3 className="qna-question">{item.q}</h3>
                       <span className="qna-accordion-icon" aria-hidden="true">
                         <svg
@@ -204,8 +218,11 @@ export default function Questions() {
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                       </span>
-                    </div>
-                    <div className="qna-answer-wrapper">
+                    </button>
+                    <div
+                      id={`qna-answer-${index}`}
+                      className="qna-answer-wrapper"
+                    >
                       <div className="qna-answer-content">
                         <p className="qna-answer">{item.a}</p>
                       </div>

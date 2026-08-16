@@ -1,18 +1,11 @@
 import KolamBorder from './KolamBorder';
+import { handleRadialMouseMove } from './utils/radialMouseMove';
 import './Footer.css';
 
 export default function Footer({ onOpenQrSidebar }) {
-  const handleRadialMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    e.currentTarget.style.setProperty('--x', `${x}px`);
-    e.currentTarget.style.setProperty('--y', `${y}px`);
-  };
-
   return (
     <footer className="footer-section" id="fifth-page">
-      <KolamBorder />
+      <KolamBorder svgClassName="second-page-wave" />
 
       <div className="footer-container">
         {/* Hero CTA Center Content */}
@@ -37,18 +30,18 @@ export default function Footer({ onOpenQrSidebar }) {
               rel="noopener noreferrer"
               className="store-btn-link"
             >
-              <img src="/googlePlay.svg" alt="Get it on Play Store" className="store-btn-img" />
+              <img src="/googlePlay.svg" alt="Get it on Google Play" className="store-btn-img" />
             </a>
             <button
               type="button"
               className="qr-code-btn"
-              aria-label="QR Code"
+              aria-label="Show QR code to download the app"
               onMouseMove={handleRadialMouseMove}
               onMouseEnter={handleRadialMouseMove}
               onMouseLeave={handleRadialMouseMove}
               onClick={onOpenQrSidebar}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon" aria-hidden="true">
                 <path fill="currentColor" d="M24 10.667H13.34V0H24v10.667Zm-2.665-8h-5.33V8h5.33V2.667ZM24 24H13.34V13.333H24V24Zm-2.665-8h-5.33v5.333h5.33V16ZM10.675 0v10.667H.012V0h10.661ZM2.678 8h5.33V2.667h-5.33V8Zm7.982 5.333H7.996V16h2.665v-2.667ZM7.996 16H5.33v2.667h2.666V16Zm2.665 2.667H7.996v2.666h2.665v-2.666Zm-5.33 0H2.664v2.666H5.33v-2.666Zm-2.666 2.666H0V24h2.665v-2.667Zm5.33 0H5.33V24h2.666v-2.667Zm-2.665-8H2.665V16H5.33v-2.667ZM2.665 16H0v2.667h2.665V16Z" />
               </svg>
             </button>
@@ -56,14 +49,14 @@ export default function Footer({ onOpenQrSidebar }) {
         </div>
 
         {/* Bottom Docked Footer Navigation */}
-        <div className="footer-bottom">
+        <nav className="footer-bottom" aria-label="Footer navigation">
           {/* Column 1: Legal & Policies */}
           <div className="footer-nav-col">
-            <a href="#" className="footer-nav-link" onClick={(e) => e.preventDefault()}>Privacy Policy</a>
-            <a href="#" className="footer-nav-link" onClick={(e) => e.preventDefault()}>Website Privacy</a>
-            <a href="#" className="footer-nav-link" onClick={(e) => e.preventDefault()}>Delete Account</a>
-            <a href="#" className="footer-nav-link" onClick={(e) => e.preventDefault()}>Terms &amp; Conditions</a>
-            <a href="#" className="footer-nav-link" onClick={(e) => e.preventDefault()}>Refund Policy</a>
+            <button type="button" className="footer-nav-link">Privacy Policy</button>
+            <button type="button" className="footer-nav-link">Website Privacy</button>
+            <button type="button" className="footer-nav-link">Delete Account</button>
+            <button type="button" className="footer-nav-link">Terms &amp; Conditions</button>
+            <button type="button" className="footer-nav-link">Refund Policy</button>
           </div>
 
           {/* Column 2: Social Links & Subscribe */}
@@ -72,9 +65,15 @@ export default function Footer({ onOpenQrSidebar }) {
             <a href="https://www.youtube.com/@thetemplegirl" target="_blank" rel="noopener noreferrer" className="footer-nav-link">YouTube</a>
             <a href="https://www.linkedin.com/in/templegirl/" target="_blank" rel="noopener noreferrer" className="footer-nav-link">LinkedIn</a>
             <a href="https://www.facebook.com/people/The-Temple-Girl/61554364524093/" target="_blank" rel="noopener noreferrer" className="footer-nav-link">Facebook</a>
-            <a href="#" className="footer-nav-link" onClick={(e) => { e.preventDefault(); if (onOpenQrSidebar) onOpenQrSidebar(); }}>Subscribe</a>
+            <button
+              type="button"
+              className="footer-nav-link"
+              onClick={() => { if (onOpenQrSidebar) onOpenQrSidebar(); }}
+            >
+              Subscribe
+            </button>
           </div>
-        </div>
+        </nav>
       </div>
     </footer>
   );

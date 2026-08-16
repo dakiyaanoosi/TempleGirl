@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { handleRadialMouseMove } from './utils/radialMouseMove';
 import './Hero.css';
 
 const WORDS = [
@@ -11,14 +12,6 @@ const WORDS = [
   'devotion.',
   'bedtime.',
 ];
-
-export const handleRadialMouseMove = (e) => {
-  const rect = e.currentTarget.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  e.currentTarget.style.setProperty('--x', `${x}px`);
-  e.currentTarget.style.setProperty('--y', `${y}px`);
-};
 
 export default function Hero({ onOpenQrSidebar }) {
   const [index, setIndex] = useState(0);
@@ -105,13 +98,16 @@ export default function Hero({ onOpenQrSidebar }) {
             Bringing temples to life <br />
             through{' '}
             <span className="word-wrapper">
-              <span ref={wordRef} className="rotating-word">
+              {/* Animated version — hidden from screen readers */}
+              <span ref={wordRef} className="rotating-word" aria-hidden="true">
                 {currentWord.split('').map((char, i) => (
                   <span key={`${index}-${i}`} className="letter">
                     {char}
                   </span>
                 ))}
               </span>
+              {/* Accessible static word — only read by screen readers */}
+              <span className="sr-only">{currentWord}</span>
             </span>
           </h1>
           <p className="hero-subtext">
@@ -133,25 +129,34 @@ export default function Hero({ onOpenQrSidebar }) {
               rel="noopener noreferrer"
               className="store-btn-link"
             >
-              <img src="/googlePlay.svg" alt="Get it on Play Store" className="store-btn-img" />
+              <img src="/googlePlay.svg" alt="Get it on Google Play" className="store-btn-img" />
             </a>
             <button
               type="button"
               className="qr-code-btn"
-              aria-label="QR Code"
+              aria-label="Show QR code to download the app"
               onMouseMove={handleRadialMouseMove}
               onMouseEnter={handleRadialMouseMove}
               onMouseLeave={handleRadialMouseMove}
               onClick={onOpenQrSidebar}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="qr-icon" aria-hidden="true">
                 <path fill="currentColor" d="M24 10.667H13.34V0H24v10.667Zm-2.665-8h-5.33V8h5.33V2.667ZM24 24H13.34V13.333H24V24Zm-2.665-8h-5.33v5.333h5.33V16ZM10.675 0v10.667H.012V0h10.661ZM2.678 8h5.33V2.667h-5.33V8Zm7.982 5.333H7.996V16h2.665v-2.667ZM7.996 16H5.33v2.667h2.666V16Zm2.665 2.667H7.996v2.666h2.665v-2.666Zm-5.33 0H2.664v2.666H5.33v-2.666Zm-2.666 2.666H0V24h2.665v-2.667Zm5.33 0H5.33V24h2.666v-2.667Zm-2.665-8H2.665V16H5.33v-2.667ZM2.665 16H0v2.667h2.665V16Z" />
               </svg>
             </button>
           </div>
         </div>
         <div className="hero-right-content">
-          <img src="/color.png" alt="Temple Girl Art" className="hero-image" />
+          {/* LCP image: explicit dimensions prevent CLS; fetchpriority ensures early load */}
+          <img
+            src="/color.png"
+            alt="Temple Girl Kids — illustrated characters from India's temple stories"
+            className="hero-image"
+            width={440}
+            height={660}
+            fetchPriority="high"
+            decoding="async"
+          />
         </div>
       </div>
 

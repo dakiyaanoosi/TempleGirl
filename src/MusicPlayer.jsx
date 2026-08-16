@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Play, Pause } from 'lucide-react';
-import { handleRadialMouseMove } from './Hero';
+import { handleRadialMouseMove } from './utils/radialMouseMove';
 import './MusicPlayer.css';
 
 export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
@@ -61,13 +61,16 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
   };
 
   const handleExploreClick = () => {
-    const userAgent = navigator.userAgent || '';
-    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
+    const ua = navigator.userAgent || '';
+    const isMobileDevice =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
     if (isMobileDevice) {
-      const isIOS = /iPhone|iPad|iPod/i.test(userAgent) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      // Use maxTouchPoints for iPadOS; navigator.platform is deprecated
+      const isIOS =
+        /iPhone|iPad|iPod/i.test(ua) ||
+        (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
 
       if (isIOS) {
         window.open('https://apps.apple.com/us/app/temple-girl-kids/id6772048283', '_blank', 'noopener,noreferrer');
@@ -92,9 +95,12 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
 
   return (
     <div className={`music-player-layout ${hasEnded ? 'ended-hidden' : ''}`}>
+      {/* preload="none" prevents the 5MB .aac file from buffering on page load */}
       <audio
         ref={audioRef}
         src="/krishna_the_little_butter_thief.aac"
+        preload="none"
+        aria-label="Krishna - The Little Butter Thief story audio"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={() => {
@@ -117,7 +123,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
         <div className="main-thumbnail-card">
           <img
             src="/krishna_the_little_butter_thief.png"
-            alt="Krishna - The Little Butter Thief"
+            alt="Krishna - The Little Butter Thief story cover art"
             className="player-cover-image"
           />
           <div className="cover-overlay-gradient">
@@ -145,6 +151,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
                 onChange={handleSeek}
                 disabled={hasEnded}
                 className="timeline-slider"
+                aria-label="Playback position"
                 style={{
                   background: `linear-gradient(to right, #ffffff ${progressPercent}%, rgba(255, 255, 255, 0.25) ${progressPercent}%)`
                 }}
@@ -174,6 +181,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
@@ -223,6 +231,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
                 <path d="M21 3v5h-5" />
@@ -244,7 +253,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
           </div>
         </div>
 
-        {/* Explore More Button Content (Slides UP into position as controls push up) */}
+        {/* Explore More Button Content */}
         <div className="explore-more-content">
           <button
             type="button"
@@ -253,7 +262,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
             onMouseMove={handleRadialMouseMove}
             onMouseEnter={handleRadialMouseMove}
             onMouseLeave={handleRadialMouseMove}
-            aria-label="Explore More"
+            aria-label="Explore more stories"
           >
             <span className="explore-btn-text">
               Explore More
@@ -267,6 +276,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
                 strokeWidth="2.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <path d="M5 12h14" />
                 <path d="m13 6 6 6-6 6" />

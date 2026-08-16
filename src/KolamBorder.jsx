@@ -1,7 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import './KolamBorder.css';
 
-export default function KolamBorder() {
+/**
+ * Responsive Kolam wave border SVG.
+ * @param {string} svgClassName  CSS class applied to the <svg> element.
+ *                               Defaults to 'second-page-wave'.
+ */
+export default function KolamBorder({ svgClassName = 'second-page-wave' }) {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(1200);
 
@@ -51,10 +56,11 @@ export default function KolamBorder() {
   return (
     <div ref={containerRef} className="wave-container top-wave-container">
       <svg
-        className="second-page-wave"
+        className={svgClassName}
         viewBox={`0 0 ${kolamSvgWidth} 24`}
         preserveAspectRatio="xMidYMid meet"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <g>
           <path

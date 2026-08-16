@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import gsap from 'gsap';
-import { handleRadialMouseMove } from './Hero';
+import { handleRadialMouseMove } from './utils/radialMouseMove';
+import { useBodyScrollLock } from './hooks/useBodyScrollLock';
 import './Header.css';
 
 export default function Header() {
@@ -10,6 +11,9 @@ export default function Header() {
 
   const lastScrollYRef = useRef(0);
   const tickingRef = useRef(false);
+
+  // Shared, reference-counted body scroll lock
+  useBodyScrollLock(isMenuOpen);
 
   // Optimized hide-on-scroll listener with requestAnimationFrame & threshold check
   useEffect(() => {
@@ -49,6 +53,16 @@ export default function Header() {
     };
   }, [isMenuOpen]);
 
+  // Escape key closes the mobile menu
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closeMenu();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMenuOpen]);
+
   const navItems = [
     { id: 'nav-home', label: 'Home' },
     { id: 'nav-contacts', label: 'Contacts' },
@@ -62,17 +76,6 @@ export default function Header() {
   const closeBtnRef = useRef(null);
   const backdropRef = useRef(null);
   const timelineRef = useRef(null);
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isMenuOpen]);
 
   useEffect(() => {
     itemsRef.current.forEach((li) => {
@@ -169,9 +172,12 @@ export default function Header() {
           setIsMenuOpen(false);
           timelineRef.current = null;
         },
+        onComplete: () => {
+          // Move focus to close button after animation
+          closeBtnRef.current?.focus();
+        },
       });
 
-      // Exact QR sidebar backdrop opacity transition concurrently at t = 0
       if (backdropRef.current) {
         tl.fromTo(
           backdropRef.current,
@@ -250,10 +256,11 @@ export default function Header() {
             <button
               type="button"
               className="mobile-menu-toggle"
-              aria-label="Toggle Menu"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMenuOpen}
               onClick={toggleMenu}
             >
-              <svg width="32" height="14" viewBox="0 0 32 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <svg width="32" height="14" viewBox="0 0 32 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <line x1="1" y1="2" x2="31" y2="2" />
                 <line x1="1" y1="10" x2="31" y2="10" />
               </svg>
@@ -267,7 +274,7 @@ export default function Header() {
                   setActiveNav('Home');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                aria-label="Home"
+                aria-label="Go to top of page"
               >
                 <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" />
               </button>
@@ -313,7 +320,7 @@ export default function Header() {
           {isMenuOpen && (
             <div ref={menuContentRef} className="mobile-menu-content">
               <div className="mobile-menu-header">
-                <ul className="mobile-nav-list">
+                <ul className="mobile-nav-list" role="list">
                   {navItems.map((item, index) => (
                     <li
                       key={`mobile-${item.id}`}
@@ -347,7 +354,7 @@ export default function Header() {
                       closeMenu();
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    aria-label="Home"
+                    aria-label="Go to top of page"
                   >
                     <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="mobile-brand-svg" />
                   </button>
@@ -383,9 +390,9 @@ export default function Header() {
               onMouseMove={handleRadialMouseMove}
               onMouseEnter={handleRadialMouseMove}
               onMouseLeave={handleRadialMouseMove}
-              aria-label="Close Menu"
+              aria-label="Close menu"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" width="18" height="18">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
                 <path fill="currentColor" d="M0 0h2.857v2.857H0V0Zm5.714 5.714H2.857V2.857h2.857v2.857Zm2.857 2.857H5.714V5.714h2.857v2.857Zm2.858 0H8.57v2.858H5.714v2.857H2.857v2.857H0V20h2.857v-2.857h2.857v-2.857h2.857v-2.857h2.858v2.857h2.857v2.857h2.857V20H20v-2.857h-2.857v-2.857h-2.857v-2.857h-2.857V8.57Zm2.857-2.857v2.857h-2.857V5.714h2.857Zm2.857-2.857v2.857h-2.857V2.857h2.857Zm0 0V0H20v2.857h-2.857Z" />
               </svg>
             </button>

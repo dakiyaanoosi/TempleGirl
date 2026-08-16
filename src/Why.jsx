@@ -1,9 +1,37 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import KolamBorder from './KolamBorder';
 import './Why.css';
 
+// Moved outside component: stable reference, no re-creation on every render
+const CARDS_DATA = [
+  {
+    id: 'zero-screen',
+    image: '/CardZeroScreen.png',
+    title: 'Beyond the screen',
+    desc: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.'
+  },
+  {
+    id: 'warm-voice',
+    image: '/CardWarmVoice.png',
+    title: 'A voice they know',
+    desc: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.'
+  },
+  {
+    id: 'temples',
+    image: '/CardTemples.png',
+    title: 'Stories rooted in Bharat',
+    desc: "From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder."
+  },
+  {
+    id: 'safe',
+    image: '/CardSafe.png',
+    title: 'Safe by design',
+    desc: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.'
+  }
+];
+
 export default function Why() {
-  const containerRef = useRef(null);
   const viewportRef = useRef(null);
 
   const prevPrimaryRef = useRef(null);
@@ -12,46 +40,15 @@ export default function Why() {
   const nextSecondaryRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(1200);
   const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  const cardsData = [
-    {
-      id: 'zero-screen',
-      image: '/CardZeroScreen.png',
-      title: 'Beyond the screen',
-      desc: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.'
-    },
-    {
-      id: 'warm-voice',
-      image: '/CardWarmVoice.png',
-      title: 'A voice they know',
-      desc: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.'
-    },
-    {
-      id: 'temples',
-      image: '/CardTemples.png',
-      title: 'Stories rooted in Bharat',
-      desc: "From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder."
-    },
-    {
-      id: 'safe',
-      image: '/CardSafe.png',
-      title: 'Safe by design',
-      desc: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.'
-    }
-  ];
-
-  // Dynamic responsive listener for Kolam border and breakpoint calculations
+  // Responsive listener
   useEffect(() => {
     const updateDimensions = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.clientWidth || 1200);
-      }
       setViewportWidth(window.innerWidth);
       setIsMobile(window.innerWidth <= 834);
     };
@@ -60,38 +57,16 @@ export default function Why() {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Responsive Kolam border calculation
-  const waveSegmentWidth = 30;
-  const numWaves = Math.max(4, Math.floor(containerWidth / waveSegmentWidth));
-  const kolamSvgWidth = numWaves * waveSegmentWidth;
+  // Calculate card gap
+  const cardGap = isMobile
+    ? Math.max(260, Math.round(viewportWidth * 0.72))
+    : Math.max(520, Math.round(viewportWidth * 0.48));
 
-  const generateWavePath = () => {
-    let d = "M 0 12 Q 15 3, 30 12";
-    for (let i = 1; i < numWaves; i++) {
-      d += ` T ${(i + 1) * waveSegmentWidth} 12`;
-    }
-    return d;
-  };
+  // Keep cardGap in a ref for GSAP tween callbacks that close over it
+  const cardGapRef = useRef(cardGap);
+  useEffect(() => { cardGapRef.current = cardGap; }, [cardGap]);
 
-  const renderDots = () => {
-    const dots = [];
-    let isUpper = true;
-    for (let i = 0; i < numWaves; i++) {
-      const cx = i * waveSegmentWidth + 15;
-      const cy = isUpper ? 15.5 : 8.5;
-      dots.push(
-        <circle
-          key={i}
-          cx={cx}
-          cy={cy}
-          r="2.2"
-          fill="#F2B84B"
-        />
-      );
-      isUpper = !isUpper;
-    }
-    return dots;
-  };
+  const snapTweenRef = useRef(null);
 
   // Nav Handlers with GSAP transition engine
   const handlePrev = () => {
@@ -99,7 +74,7 @@ export default function Why() {
     if (snapTweenRef.current) snapTweenRef.current.kill();
 
     const targetIndex = activeIndex - 1;
-    const initialOffset = dragOffset - cardGap;
+    const initialOffset = dragOffset - cardGapRef.current;
 
     setActiveIndex(targetIndex);
     setDragOffset(initialOffset);
@@ -114,11 +89,11 @@ export default function Why() {
   };
 
   const handleNext = () => {
-    if (activeIndex >= cardsData.length - 1) return;
+    if (activeIndex >= CARDS_DATA.length - 1) return;
     if (snapTweenRef.current) snapTweenRef.current.kill();
 
     const targetIndex = activeIndex + 1;
-    const initialOffset = dragOffset + cardGap;
+    const initialOffset = dragOffset + cardGapRef.current;
 
     setActiveIndex(targetIndex);
     setDragOffset(initialOffset);
@@ -139,10 +114,9 @@ export default function Why() {
     if (index === activeIndex) return;
     if (snapTweenRef.current) snapTweenRef.current.kill();
 
-    const targetIndex = index;
-    const initialOffset = dragOffset + (targetIndex - activeIndex) * cardGap;
+    const initialOffset = dragOffset + (index - activeIndex) * cardGapRef.current;
 
-    setActiveIndex(targetIndex);
+    setActiveIndex(index);
     setDragOffset(initialOffset);
 
     const tweenObj = { value: initialOffset };
@@ -174,7 +148,7 @@ export default function Why() {
   };
 
   const handleNextMouseEnter = () => {
-    if (activeIndex === cardsData.length - 1) return;
+    if (activeIndex === CARDS_DATA.length - 1) return;
     if (nextTlRef.current) nextTlRef.current.kill();
     nextTlRef.current = gsap.timeline()
       .to(nextPrimaryRef.current, { xPercent: 180, duration: 0.3, ease: 'power2.in' })
@@ -188,9 +162,7 @@ export default function Why() {
       .to(nextPrimaryRef.current, { xPercent: 0, duration: 0.3, ease: 'power2.out' });
   };
 
-  const snapTweenRef = useRef(null);
-
-  // Drag / Touch Interactions (Real-Time 1:1 Scrub with GSAP Smooth Snap on Release)
+  // Drag / Touch Interactions
   const handleDragStart = (e) => {
     if (snapTweenRef.current) snapTweenRef.current.kill();
     hasMovedRef.current = false;
@@ -204,14 +176,13 @@ export default function Why() {
     if (!isDragging) return;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const diff = clientX - startX;
-    
+
     if (Math.abs(diff) > 5) {
       hasMovedRef.current = true;
     }
 
-    // Dampen drag at boundary bounds
     let adjustedDiff = diff;
-    if ((activeIndex === 0 && diff > 0) || (activeIndex === cardsData.length - 1 && diff < 0)) {
+    if ((activeIndex === 0 && diff > 0) || (activeIndex === CARDS_DATA.length - 1 && diff < 0)) {
       adjustedDiff = diff * 0.25;
     }
     setDragOffset(adjustedDiff);
@@ -224,13 +195,13 @@ export default function Why() {
     const threshold = isMobile ? 40 : 80;
     let targetIndex = activeIndex;
 
-    if (dragOffset < -threshold && activeIndex < cardsData.length - 1) {
+    if (dragOffset < -threshold && activeIndex < CARDS_DATA.length - 1) {
       targetIndex = activeIndex + 1;
     } else if (dragOffset > threshold && activeIndex > 0) {
       targetIndex = activeIndex - 1;
     }
 
-    const initialOffset = dragOffset + (targetIndex - activeIndex) * cardGap;
+    const initialOffset = dragOffset + (targetIndex - activeIndex) * cardGapRef.current;
 
     setActiveIndex(targetIndex);
     setDragOffset(initialOffset);
@@ -244,31 +215,10 @@ export default function Why() {
     });
   };
 
-  // Calculate card gap (48% of screen width on desktop, matching Eight Club spacing)
-  const cardGap = isMobile ? Math.max(260, Math.round(viewportWidth * 0.72)) : Math.max(520, Math.round(viewportWidth * 0.48));
-
   return (
     <section className="why-page-section" id="why">
-      {/* Top Kolam Wave Border */}
-      <div ref={containerRef} className="wave-container top-wave-container">
-        <svg
-          className="why-page-wave"
-          viewBox={`0 0 ${kolamSvgWidth} 24`}
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <path
-              d={generateWavePath()}
-              stroke="#ffffff"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {renderDots()}
-          </g>
-        </svg>
-      </div>
+      {/* Top Kolam Wave Border — shared component */}
+      <KolamBorder svgClassName="why-page-wave" />
 
       {/* Section Heading */}
       <div className="why-header-block">
@@ -282,11 +232,19 @@ export default function Why() {
       <div className="slider">
         <div className="slider__carrousel">
           <div className="carousel">
-            
-            {/* Viewport Boundary for Mouse Drag & Touch */}
+
+            {/* Viewport Boundary — accessible region with keyboard navigation */}
             <div
               ref={viewportRef}
               className={`carousel__viewport ${isDragging ? 'carousel__viewport--dragging' : ''}`}
+              role="region"
+              aria-label="Why Temple Girl Kids — feature cards"
+              aria-roledescription="carousel"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft') handlePrev();
+                if (e.key === 'ArrowRight') handleNext();
+              }}
               onMouseDown={handleDragStart}
               onMouseMove={handleDragMove}
               onMouseUp={handleDragEnd}
@@ -296,15 +254,14 @@ export default function Why() {
               onTouchEnd={handleDragEnd}
             >
               <div className="carousel__track">
-                {cardsData.map((card, index) => {
+                {CARDS_DATA.map((card, index) => {
                   const offset = index - activeIndex;
                   const translateX = offset * cardGap + dragOffset;
-                  
-                  // Continuous 180° rotateY scrub mapped directly to drag position in uniform direction
+
                   const normOffset = cardGap > 0 ? translateX / cardGap : offset;
                   const clampedNorm = Math.max(-1, Math.min(1, normOffset));
                   const cardRotateY = 180 - clampedNorm * 180;
-                  
+
                   const rotateZ = normOffset * (isMobile ? 3 : 5);
                   const scale = 1 - Math.min(1.2, Math.abs(normOffset)) * 0.12;
                   const translateZ = -Math.min(1.2, Math.abs(normOffset)) * 60;
@@ -319,6 +276,9 @@ export default function Why() {
                         zIndex: zIndex,
                       }}
                       onClick={() => handleCardClick(index)}
+                      role="group"
+                      aria-label={`${card.title}, slide ${index + 1} of ${CARDS_DATA.length}`}
+                      aria-current={index === activeIndex ? 'true' : undefined}
                     >
                       <div
                         className="card__inner"
@@ -326,7 +286,7 @@ export default function Why() {
                           transform: `rotateY(${cardRotateY}deg)`
                         }}
                       >
-                        {/* Front Face (Card Image Artwork with #F2B84B Matted Frame) */}
+                        {/* Front Face */}
                         <div className="card__face card__face--front">
                           <div className="card-frame-inner">
                             <img
@@ -334,6 +294,9 @@ export default function Why() {
                               alt={card.title}
                               className="card-image"
                               draggable={false}
+                              loading="lazy"
+                              width={322}
+                              height={549}
                               onDragStart={(e) => e.preventDefault()}
                             />
                             <div className="card-overlay">
@@ -342,8 +305,8 @@ export default function Why() {
                           </div>
                         </div>
 
-                        {/* Back Face (Pattern) */}
-                        <div className="card__face card__face--back" />
+                        {/* Back Face */}
+                        <div className="card__face card__face--back" aria-hidden="true" />
                       </div>
                     </div>
                   );
@@ -359,9 +322,9 @@ export default function Why() {
               onMouseEnter={handlePrevMouseEnter}
               onMouseLeave={handlePrevMouseLeave}
               disabled={activeIndex === 0}
-              aria-label="Previous Slide"
+              aria-label="Previous slide"
             >
-              <span className="button-arrow-icon-wrapper">
+              <span className="button-arrow-icon-wrapper" aria-hidden="true">
                 <svg ref={prevPrimaryRef} className="arrow-icon icon-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
@@ -373,14 +336,14 @@ export default function Why() {
 
             <button
               type="button"
-              className={`button-arrow slider__nav slider__nav--next ${activeIndex === cardsData.length - 1 ? 'is-disabled' : ''}`}
+              className={`button-arrow slider__nav slider__nav--next ${activeIndex === CARDS_DATA.length - 1 ? 'is-disabled' : ''}`}
               onClick={handleNext}
               onMouseEnter={handleNextMouseEnter}
               onMouseLeave={handleNextMouseLeave}
-              disabled={activeIndex === cardsData.length - 1}
-              aria-label="Next Slide"
+              disabled={activeIndex === CARDS_DATA.length - 1}
+              aria-label="Next slide"
             >
-              <span className="button-arrow-icon-wrapper">
+              <span className="button-arrow-icon-wrapper" aria-hidden="true">
                 <svg ref={nextPrimaryRef} className="arrow-icon icon-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>

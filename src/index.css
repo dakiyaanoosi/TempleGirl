@@ -23,17 +23,6 @@ body,
   background-color: #24100e;
 }
 
-canvas#shader4-canvas {
-  display: block;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
 canvas#shader6-canvas {
   display: block;
   width: 100vw;
@@ -43,4 +32,17 @@ canvas#shader6-canvas {
   left: 0;
   z-index: 1;
   pointer-events: none;
+}
+
+/* Screen-reader only utility: visually hidden but accessible to AT */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

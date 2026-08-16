@@ -121,6 +121,12 @@
   box-shadow: none;
 }
 
+.store-btn-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
 .store-btn-img {
   height: 48px;
   width: auto;

@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 
 export default function DownloadRedirect() {
   useEffect(() => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+    // Use maxTouchPoints for iPadOS detection (navigator.platform is deprecated)
     const isIOS =
-      /iPad|iPhone|iPod/.test(userAgent) ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
 
     if (isIOS) {
       window.location.href = 'https://apps.apple.com/us/app/temple-girl-kids/id6772048283';

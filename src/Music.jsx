@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import KolamBorder from './KolamBorder';
 import MusicPlayer from './MusicPlayer';
 import './Music.css';
 
@@ -11,7 +12,8 @@ export default function Music({ onOpenQrSidebar }) {
   const amplitudeRef = useRef(0);
   const swayPhaseRef = useRef(0);
 
-  const containerRef = useRef(null);
+  // Use sectionRef for containerWidth measurement; freeing the wave div for KolamBorder
+  const sectionRef = useRef(null);
   const leftColRef = useRef(null);
   const rightColRef = useRef(null);
 
@@ -23,8 +25,8 @@ export default function Music({ onOpenQrSidebar }) {
   // Dynamic responsive listener measuring music player column height & stem width & breakpoint
   useEffect(() => {
     const updateDimensions = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.clientWidth || 1200);
+      if (sectionRef.current) {
+        setContainerWidth(sectionRef.current.clientWidth || 1200);
       }
       if (rightColRef.current) {
         setLinesWidth(rightColRef.current.clientWidth || 600);
@@ -44,130 +46,82 @@ export default function Music({ onOpenQrSidebar }) {
   const activeLinesWidth = isMobile ? containerWidth : linesWidth;
   const activeStemHeight = isMobile ? 180 : Math.round(playerHeight * 0.5);
 
-  // Responsive Kolam border calculation
-  const waveSegmentWidth = 30;
-  const numWaves = Math.max(4, Math.floor(containerWidth / waveSegmentWidth));
-  const kolamSvgWidth = numWaves * waveSegmentWidth;
-
   // Dynamic vertical stem line count for active lines width maintaining constant ~46px spacing
   const targetLineSpacing = 46;
   const totalLines = Math.max(4, Math.floor((activeLinesWidth - 40) / targetLineSpacing) + 1);
 
-  // Generate path string dynamically for numWaves
-  const generateWavePath = () => {
-    let d = "M 0 12 Q 15 3, 30 12";
-    for (let i = 1; i < numWaves; i++) {
-      d += ` T ${(i + 1) * waveSegmentWidth} 12`;
-    }
-    return d;
-  };
+  // --- Refs to sync reactive values for stable single GSAP ticker ---
+  const isPlayingRef = useRef(isPlaying);
+  const totalLinesRef = useRef(totalLines);
+  const activeLinesWidthRef = useRef(activeLinesWidth);
+  const activeStemHeightRef = useRef(activeStemHeight);
 
-  // Generate gold dots dynamically based on number of waves
-  const renderDots = () => {
-    const dots = [];
-    let isUpper = true;
-    for (let i = 0; i < numWaves; i++) {
-      const cx = i * waveSegmentWidth + 15;
-      const cy = isUpper ? 15.5 : 8.5;
-      dots.push(
-        <circle
-          key={i}
-          cx={cx}
-          cy={cy}
-          r="2.2"
-          fill="#F2B84B"
-        />
-      );
-      isUpper = !isUpper;
-    }
-    return dots;
-  };
+  useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
+  useEffect(() => { totalLinesRef.current = totalLines; }, [totalLines]);
+  useEffect(() => { activeLinesWidthRef.current = activeLinesWidth; }, [activeLinesWidth]);
+  useEffect(() => { activeStemHeightRef.current = activeStemHeight; }, [activeStemHeight]);
 
-  // GSAP Ticker wave animation: dynamic spatial frequency & organic stem sway
+  // Single stable GSAP ticker — registered once, reads from refs each frame
   useEffect(() => {
-    let phase = phaseRef.current;
-    let amplitude = amplitudeRef.current;
-    let swayPhase = swayPhaseRef.current;
     const waveSpeed = 0.035;
 
     const onTick = () => {
-      const targetAmp = isPlaying ? 1 : 0;
-      amplitude += (targetAmp - amplitude) * 0.06;
-      amplitudeRef.current = amplitude;
+      const isPlayingNow = isPlayingRef.current;
+      const totalLinesNow = totalLinesRef.current;
+      const activeLinesWidthNow = activeLinesWidthRef.current;
+      const activeStemHeightNow = activeStemHeightRef.current;
 
-      swayPhase += 0.015; // Gentle continuous organic stem sway
-      swayPhaseRef.current = swayPhase;
+      const targetAmp = isPlayingNow ? 1 : 0;
+      amplitudeRef.current += (targetAmp - amplitudeRef.current) * 0.06;
 
-      const activeLineCount = linesRef.current.filter(Boolean).length || totalLines;
+      swayPhaseRef.current += 0.015;
+
+      const activeLineCount = linesRef.current.filter(Boolean).length || totalLinesNow;
       const spatialFreq = (2 * Math.PI) / activeLineCount;
 
       linesRef.current.forEach((line, index) => {
         if (line) {
-          const x = totalLines > 1
-            ? 20 + index * ((activeLinesWidth - 40) / (totalLines - 1))
-            : activeLinesWidth / 2;
+          const x = totalLinesNow > 1
+            ? 20 + index * ((activeLinesWidthNow - 40) / (totalLinesNow - 1))
+            : activeLinesWidthNow / 2;
 
-          const wave = Math.sin(phase - index * spatialFreq);
-          const dip = amplitude * 0.1875 * (1 - wave);
+          const wave = Math.sin(phaseRef.current - index * spatialFreq);
+          const dip = amplitudeRef.current * 0.1875 * (1 - wave);
           const heightFactor = 1.0 - dip;
-          const targetY1 = activeStemHeight * (1 - heightFactor);
+          const targetY1 = activeStemHeightNow * (1 - heightFactor);
 
-          // Subtle organic wavy curvature (S-curve Bezier control points)
-          const swayAmp = 3.5 + amplitude * 4.5;
-          const offset1 = Math.sin(swayPhase + index * 0.45) * swayAmp;
-          const offset2 = Math.cos(swayPhase + index * 0.45) * swayAmp;
+          const swayAmp = 3.5 + amplitudeRef.current * 4.5;
+          const offset1 = Math.sin(swayPhaseRef.current + index * 0.45) * swayAmp;
+          const offset2 = Math.cos(swayPhaseRef.current + index * 0.45) * swayAmp;
 
           const cp1x = (x + offset1).toFixed(2);
-          const cp1y = (targetY1 + (activeStemHeight - targetY1) * 0.33).toFixed(2);
+          const cp1y = (targetY1 + (activeStemHeightNow - targetY1) * 0.33).toFixed(2);
           const cp2x = (x - offset2).toFixed(2);
-          const cp2y = (targetY1 + (activeStemHeight - targetY1) * 0.66).toFixed(2);
+          const cp2y = (targetY1 + (activeStemHeightNow - targetY1) * 0.66).toFixed(2);
 
-          const pathD = `M ${x.toFixed(2)} ${targetY1.toFixed(2)} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x.toFixed(2)} ${activeStemHeight}`;
+          const pathD = `M ${x.toFixed(2)} ${targetY1.toFixed(2)} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x.toFixed(2)} ${activeStemHeightNow}`;
           line.setAttribute('d', pathD);
 
           const lotus = lotusesRef.current[index];
           if (lotus) {
-            const lotusY = targetY1 - 28;
-            lotus.setAttribute('y', lotusY.toFixed(2));
+            lotus.setAttribute('y', (targetY1 - 28).toFixed(2));
           }
         }
       });
 
-      if (isPlaying || amplitude > 0.001) {
-        phase += waveSpeed;
-        phaseRef.current = phase;
+      if (isPlayingNow || amplitudeRef.current > 0.001) {
+        phaseRef.current += waveSpeed;
       }
     };
 
     gsap.ticker.add(onTick);
-
-    return () => {
-      gsap.ticker.remove(onTick);
-    };
-  }, [isPlaying, totalLines, activeLinesWidth, activeStemHeight]);
+    return () => gsap.ticker.remove(onTick);
+  }, []); // stable — runs once only
 
   return (
-    <section className="second-page-section" id="second-page">
-      {/* Responsive Top Kolam Wave Border */}
-      <div ref={containerRef} className="wave-container top-wave-container">
-        <svg
-          className="second-page-wave"
-          viewBox={`0 0 ${kolamSvgWidth} 24`}
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g>
-            <path
-              d={generateWavePath()}
-              stroke="#ffffff"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
-            />
-            {renderDots()}
-          </g>
-        </svg>
-      </div>
+    <section ref={sectionRef} className="second-page-section" id="second-page">
+      {/* Reusable KolamBorder replaces 40 lines of duplicated wave logic */}
+      <KolamBorder svgClassName="second-page-wave" />
 
       <div className="second-page-content">
         {/* 2-Column Split Layout matching Hero styling */}
@@ -184,7 +138,7 @@ export default function Music({ onOpenQrSidebar }) {
             {/* Headline with Headphone SVG Icon before "Hear" */}
             <h2 className="second-page-title">
               <span className="title-inline-svg title-prefix-svg">
-                <img src="/headphone.svg" alt="Headphone" />
+                <img src="/headphone.svg" alt="" aria-hidden="true" />
               </span>
               Hear <span className="text-highlight">Namratha</span> bring a story to life.
             </h2>
@@ -197,6 +151,7 @@ export default function Music({ onOpenQrSidebar }) {
                   viewBox={`0 -38 ${activeLinesWidth} ${activeStemHeight + 38}`}
                   preserveAspectRatio="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
                 >
                   {/* Vertical Stem Lines */}
                   {Array.from({ length: totalLines }).map((_, index) => {

@@ -157,31 +157,31 @@ export function initShaderBackground(canvas) {
   let startTime = performance.now();
 
   function render() {
-    const time = (performance.now() - startTime) / 1000;
-
-    gl.uniform2f(iResolution, canvas.width, canvas.height);
-    gl.uniform1f(iTime, time);
-
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    // Skip GPU draw when tab is hidden — saves battery & CPU on background tabs
+    if (!document.hidden) {
+      const time = (performance.now() - startTime) / 1000;
+      gl.uniform2f(iResolution, canvas.width, canvas.height);
+      gl.uniform1f(iTime, time);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
     animationFrameId = requestAnimationFrame(render);
   }
+
+  // Re-anchor start time after tab becomes visible to avoid animation jump
+  const handleVisibilityChange = () => {
+    if (!document.hidden) {
+      startTime = performance.now() - ((performance.now() - startTime));
+    }
+  };
+  document.addEventListener("visibilitychange", handleVisibilityChange);
 
   render();
 
   return () => {
     window.removeEventListener("resize", resize);
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
     }
   };
-}
-
-// Fallback DOMContentLoaded execution if loaded directly via script tag
-if (typeof document !== "undefined") {
-  document.addEventListener("DOMContentLoaded", () => {
-    const canvas = document.getElementById("shader6-canvas");
-    if (canvas) {
-      initShaderBackground(canvas);
-    }
-  });
 }
