@@ -1,18 +1,45 @@
 import { useEffect, useRef } from "react";
 import { initShaderBackground } from "../background.js";
+import { initMobileShaderBackground } from "../mobileBackground.js";
 
 export default function ShaderBackground() {
   const primaryCanvasRef = useRef(null);
 
   useEffect(() => {
-    let cleanupPrimary = null;
+    let cleanup = null;
 
-    if (primaryCanvasRef.current) {
-      cleanupPrimary = initShaderBackground(primaryCanvasRef.current);
-    }
+    const setupBackground = () => {
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+
+      if (!primaryCanvasRef.current) return;
+
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        cleanup = initMobileShaderBackground(primaryCanvasRef.current);
+      } else {
+        cleanup = initShaderBackground(primaryCanvasRef.current);
+      }
+    };
+
+    setupBackground();
+
+    let wasMobile = window.innerWidth < 768;
+    const handleResize = () => {
+      const isMobileNow = window.innerWidth < 768;
+      if (isMobileNow !== wasMobile) {
+        wasMobile = isMobileNow;
+        setupBackground();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      if (cleanupPrimary) cleanupPrimary();
+      window.removeEventListener("resize", handleResize);
+      if (cleanup) cleanup();
     };
   }, []);
 
