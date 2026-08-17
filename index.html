@@ -7,7 +7,7 @@
     <meta name="description" content="Temple Girl Kids brings India's timeless temple stories to life as warm, screen-free audio bedtime stories, lovingly narrated for curious young minds." />
     <meta property="og:title" content="Temple Girl Kids" />
     <meta property="og:description" content="Audio bedtime stories from India's temples. Zero screen time. 2 new stories every week. Trusted by 2 million families." />
-    <meta property="og:image" content="/color.png" />
+    <meta property="og:image" content="/color.webp" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Temple Girl Kids" />
@@ -15,9 +15,13 @@
     <link rel="icon" type="image/svg+xml" href="/templeGirlKids.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Manrope:wght@200..800&family=Outfit:wght@300;400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Manrope:wght@200..800&family=Outfit:wght@300;400;500;600;700&family=Yatra+One&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Manrope:wght@200..800&family=Outfit:wght@300;400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Manrope:wght@200..800&family=Outfit:wght@300;400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet">
+    </noscript>
     <!-- Preload LCP image to improve Largest Contentful Paint -->
-    <link rel="preload" as="image" href="/color.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/color.webp" fetchpriority="high" />
   </head>
   <body>
     <div id="root"></div>

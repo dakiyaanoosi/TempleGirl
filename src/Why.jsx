@@ -7,25 +7,25 @@ import './Why.css';
 const CARDS_DATA = [
   {
     id: 'zero-screen',
-    image: '/CardZeroScreen.png',
+    image: '/CardZeroScreen.webp',
     title: 'Beyond the screen',
     desc: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.'
   },
   {
     id: 'warm-voice',
-    image: '/CardWarmVoice.png',
+    image: '/CardWarmVoice.webp',
     title: 'A voice they know',
     desc: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.'
   },
   {
     id: 'temples',
-    image: '/CardTemples.png',
+    image: '/CardTemples.webp',
     title: 'Stories rooted in Bharat',
     desc: "From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder."
   },
   {
     id: 'safe',
-    image: '/CardSafe.png',
+    image: '/CardSafe.webp',
     title: 'Safe by design',
     desc: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.'
   }

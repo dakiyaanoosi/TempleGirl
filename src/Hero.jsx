@@ -121,7 +121,7 @@ export default function Hero({ onOpenQrSidebar }) {
               rel="noopener noreferrer"
               className="store-btn-link"
             >
-              <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" />
+              <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" width={114} height={38} />
             </a>
             <a
               href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
@@ -129,7 +129,7 @@ export default function Hero({ onOpenQrSidebar }) {
               rel="noopener noreferrer"
               className="store-btn-link"
             >
-              <img src="/googlePlay.svg" alt="Get it on Google Play" className="store-btn-img" />
+              <img src="/googlePlay.svg" alt="Get it on Google Play" className="store-btn-img" width={114} height={38} />
             </a>
             <button
               type="button"
@@ -149,7 +149,7 @@ export default function Hero({ onOpenQrSidebar }) {
         <div className="hero-right-content">
           {/* LCP image: explicit dimensions prevent CLS; fetchpriority ensures early load */}
           <img
-            src="/color.png"
+            src="/color.webp"
             alt="Temple Girl Kids — illustrated characters from India's temple stories"
             className="hero-image"
             width={440}

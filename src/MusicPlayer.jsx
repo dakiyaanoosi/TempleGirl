@@ -122,9 +122,11 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
         {/* Main Front Thumbnail Card */}
         <div className="main-thumbnail-card">
           <img
-            src="/krishna_the_little_butter_thief.png"
+            src="/krishna_the_little_butter_thief.webp"
             alt="Krishna - The Little Butter Thief story cover art"
             className="player-cover-image"
+            width={300}
+            height={300}
           />
           <div className="cover-overlay-gradient">
             <div className="player-track-info">

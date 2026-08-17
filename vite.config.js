@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
+    target: 'esnext',
+    cssTarget: 'chrome100',
     rollupOptions: {
       output: {
         // Vite 8 / Rollup 4+ requires manualChunks as a function

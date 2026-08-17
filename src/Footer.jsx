@@ -22,7 +22,7 @@ export default function Footer({ onOpenQrSidebar }) {
               rel="noopener noreferrer"
               className="store-btn-link"
             >
-              <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" />
+              <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" width={114} height={38} />
             </a>
             <a
               href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
@@ -30,7 +30,7 @@ export default function Footer({ onOpenQrSidebar }) {
               rel="noopener noreferrer"
               className="store-btn-link"
             >
-              <img src="/googlePlay.svg" alt="Get it on Google Play" className="store-btn-img" />
+              <img src="/googlePlay.svg" alt="Get it on Google Play" className="store-btn-img" width={114} height={38} />
             </a>
             <button
               type="button"

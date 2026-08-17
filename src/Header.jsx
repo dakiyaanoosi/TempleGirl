@@ -276,7 +276,7 @@ export default function Header() {
                 }}
                 aria-label="Go to top of page"
               >
-                <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" />
+                <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" width={77} height={32} />
               </button>
             </div>
 
@@ -356,7 +356,7 @@ export default function Header() {
                     }}
                     aria-label="Go to top of page"
                   >
-                    <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="mobile-brand-svg" />
+                    <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="mobile-brand-svg" width={77} height={32} />
                   </button>
                 </div>
               </div>

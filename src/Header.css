@@ -7,7 +7,6 @@
   width: 70vw;
   max-width: 1280px;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
 }
 
 .pill-header-container.header-hidden {
@@ -17,8 +16,8 @@
 
 .pill-header {
   background: rgba(18, 18, 22, 0.2);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border-radius: 14px;
   padding: 8px 8px 8px 16px;
   box-shadow: none;

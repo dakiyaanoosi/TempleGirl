@@ -257,7 +257,7 @@
 @media (max-width: 824px) {
   .fourth-page-section {
     height: auto;
-    min-height: 100vh;
+    min-height: auto;
     overflow: visible;
   }
   .fourth-page-content {

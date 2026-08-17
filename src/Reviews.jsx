@@ -96,7 +96,7 @@ export default function Reviews() {
             <article key={index} className="review-card">
               {/* Header Row: Stars Left, Date Right */}
               <div className="card-top-row">
-                <div className="card-stars" aria-label={`${review.stars ?? 5} out of 5 stars`}>
+                <div className="card-stars" role="img" aria-label={`${review.stars ?? 5} out of 5 stars`}>
                   {renderStars(review.stars || 5)}
                 </div>
                 <div className="card-date">{review.date}</div>
