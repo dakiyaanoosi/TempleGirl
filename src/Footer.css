@@ -41,30 +41,31 @@
 
 .footer-title {
   font-family: 'Outfit', 'Manrope', sans-serif;
-  font-size: 5rem;
+  font-size: clamp(2rem, 4vw + 1rem, 5rem); /* Issue 14: fluid — no abrupt jumps */
   font-weight: 400;
-  color: #ffffff;
+  color: var(--color-text-primary);
   letter-spacing: -0.03em;
-  margin: 0 0 20px 0;
+  margin: 0 0 var(--space-5) 0;
   line-height: 1.1;
+  word-break: keep-all;   /* Issue 14: prevent awkward mid-word breaks */
 }
 
 .footer-subtitle {
   font-family: 'Manrope', sans-serif;
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.5rem); /* fluid subtitle */
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 18px 0;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-4) 0;
   line-height: 1.45;
 }
 
 .footer-underline {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid var(--color-text-muted);
   cursor: pointer;
   display: inline-block;
   padding-bottom: 2px;
-  color: #ffffff;
-  transition: opacity 0.25s ease;
+  color: var(--color-text-primary);
+  transition: var(--transition-opacity);   /* R4 */
 }
 
 .footer-underline:hover {
@@ -99,13 +100,12 @@
 
 .footer-nav-link {
   font-family: 'Manrope', sans-serif;
-  font-size: 1.05rem;
+  font-size: var(--text-md);
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-text-dim);
   text-decoration: none;
-  transition: color 0.25s ease;
+  transition: var(--transition-color);   /* R4 */
   white-space: nowrap;
-  /* button reset — preserves visual parity with anchor elements */
   background: none;
   border: none;
   padding: 0;
@@ -131,16 +131,10 @@
   text-underline-offset: 6px;
 }
 
-/* Responsive Media Queries */
+/* Responsive Media Queries — Issue 14: clamp() handles fluid scaling, minimal overrides needed */
 @media (max-width: 1024px) {
-  .footer-title {
-    font-size: 3.8rem;
-  }
-  .footer-subtitle {
-    font-size: 1.3rem;
-  }
   .footer-bottom {
-    gap: 24px;
+    gap: var(--space-6);
     flex-wrap: wrap;
   }
 }
@@ -149,13 +143,16 @@
   .footer-section {
     height: auto;
     min-height: auto;
-    padding: 20px 5vw 40px 5vw;
-  }
-  .footer-title {
-    font-size: 2.8rem;
+    padding: var(--space-5) 5vw var(--space-10) 5vw;
   }
   .footer-subtitle {
-    font-size: 1.15rem;
-    margin-bottom: 28px;
+    margin-bottom: var(--space-7);
+  }
+}
+
+/* Issue 14: explicit small-mobile override to prevent orphan */
+@media (max-width: 480px) {
+  .footer-title {
+    font-size: 2rem;
   }
 }

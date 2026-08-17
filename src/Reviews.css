@@ -64,19 +64,18 @@
   overflow: hidden;
 }
 
-/* Draggable Review Cards Slider Track */
 .reviews-slider-track {
   display: flex;
-  align-items: flex-start; /* Cards naturally adapt to their own content height */
-  gap: 24px;
+  align-items: flex-start;   /* restored to original — cards top-align */
+  gap: var(--space-6);
   overflow-x: auto;
   scroll-behavior: auto;
   padding-left: max(7vw, calc((100vw - 1240px) / 2));
   padding-right: max(7vw, calc((100vw - 1240px) / 2));
-  padding-top: 12px;
-  padding-bottom: 36px;
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-9);
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
   user-select: none;
   cursor: grab;
 }
@@ -89,23 +88,23 @@
   cursor: grabbing;
 }
 
-/* Individual Review Card - Dynamic height matching comment length */
+/* Individual Review Card - dynamic height matching comment length */
 .review-card {
   flex: 0 0 380px;
   width: 380px;
   height: fit-content;
-  min-height: auto;
-  background: rgba(18, 18, 22, 0.2);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid #A6A6A6;
-  border-radius: 28px;
-  padding: 40px;
+  min-height: auto;        /* restored to original */
+  background: var(--color-surface-dark);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1.5px solid var(--color-border-muted);
+  border-radius: var(--radius-card);
+  padding: var(--space-10);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 18px;
+  gap: var(--space-4);
   box-shadow: none;
 }
 
@@ -152,9 +151,9 @@
 
 .reviewer-name {
   font-family: 'Manrope', sans-serif;
-  font-size: 1.15rem;
+  font-size: var(--text-md);
   font-weight: 700;
-  color: #F4C95D;
+  color: var(--color-brand-amber-soft);   /* R2: was #F4C95D */
   letter-spacing: -0.01em;
   text-transform: capitalize;
 }
@@ -162,9 +161,9 @@
 /* Review Body Paragraph */
 .card-review-text {
   font-family: 'Manrope', sans-serif;
-  font-size: 0.92rem;
+  font-size: var(--text-base);
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--color-text-primary);
   margin: 0;
   font-weight: 400;
 }

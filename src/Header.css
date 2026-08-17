@@ -95,10 +95,10 @@
 
 .pill-nav-link {
   font-family: 'Manrope', sans-serif;
-  font-size: 0.9rem;
+  font-size: var(--text-nav);
   font-weight: 600;
   text-transform: uppercase;
-  color: rgba(255, 221, 221, 0.85);
+  color: var(--color-text-nav);
   background: transparent;
   border: none;
   border-radius: 0;
@@ -106,7 +106,7 @@
   cursor: pointer;
   white-space: nowrap;
   outline: none;
-  transition: color 250ms ease-in-out;
+  transition: var(--transition-color);   /* R4: unified token */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -165,14 +165,14 @@
   justify-content: center;
   background: #000000;
   border: none;
-  border-radius: 14px;
-  color: #ffffff;
+  border-radius: var(--radius-btn);
+  color: var(--color-text-primary);
   cursor: pointer;
   outline: none;
   box-shadow: none;
-  padding: 12px 20px;
+  padding: 12px var(--space-5);
   font-family: 'Manrope', sans-serif;
-  font-size: 0.9rem;
+  font-size: var(--text-nav);
   font-weight: 700;
   letter-spacing: 0.05em;
   line-height: 1;
@@ -180,7 +180,7 @@
   isolation: isolate;
   --x: 50%;
   --y: 50%;
-  transition: color 0.35s ease;
+  transition: var(--transition-color);   /* R4 */
   margin-right: 0;
 }
 
@@ -208,6 +208,12 @@
   color: #000000;
 }
 
+/* R5: active/pressed state */
+.subscribe-btn:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
 .subscribe-btn.active {
   background: #ffffff;
   color: #000000;
@@ -224,17 +230,30 @@
   outline-offset: 4px;
 }
 
+/* Issue 10: Mobile hamburger must meet 44×44px WCAG 2.5.5 touch target */
 .mobile-menu-toggle {
   display: none;
   background: transparent;
   border: none;
-  color: #ffffff;
+  color: var(--color-text-primary);
   cursor: pointer;
-  padding: 6px 8px;
-  margin-left: 8px;
+  padding: 6px 8px;    /* restored to original visual padding */
+  margin-left: var(--space-2);
   align-items: center;
   justify-content: center;
   outline: none;
+  transition: var(--transition-opacity);
+}
+
+.mobile-menu-toggle:hover {
+  opacity: 0.75;
+}
+
+/* R5: active press state  */
+.mobile-menu-toggle:active {
+  opacity: 0.5;
+  transform: scale(0.92);
+  transition: transform 0.1s ease, opacity 0.1s ease;
 }
 
 @media (max-width: 1096px) {
@@ -342,9 +361,10 @@
   align-items: center;
 }
 
+/* Issue 10: Mobile nav links need 44px minimum vertical tap target */
 .mobile-nav-item .pill-nav-link {
   color: rgba(18, 18, 22, 0.65);
-  padding: 4px 0;
+  padding: 4px 0;      /* restored to original visual padding */
 }
 
 .mobile-nav-item .pill-nav-link.active,

@@ -35,15 +35,28 @@ export default function Questions() {
       .catch((err) => console.error("Failed to load Q&A data:", err));
   }, []);
 
-  // Continuous ultra-smooth GSAP marquee tween
+  // Continuous ultra-smooth GSAP marquee tween — Issue 06: start at x=0 so first word is never clipped
   useEffect(() => {
     if (!trackRef.current) return;
 
+    const groupEls = trackRef.current.querySelectorAll('.marquee-group');
+    if (!groupEls.length) return;
+
+    // Measure the width of a single group after first paint
+    const singleGroupWidth = groupEls[0].offsetWidth || 0;
+    if (singleGroupWidth === 0) return;
+
+    // Always start at x=0 — first character is always clean/visible
+    gsap.set(trackRef.current, { x: 0 });
+
     const marqueeTween = gsap.to(trackRef.current, {
-      xPercent: -50,
+      x: -singleGroupWidth,
       ease: 'none',
       duration: 50,
-      repeat: -1
+      repeat: -1,
+      modifiers: {
+        x: gsap.utils.unitize((value) => parseFloat(value) % singleGroupWidth)
+      }
     });
 
     return () => {

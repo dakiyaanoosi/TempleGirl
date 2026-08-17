@@ -181,6 +181,7 @@ export default function Music({ onOpenQrSidebar }) {
                       <svg
                         key={`lotus-${index}`}
                         ref={(el) => (lotusesRef.current[index] = el)}
+                        className={isPlaying ? 'lotus-playing' : 'lotus-idle'}
                         x={x - 16}
                         y={-28}
                         width="32"

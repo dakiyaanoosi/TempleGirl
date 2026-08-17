@@ -162,20 +162,20 @@ export default function Hero({ onOpenQrSidebar }) {
 
       {/* Bottom Stats Section */}
       <div className="hero-stats-container">
-        <div className="stat-card">
-          <span className="stat-number">0</span>
+        <div className="stat-card" role="figure" aria-label="Zero screen time required — audio only">
+          <span className="stat-number" aria-hidden="true">0</span>
           <span className="stat-label">SCREEN TIME</span>
         </div>
-        <div className="stat-card">
-          <span className="stat-number">2</span>
+        <div className="stat-card" role="figure" aria-label="Two new stories every week">
+          <span className="stat-number" aria-hidden="true">2</span>
           <span className="stat-label">NEW STORIES EVERY WEEK</span>
         </div>
-        <div className="stat-card">
-          <span className="stat-number">2M+</span>
+        <div className="stat-card" role="figure" aria-label="Two million plus families trust us">
+          <span className="stat-number" aria-hidden="true">2M+</span>
           <span className="stat-label">FAMILIES TRUST US</span>
         </div>
-        <div className="stat-card">
-          <span className="stat-number">0</span>
+        <div className="stat-card" role="figure" aria-label="Zero advertisements, ever">
+          <span className="stat-number" aria-hidden="true">0</span>
           <span className="stat-label">ADS. EVER.</span>
         </div>
       </div>

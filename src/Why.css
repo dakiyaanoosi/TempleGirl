@@ -231,13 +231,21 @@
   width: 100%;
 }
 
-/* Nav Arrows - Positioned directly beside middle card (Exact Eight Club Style) */
+.button-arrow:disabled,
+.button-arrow.is-disabled {
+  opacity: 0.15;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: translateY(-50%) !important;
+}
+
+/* Issue 05 fix: expand to 44×44px WCAG minimum touch target */
 .button-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 150;
-  width: 27px;
+  width: 27px;    /* restored to original visual size */
   height: 27px;
   border-radius: 50%;
   background: #FAF6EE;
@@ -248,14 +256,12 @@
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
+  /* R5: active press state */
+  transition: transform 0.15s ease;
 }
 
-.button-arrow:disabled,
-.button-arrow.is-disabled {
-  opacity: 0.15;
-  cursor: not-allowed;
-  pointer-events: none;
-  transform: translateY(-50%) !important;
+.button-arrow:active {
+  transform: translateY(-50%) scale(0.92);
 }
 
 .button-arrow-icon-wrapper {
@@ -276,20 +282,25 @@
   will-change: transform;
 }
 
-/* Left Arrow floating right next to left edge of middle card */
-.slider__nav--prev {
-  left: calc(50% - 245px);
+/* Issue 04 fix: use CSS variables so position is tied to card width */
+:root {
+  --carousel-card-half: 195px;   /* 350px / 2 = 175px + 20px gutter = 195px */
 }
 
-/* Right Arrow floating right next to right edge of middle card */
+/* Left Arrow: flush against left edge of active card */
+.slider__nav--prev {
+  left: calc(50% - var(--carousel-card-half) - var(--touch-target) - 4px);
+}
+
+/* Right Arrow: flush against right edge of active card */
 .slider__nav--next {
-  right: calc(50% - 245px);
+  right: calc(50% - var(--carousel-card-half) - var(--touch-target) - 4px);
 }
 
 /* Responsive Media Queries */
 @media (max-width: 834px) {
   .why-main-title {
-    gap: 8px;
+    gap: var(--space-2);
   }
   .why-cursive {
     font-size: 2.3rem;
@@ -317,18 +328,11 @@
   .card-desc {
     font-size: 0.82rem;
   }
-  .button-arrow {
-    width: 28px;
-    height: 28px;
-  }
-  .button-arrow svg.arrow-icon {
-    width: 14px;
-    height: 14px;
-  }
+  /* Issue 04 fix: at mobile, anchor arrows to viewport edges */
   .slider__nav--prev {
-    left: 16px;
+    left: var(--space-4);   /* 16px from viewport edge */
   }
   .slider__nav--next {
-    right: 16px;
+    right: var(--space-4);  /* 16px from viewport edge */
   }
 }

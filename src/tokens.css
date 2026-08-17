@@ -1,0 +1,93 @@
+/* ============================================================
+   TempleGirl Kids — Design Token System
+   Single source of truth for all colors, spacing, type, and
+   transitions used across every component stylesheet.
+   ============================================================ */
+
+:root {
+  /* --------------------------------------------------
+     Brand Color Palette
+     -------------------------------------------------- */
+  --color-brand-amber:       #F2B84B;   /* Primary accent — buttons, highlights, stat numbers */
+  --color-brand-amber-soft:  #F4C95D;   /* Subtle accent — FAQ questions, soft highlights */
+  --color-brand-crimson:     #6e1629;   /* Player stacked card background */
+
+  /* Surface & glass */
+  --color-surface-dark:      rgba(18, 18, 22, 0.20);
+  --color-surface-dark-md:   rgba(18, 18, 22, 0.35);
+  --color-border-muted:      #A6A6A6;
+  --color-bg-base:           #24100e;
+
+  /* Text */
+  --color-text-primary:      #ffffff;
+  --color-text-muted:        rgba(255, 255, 255, 0.85);
+  --color-text-faint:        rgba(255, 255, 255, 0.70);
+  --color-text-dim:          rgba(255, 255, 255, 0.65);
+  --color-text-nav:          rgba(255, 221, 221, 0.85);      /* Header nav links */
+  --color-marquee:           rgba(255, 255, 255, 0.65);      /* Questions marquee text */
+
+  /* --------------------------------------------------
+     Fluid Typography Scale  (clamp: mobile → desktop)
+     -------------------------------------------------- */
+  --text-xs:    clamp(0.65rem,  0.60rem + 0.25vw, 0.75rem);  /* stat label, captions */
+  --text-sm:    clamp(0.80rem,  0.75rem + 0.25vw, 0.90rem);  /* timestamps, date, artist */
+  --text-base:  clamp(0.92rem,  0.88rem + 0.20vw, 1.00rem);  /* body text, step desc */
+  --text-md:    clamp(1.00rem,  0.95rem + 0.25vw, 1.15rem);  /* subtext, reviewer name */
+  --text-nav:   clamp(0.80rem,  0.78rem + 0.10vw, 0.90rem);  /* nav links */
+  --text-card:  clamp(0.90rem,  0.88rem + 0.10vw, 0.96rem);  /* step-card desc */
+  --text-lg:    clamp(1.20rem,  1.10rem + 0.50vw, 1.55rem);  /* step-card title */
+  --text-xl:    clamp(1.40rem,  1.30rem + 0.60vw, 2.00rem);  /* FAQ question */
+  --text-2xl:   clamp(2.00rem,  1.80rem + 1.00vw, 3.00rem);  /* why-highlight, why-cursive */
+  --text-3xl:   clamp(2.20rem,  1.90rem + 1.50vw, 3.50rem);  /* hero heading, steps title */
+  --text-4xl:   clamp(2.00rem,  1.80rem + 2.00vw, 5.00rem);  /* footer title, marquee */
+
+  /* --------------------------------------------------
+     8-pt Spatial Grid
+     -------------------------------------------------- */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-9:  36px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* --------------------------------------------------
+     Border Radius
+     -------------------------------------------------- */
+  --radius-sm:     6px;
+  --radius-md:     8px;
+  --radius-btn:   14px;
+  --radius-card:  28px;
+  --radius-full:  999px;
+
+  /* --------------------------------------------------
+     Elevation & Glass
+     -------------------------------------------------- */
+  --blur-glass:   blur(16px);
+  --blur-strong:  blur(20px);
+  --shadow-card:  0 14px 36px rgba(0, 0, 0, 0.50);
+  --shadow-sm:    0 10px 24px rgba(0, 0, 0, 0.35);
+
+  /* --------------------------------------------------
+     Transitions (unified, no diverging durations)
+     -------------------------------------------------- */
+  --transition-color:    color 0.25s ease;
+  --transition-opacity:  opacity 0.25s ease;
+  --transition-hover:    color 0.25s ease, opacity 0.25s ease;
+  --transition-ripple:   width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                         height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slide:    transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --------------------------------------------------
+     Touch Target Minimum
+     -------------------------------------------------- */
+  --touch-target: 44px;
+}

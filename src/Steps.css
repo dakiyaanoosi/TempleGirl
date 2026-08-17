@@ -14,7 +14,7 @@
   max-width: 1240px;
   height: 24px;
   overflow: hidden;
-  margin: 0 auto 36px auto;
+  margin: 0 auto var(--space-8) auto; /* Issue 12: 36px → 32px on 8pt grid */
 }
 
 .steps-page-wave {
@@ -47,22 +47,26 @@
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: var(--space-6);
   width: 100%;
+  align-items: stretch;   /* Issue 11: equalize card heights across the row */
 }
 
 .step-card {
   position: relative;
-  background: rgba(18, 18, 22, 0.35);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 28px;
+  background: var(--color-surface-dark-md);
+  backdrop-filter: var(--blur-strong);
+  -webkit-backdrop-filter: var(--blur-strong);
+  border-radius: var(--radius-card);
   border: none;
-  padding: 40px 34px;
+  padding: var(--space-10) 34px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  min-height: 270px;
+  height: 100%;           /* Issue 11: fill the grid row for equal heights */
+  min-height: 0;          /* Issue 11: let grid control height, not min-height */
+  /* R5: active press state for card interactivity */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .step-card-header {
@@ -86,7 +90,7 @@
   font-family: 'Manrope', sans-serif;
   font-size: 2.2rem;
   font-weight: 400;
-  color: #F2B84B;
+  color: var(--color-brand-amber);
   letter-spacing: 0.04em;
 }
 
@@ -112,9 +116,9 @@
 
 .step-card-desc {
   font-family: 'Manrope', sans-serif;
-  font-size: 0.96rem;
+  font-size: var(--text-card);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-faint);
   line-height: 1.6;
   margin: 0;
 }

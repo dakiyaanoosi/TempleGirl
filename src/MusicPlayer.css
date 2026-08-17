@@ -7,7 +7,7 @@
   flex-direction: column;
   position: relative;
   transition: max-width 0.3s ease;
-  padding-top: 26px;
+  padding-top: var(--space-6);  /* Issue 12: 26px → 24px on 8pt grid */
 }
 
 /* Fanned Stack Cover Container */
@@ -16,7 +16,7 @@
   z-index: 2;
   width: 100%;
   aspect-ratio: 1 / 1;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-8);  /* Issue 12: 28px → 32px on 8pt grid */
 }
 
 /* Common Background Stacked Cards Base (Hidden directly behind thumbnail by default) */
@@ -266,6 +266,13 @@
   cursor: pointer;
 }
 
+/* R6: focus-visible ring on range slider for keyboard users */
+.timeline-slider:focus-visible {
+  outline: 2px solid var(--color-brand-amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 .timeline-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -291,9 +298,9 @@
   display: flex;
   justify-content: space-between;
   font-family: 'Manrope', sans-serif;
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-dim);
 }
 
 .player-controls {
@@ -310,7 +317,7 @@
 .skip-btn {
   background: transparent;
   border: none;
-  color: #ffffff;
+  color: var(--color-text-primary);
   padding: 0;
   width: 40px;
   height: 40px;
@@ -321,7 +328,15 @@
   box-shadow: none;
   flex-shrink: 0;
   cursor: pointer;
-  transition: width 0.3s ease, height 0.3s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;  /* R5 */
+}
+
+/* R5: active/pressed state feedback */
+.control-btn:active,
+.play-pause-btn:active,
+.skip-btn:active {
+  opacity: 0.65;
+  transform: scale(0.88);
 }
 
 .control-btn svg,
