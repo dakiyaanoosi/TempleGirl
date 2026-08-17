@@ -159,13 +159,11 @@ export default function Header() {
         gsap.set(menuContentEl, { opacity: 0 });
       }
 
-      const collapsedHeight = topBarEl ? topBarEl.offsetHeight + 16 : 48;
+      const collapsedHeight = topBarEl ? topBarEl.getBoundingClientRect().height + 16 : 48;
+      // Read target scroll height cleanly without intermediate style toggles
+      const targetHeight = collapsedHeight + (menuContentEl ? menuContentEl.scrollHeight : 0);
 
       gsap.set(headerEl, { height: collapsedHeight, overflow: 'hidden' });
-      gsap.set(headerEl, { height: 'auto' });
-      const targetHeight = headerEl.scrollHeight;
-
-      gsap.set(headerEl, { height: collapsedHeight });
 
       const tl = gsap.timeline({
         onReverseComplete: () => {

@@ -67,44 +67,51 @@ export default function Why() {
   useEffect(() => { cardGapRef.current = cardGap; }, [cardGap]);
 
   const snapTweenRef = useRef(null);
+  const rafMoveRef = useRef(null);
+
+  // Throttled snap animation helper using rAF
+  const animateSnapToZero = (initialOffset, duration = 0.55) => {
+    if (snapTweenRef.current) snapTweenRef.current.kill();
+    if (rafMoveRef.current) cancelAnimationFrame(rafMoveRef.current);
+
+    const tweenObj = { value: initialOffset };
+    let rAFId = null;
+    snapTweenRef.current = gsap.to(tweenObj, {
+      value: 0,
+      duration,
+      ease: 'power3.out',
+      onUpdate: () => {
+        if (!rAFId) {
+          rAFId = requestAnimationFrame(() => {
+            setDragOffset(tweenObj.value);
+            rAFId = null;
+          });
+        }
+      },
+      onComplete: () => {
+        if (rAFId) cancelAnimationFrame(rAFId);
+        setDragOffset(0);
+      }
+    });
+  };
 
   // Nav Handlers with GSAP transition engine
   const handlePrev = () => {
     if (activeIndex <= 0) return;
-    if (snapTweenRef.current) snapTweenRef.current.kill();
-
     const targetIndex = activeIndex - 1;
     const initialOffset = dragOffset - cardGapRef.current;
-
     setActiveIndex(targetIndex);
     setDragOffset(initialOffset);
-
-    const tweenObj = { value: initialOffset };
-    snapTweenRef.current = gsap.to(tweenObj, {
-      value: 0,
-      duration: 1.3,
-      ease: 'power3.out',
-      onUpdate: () => setDragOffset(tweenObj.value)
-    });
+    animateSnapToZero(initialOffset, 0.85);
   };
 
   const handleNext = () => {
     if (activeIndex >= CARDS_DATA.length - 1) return;
-    if (snapTweenRef.current) snapTweenRef.current.kill();
-
     const targetIndex = activeIndex + 1;
     const initialOffset = dragOffset + cardGapRef.current;
-
     setActiveIndex(targetIndex);
     setDragOffset(initialOffset);
-
-    const tweenObj = { value: initialOffset };
-    snapTweenRef.current = gsap.to(tweenObj, {
-      value: 0,
-      duration: 1.3,
-      ease: 'power3.out',
-      onUpdate: () => setDragOffset(tweenObj.value)
-    });
+    animateSnapToZero(initialOffset, 0.85);
   };
 
   const hasMovedRef = useRef(false);
@@ -112,20 +119,10 @@ export default function Why() {
   const handleCardClick = (index) => {
     if (hasMovedRef.current) return;
     if (index === activeIndex) return;
-    if (snapTweenRef.current) snapTweenRef.current.kill();
-
     const initialOffset = dragOffset + (index - activeIndex) * cardGapRef.current;
-
     setActiveIndex(index);
     setDragOffset(initialOffset);
-
-    const tweenObj = { value: initialOffset };
-    snapTweenRef.current = gsap.to(tweenObj, {
-      value: 0,
-      duration: 1.3,
-      ease: 'power3.out',
-      onUpdate: () => setDragOffset(tweenObj.value)
-    });
+    animateSnapToZero(initialOffset, 0.85);
   };
 
   const prevTlRef = useRef(null);
@@ -165,6 +162,7 @@ export default function Why() {
   // Drag / Touch Interactions
   const handleDragStart = (e) => {
     if (snapTweenRef.current) snapTweenRef.current.kill();
+    if (rafMoveRef.current) cancelAnimationFrame(rafMoveRef.current);
     hasMovedRef.current = false;
     setIsDragging(true);
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -185,7 +183,13 @@ export default function Why() {
     if ((activeIndex === 0 && diff > 0) || (activeIndex === CARDS_DATA.length - 1 && diff < 0)) {
       adjustedDiff = diff * 0.25;
     }
-    setDragOffset(adjustedDiff);
+
+    if (!rafMoveRef.current) {
+      rafMoveRef.current = requestAnimationFrame(() => {
+        setDragOffset(adjustedDiff);
+        rafMoveRef.current = null;
+      });
+    }
   };
 
   const handleDragEnd = () => {
@@ -205,14 +209,7 @@ export default function Why() {
 
     setActiveIndex(targetIndex);
     setDragOffset(initialOffset);
-
-    const tweenObj = { value: initialOffset };
-    snapTweenRef.current = gsap.to(tweenObj, {
-      value: 0,
-      duration: 0.55,
-      ease: 'power3.out',
-      onUpdate: () => setDragOffset(tweenObj.value)
-    });
+    animateSnapToZero(initialOffset, 0.55);
   };
 
   return (
