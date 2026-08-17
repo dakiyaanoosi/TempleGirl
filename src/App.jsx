@@ -1,16 +1,15 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import ShaderBackground from './ShaderBackground';
 import Hero from './Hero';
 import Music from './Music';
 import Why from './Why';
 import Steps from './Steps';
-
-const Reviews = lazy(() => import('./Reviews'));
-const Questions = lazy(() => import('./Questions'));
-const Footer = lazy(() => import('./Footer'));
-const QrSidebar = lazy(() => import('./QrSidebar'));
-const DownloadRedirect = lazy(() => import('./DownloadRedirect'));
+import Reviews from './Reviews';
+import Questions from './Questions';
+import Footer from './Footer';
+import QrSidebar from './QrSidebar';
+import DownloadRedirect from './DownloadRedirect';
 
 function App() {
   const [isDownloadRoute, setIsDownloadRoute] = useState(
@@ -28,11 +27,7 @@ function App() {
   }, []);
 
   if (isDownloadRoute) {
-    return (
-      <Suspense fallback={null}>
-        <DownloadRedirect />
-      </Suspense>
-    );
+    return <DownloadRedirect />;
   }
 
   return (
@@ -42,12 +37,10 @@ function App() {
       <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
       <Why />
       <Steps />
-      <Suspense fallback={null}>
-        <Reviews />
-        <Questions />
-        <Footer onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      </Suspense>
+      <Reviews />
+      <Questions />
+      <Footer onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+      <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>
   );
