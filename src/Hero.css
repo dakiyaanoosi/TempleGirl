@@ -331,6 +331,9 @@
     text-align: left;
     max-width: 100%;
   }
+  .hero-heading br {
+    display: none;
+  }
   .hero-subtext {
     margin-top: var(--space-4);
     max-width: 100%;
