@@ -69,6 +69,41 @@ export default function Header() {
     { id: 'nav-subscriptions', label: 'Manage Subscriptions' },
   ];
 
+  // Sync activeNav with current location
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/contact' || path === '/pages/contact.html' || path.endsWith('/contact.html')) {
+      setActiveNav('Contacts');
+    } else if (path === '/refund' || path === '/pages/refund.html' || path.endsWith('/refund.html')) {
+      setActiveNav('Manage Subscriptions');
+    } else if (path === '/') {
+      setActiveNav('Home');
+    }
+  }, []);
+
+  const handleNavClick = (label) => {
+    setActiveNav(label);
+    if (label === 'Home') {
+      if (window.location.pathname !== '/' && window.onNavigateRoute) {
+        window.onNavigateRoute('/');
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else if (label === 'Contacts') {
+      if (window.onNavigateRoute) {
+        window.onNavigateRoute('/contact');
+      } else {
+        window.location.href = '/contact';
+      }
+    } else if (label === 'Manage Subscriptions') {
+      if (window.onNavigateRoute) {
+        window.onNavigateRoute('/refund');
+      } else {
+        window.location.href = '/refund';
+      }
+    }
+  };
+
   const itemsRef = useRef([]);
   const mobileItemsRef = useRef([]);
   const headerRef = useRef(null);
@@ -297,12 +332,7 @@ export default function Header() {
                     id={item.id}
                     type="button"
                     className={`pill-nav-link ${activeNav === item.label ? 'active' : ''}`}
-                    onClick={() => {
-                      setActiveNav(item.label);
-                      if (window.location.pathname !== '/' && window.onNavigateRoute) {
-                        window.onNavigateRoute('/');
-                      }
-                    }}
+                    onClick={() => handleNavClick(item.label)}
                   >
                     <span className="bracket left" aria-hidden="true">||</span>
                     <span className="nav-item-text" data-text={item.label}>{item.label}</span>
@@ -342,7 +372,7 @@ export default function Header() {
                         type="button"
                         className={`pill-nav-link ${activeNav === item.label ? 'active' : ''}`}
                         onClick={() => {
-                          setActiveNav(item.label);
+                          handleNavClick(item.label);
                           closeMenu();
                         }}
                       >

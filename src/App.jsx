@@ -15,6 +15,7 @@ import WebsitePrivacyPolicy from './WebsitePrivacyPolicy';
 import DeleteAccount from './DeleteAccount';
 import Terms from './Terms';
 import RefundPolicy from './RefundPolicy';
+import Contact from './Contact';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(
@@ -44,6 +45,20 @@ function App() {
 
   if (currentPath.startsWith('/download')) {
     return <DownloadRedirect />;
+  }
+
+  if (currentPath === '/contact' || currentPath === '/pages/contact.html' || currentPath.endsWith('/contact.html')) {
+    return (
+      <main>
+        <Contact 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </main>
+    );
   }
 
   if (currentPath === '/refund' || currentPath === '/pages/refund.html' || currentPath.endsWith('/refund.html')) {
