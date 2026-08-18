@@ -1,37 +1,57 @@
-// Mobile Shader Background - Optimized WebGL Implementation for Mobile Screens (<768px)
+// Mobile Shader Background - Production-Ready WebGL Implementation (<768px)
 // Renders the smooth animated Sanatani Pink & Sandalwood Brown fluid gradient without film grain distortion.
 
 export function initMobileShaderBackground(canvas) {
   if (!canvas) return () => {};
 
-  const gl = canvas.getContext("webgl", { alpha: false, powerPreference: "low-power" }) ||
-             canvas.getContext("experimental-webgl", { alpha: false, powerPreference: "low-power" });
+  // 1. Rendering Configuration Constants
+  const TARGET_FPS = 30;
+  const FRAME_INTERVAL = 1000 / TARGET_FPS; // ~33.33ms per frame
+  const MAX_DPR = 1.25;
+  const RENDER_SCALE = 0.8;
+  const MAX_ACCUMULATED_TIME = Math.PI * 20000; // Safe upper bound for accumulated animation time
+
+  // 2. WebGL Context Initialization Options
+  const glOptions = {
+    alpha: false,
+    depth: false,
+    stencil: false,
+    antialias: false,
+    powerPreference: "low-power",
+    preserveDrawingBuffer: false,
+  };
+
+  const gl =
+    canvas.getContext("webgl", glOptions) ||
+    canvas.getContext("experimental-webgl", glOptions);
+
   if (!gl) {
-    console.error("WebGL not supported on mobile");
+    console.error("Mobile Shader: WebGL not supported");
     return () => {};
   }
 
+  // 3. State Variables
   let animationFrameId = null;
   let isContextLost = false;
+  let isCleanedUp = false;
   let currentWidth = 0;
   let currentHeight = 0;
 
-  const resize = () => {
-    if (isContextLost) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    const newWidth = Math.floor(window.innerWidth * dpr);
-    const newHeight = Math.floor(window.innerHeight * dpr);
+  // GPU Resource State Handles
+  let program = null;
+  let vertShader = null;
+  let fragShader = null;
+  let positionBuffer = null;
 
-    if (newWidth !== currentWidth || newHeight !== currentHeight) {
-      currentWidth = newWidth;
-      currentHeight = newHeight;
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    }
-  };
-  resize();
-  window.addEventListener("resize", resize);
+  // Uniform & Attribute Locations
+  let positionLocation = -1;
+  let iResolutionLocation = null;
+  let iTimeLocation = null;
+
+  // Timing State
+  let accumulatedTime = 0;
+  let lastFrameTime = performance.now();
+  let lastRenderTimestamp = 0;
 
   const vertexShaderSource = `
     attribute vec2 position;
@@ -49,10 +69,10 @@ export function initMobileShaderBackground(canvas) {
     mat2 Rot(float a){
       float s = sin(a);
       float c = cos(a);
-      return mat2(c,-s,s,c);
+      return mat2(c, -s, s, c);
     }
 
-    // Sine-less 2D hash preventing 16-bit half-float mantissa overflow & distortion on mobile GPUs
+    // Sine-less, bounded 2D hash for improved numerical stability on mobile GPUs with limited floating-point precision
     vec2 hash(vec2 p){
       p = mod(p, 100.0);
       vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
@@ -88,8 +108,8 @@ export function initMobileShaderBackground(canvas) {
       float frequency = 4.5;
       float amplitude = 25.0;
       
-      // Bounded wave speed input prevents sin(large_number) precision degradation over time
-      float speed = mod(iTime * 1.8, TWO_PI);
+      // Bounded wave speed input with calm, elegant fluid movement (~0.7)
+      float speed = mod(iTime * 0.7, TWO_PI);
 
       tuv.x += sin(tuv.y * frequency + speed) / amplitude;
       tuv.y += sin(tuv.x * frequency * 1.5 + speed) / (amplitude * 0.5);
@@ -113,8 +133,12 @@ export function initMobileShaderBackground(canvas) {
       vec3 color3 = mix(terracotta, copperBronze, t);
       vec3 color4 = mix(saffronGold, softBlushPink, t);
 
-      vec3 layer1 = mix(color3, color2, smoothstep(-0.4, 0.4, (tuv * Rot(radians(-5.0))).x));
-      vec3 layer2 = mix(color4, color1, smoothstep(-0.4, 0.4, (tuv * Rot(radians(-5.0))).x));
+      // Cached rotated layer coordinates to avoid redundant matrix-vector multiplication
+      vec2 layerUV = tuv * Rot(radians(-5.0));
+      float layerX = layerUV.x;
+
+      vec3 layer1 = mix(color3, color2, smoothstep(-0.4, 0.4, layerX));
+      vec3 layer2 = mix(color4, color1, smoothstep(-0.4, 0.4, layerX));
 
       vec3 color = mix(layer1, layer2, smoothstep(0.6, -0.4, tuv.y));
 
@@ -126,11 +150,52 @@ export function initMobileShaderBackground(canvas) {
     }
   `;
 
-  function compile(type, source) {
+  // Safely cleanup GPU objects without throwing errors
+  function cleanupGPUResources() {
+    if (!gl) return;
+
+    try {
+      const contextIsLost = gl.isContextLost();
+
+      if (positionBuffer && !contextIsLost) {
+        gl.deleteBuffer(positionBuffer);
+      }
+      positionBuffer = null;
+
+      if (program && !contextIsLost) {
+        if (vertShader) {
+          gl.detachShader(program, vertShader);
+          gl.deleteShader(vertShader);
+        }
+        if (fragShader) {
+          gl.detachShader(program, fragShader);
+          gl.deleteShader(fragShader);
+        }
+        gl.deleteProgram(program);
+      } else {
+        if (vertShader && !contextIsLost) gl.deleteShader(vertShader);
+        if (fragShader && !contextIsLost) gl.deleteShader(fragShader);
+      }
+
+      program = null;
+      vertShader = null;
+      fragShader = null;
+      positionLocation = -1;
+      iResolutionLocation = null;
+      iTimeLocation = null;
+    } catch (err) {
+      console.warn("Mobile Shader: Error during GPU resource cleanup", err);
+    }
+  }
+
+  // Shader Compiler Helper
+  function compileShader(type, source) {
     const shader = gl.createShader(type);
     if (!shader) return null;
+
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
+
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       console.error("Mobile Shader Compile Error:", gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
@@ -139,88 +204,201 @@ export function initMobileShaderBackground(canvas) {
     return shader;
   }
 
-  const program = gl.createProgram();
-  const vertShader = compile(gl.VERTEX_SHADER, vertexShaderSource);
-  const fragShader = compile(gl.FRAGMENT_SHADER, fragmentShaderSource);
-  if (!vertShader || !fragShader) return () => {};
+  // Complete WebGL Resource Creation (used on initial setup and context restoration)
+  function setupWebGLResources() {
+    cleanupGPUResources();
 
-  gl.attachShader(program, vertShader);
-  gl.attachShader(program, fragShader);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error("Mobile Program Link Error:", gl.getProgramInfoLog(program));
-    return () => {};
+    if (gl.isContextLost()) return false;
+
+    vertShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+    fragShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+    if (!vertShader || !fragShader) {
+      cleanupGPUResources();
+      return false;
+    }
+
+    program = gl.createProgram();
+    if (!program) {
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error("Mobile Shader Link Error:", gl.getProgramInfoLog(program));
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.useProgram(program);
+
+    positionBuffer = gl.createBuffer();
+    if (!positionBuffer) {
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+      gl.STATIC_DRAW
+    );
+
+    positionLocation = gl.getAttribLocation(program, "position");
+    if (positionLocation < 0) {
+      console.error("Mobile Shader: Failed to get position attribute location");
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    iResolutionLocation = gl.getUniformLocation(program, "iResolution");
+    iTimeLocation = gl.getUniformLocation(program, "iTime");
+
+    if (!iResolutionLocation || !iTimeLocation) {
+      console.error("Mobile Shader: Failed to get uniform locations");
+      cleanupGPUResources();
+      return false;
+    }
+
+    // Reset dimensions to force viewport calculation for the new context
+    currentWidth = 0;
+    currentHeight = 0;
+    resize();
+
+    return true;
   }
-  gl.useProgram(program);
 
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    -1,-1, 1,-1, -1,1, 1,1
-  ]), gl.STATIC_DRAW);
+  // Resize Handler with DPR and Render Scaling
+  const resize = () => {
+    if (isContextLost || isCleanedUp || !gl) return;
 
-  const position = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(position);
-  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    const newWidth = Math.max(1, Math.floor(window.innerWidth * dpr * RENDER_SCALE));
+    const newHeight = Math.max(1, Math.floor(window.innerHeight * dpr * RENDER_SCALE));
 
-  const iResolution = gl.getUniformLocation(program, "iResolution");
-  const iTime = gl.getUniformLocation(program, "iTime");
+    // Threshold check (4px render difference) to prevent micro-jitter from mobile scrollbar/address bar changes
+    if (
+      Math.abs(newWidth - currentWidth) >= 4 ||
+      Math.abs(newHeight - currentHeight) >= 4 ||
+      currentWidth === 0
+    ) {
+      currentWidth = newWidth;
+      currentHeight = newHeight;
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    }
+  };
 
-  let startTime = performance.now();
-  const PERIOD = Math.PI * 2000; // Exact multiple of 2*PI ensuring seamless loop with zero jump
+  // Render Loop with ~30 FPS Throttle and Bounded Delta Control
+  function render(timestamp) {
+    if (isCleanedUp || isContextLost) return;
 
-  function render() {
-    if (isContextLost) return;
-    if (!document.hidden) {
-      const time = ((performance.now() - startTime) / 1000) % PERIOD;
-      gl.uniform2f(iResolution, canvas.width, canvas.height);
-      gl.uniform1f(iTime, time);
+    animationFrameId = requestAnimationFrame(render);
+
+    if (document.hidden) return;
+
+    const elapsedSinceLastRender = timestamp - lastRenderTimestamp;
+
+    // 30 FPS throttle check (~33.3ms)
+    if (elapsedSinceLastRender < FRAME_INTERVAL - 1.0) {
+      return;
+    }
+
+    // Adjust timestamp to maintain stable interval pacing
+    lastRenderTimestamp = timestamp - (elapsedSinceLastRender % FRAME_INTERVAL);
+
+    // Compute smooth time delta
+    const now = performance.now();
+    const rawDelta = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
+
+    // Cap delta at 0.1s to prevent visual time jumps after app suspension
+    const cappedDelta = Math.max(0, Math.min(rawDelta, 0.1));
+    accumulatedTime += cappedDelta;
+
+    if (accumulatedTime >= MAX_ACCUMULATED_TIME) {
+      accumulatedTime %= MAX_ACCUMULATED_TIME;
+    }
+
+    if (gl && program) {
+      gl.useProgram(program);
+      gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+      gl.uniform1f(iTimeLocation, accumulatedTime);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
+  }
+
+  function stopAnimationLoop() {
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
+  function startAnimationLoop() {
+    stopAnimationLoop();
+    lastFrameTime = performance.now();
+    lastRenderTimestamp = performance.now();
     animationFrameId = requestAnimationFrame(render);
   }
+
+  // Event Handlers
+  const handleVisibilityChange = () => {
+    if (!document.hidden) {
+      // Reset timestamps on tab focus to avoid time delta spikes
+      lastFrameTime = performance.now();
+      lastRenderTimestamp = performance.now();
+    }
+  };
 
   const handleContextLost = (e) => {
     e.preventDefault();
     isContextLost = true;
-    if (animationFrameId) {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = null;
-    }
+    stopAnimationLoop();
   };
 
   const handleContextRestored = () => {
     isContextLost = false;
-    startTime = performance.now();
-    render();
+    if (setupWebGLResources()) {
+      startAnimationLoop();
+    } else {
+      console.error("Mobile Shader: Failed to restore WebGL resources.");
+    }
   };
 
+  // Initial WebGL Setup
+  if (!setupWebGLResources()) {
+    return () => {};
+  }
+
+  window.addEventListener("resize", resize);
+  document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost, false);
   canvas.addEventListener("webglcontextrestored", handleContextRestored, false);
 
-  render();
+  startAnimationLoop();
 
+  // Robust, Safe Cleanup Function
   return () => {
+    if (isCleanedUp) return;
+    isCleanedUp = true;
+
+    stopAnimationLoop();
+
     window.removeEventListener("resize", resize);
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
     canvas.removeEventListener("webglcontextlost", handleContextLost);
     canvas.removeEventListener("webglcontextrestored", handleContextRestored);
 
-    if (animationFrameId) {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = null;
-    }
-
-    if (gl && !gl.isContextLost()) {
-      if (buffer) gl.deleteBuffer(buffer);
-      if (vertShader) {
-        gl.detachShader(program, vertShader);
-        gl.deleteShader(vertShader);
-      }
-      if (fragShader) {
-        gl.detachShader(program, fragShader);
-        gl.deleteShader(fragShader);
-      }
-      if (program) gl.deleteProgram(program);
-    }
+    cleanupGPUResources();
   };
 }
