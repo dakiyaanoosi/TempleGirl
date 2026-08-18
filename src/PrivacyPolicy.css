@@ -1,0 +1,450 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* Privacy Policy Flowty Replica Styles */
+.policy-page {
+  min-height: 100vh;
+  width: 100%;
+  background: transparent;
+  color: #ffffff;
+  font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Header bar inside policy page */
+.policy-nav-header {
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.policy-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  cursor: pointer;
+  padding: 0;
+}
+
+.policy-brand-svg {
+  height: 28px;
+  width: auto;
+}
+
+.policy-top-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.55rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(12px);
+}
+
+.policy-top-back-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+/* Main Layout Container */
+.policy-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 7rem 3.5rem 0 3.5rem;
+  box-sizing: border-box;
+}
+
+/* Hero Title Section */
+.policy-hero {
+  padding-top: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.policy-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) 1fr;
+  gap: clamp(3rem, 10vw, 12rem);
+  align-items: center;
+  width: 100%;
+}
+
+.policy-hero-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.policy-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.policy-hero-right p {
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 0;
+}
+
+.policy-hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.policy-title-group {
+  margin-bottom: 2rem;
+}
+
+.policy-title-line {
+  display: block;
+  font-size: clamp(4.5rem, 11vw, 7.8rem);
+  font-weight: 350;
+  color: #ffffff;
+  letter-spacing: -0.035em;
+  line-height: 0.90;
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+.policy-hero-logo {
+  height: 48px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  margin-top: 0.5rem;
+}
+
+.policy-intro-text {
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: #ffffff;
+  max-width: 440px;
+  margin: 2.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.policy-intro-text p {
+  margin: 0;
+}
+
+.policy-intro-text strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.policy-meta-date {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 0.25rem;
+}
+
+/* Full Width Divider */
+.policy-divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0;
+}
+
+.policy-hero-divider {
+  display: none;
+}
+
+/* Flowty Section Grid Layout */
+.policy-section {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: clamp(3rem, 14vw, 15rem);
+  align-items: start;
+  padding: 5rem 0;
+}
+
+.policy-num-col {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 0.25rem;
+}
+
+.policy-num-text {
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 400;
+  font-family: 'Outfit', sans-serif;
+  color: #f2b84b;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  display: inline-block;
+  user-select: none;
+}
+
+.policy-content-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.policy-section-heading {
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.08;
+  font-family: 'Outfit', sans-serif;
+}
+
+.policy-subheading {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 2rem 0 0.85rem 0;
+  letter-spacing: -0.01em;
+}
+
+.policy-content-col p {
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 1.25rem 0;
+  max-width: 100%;
+}
+
+/* List Items */
+.policy-list {
+  padding-left: 1.25rem;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  list-style: disc;
+}
+
+.policy-list li {
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.policy-sublist {
+  padding-left: 1.25rem;
+  margin: 0.85rem 0 0.85rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: circle;
+}
+
+.list-label,
+.sublist-label {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.policy-note {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #71717a;
+  margin-top: 0.75rem;
+}
+
+.policy-inline-link {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.policy-inline-link:hover {
+  opacity: 0.8;
+}
+
+/* GSAP Animated Underline Links */
+.policy-animated-link {
+  position: relative;
+  color: #ffffff;
+  text-decoration: none;
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 2px;
+  vertical-align: bottom;
+}
+
+.policy-animated-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ffffff;
+  transform: translateX(0%);
+  will-change: transform;
+}
+
+/* Contact Box */
+.policy-contact-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem 1.75rem;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+.policy-contact-email {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-decoration: none;
+  width: max-content;
+  max-width: 100%;
+  align-self: flex-start;
+}
+
+.policy-contact-address {
+  font-style: normal;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* Flowty Floating Bottom Capsule Dock Bar */
+.flowty-floating-dock {
+  position: fixed;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(216, 216, 226, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 9999px;
+  padding: 6px 8px 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dock-menu-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #0f172a;
+  padding: 4px;
+}
+
+.dock-brand-icon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #0f172a;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.dock-download-btn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.dock-download-btn:hover {
+  background: #1e293b;
+  transform: scale(1.03);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .policy-container {
+    padding: 4.75rem 1.25rem 0 1.25rem;
+  }
+
+  .policy-hero {
+    padding-top: 0.5rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .policy-title-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .policy-intro-text {
+    margin-top: 1rem;
+  }
+
+  .policy-title-line {
+    font-size: 3.5rem;
+  }
+
+  .policy-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .policy-hero-divider {
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .policy-section {
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem 1rem;
+    padding: 2.5rem 0;
+  }
+
+  .policy-num-text {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+
+  .policy-section-heading {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+
+  .policy-hero-logo {
+    height: 36px;
+  }
+}

@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .wave-container {
@@ -73,7 +73,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .slider__carrousel {
@@ -82,6 +82,7 @@
   position: relative;
   display: flex;
   justify-content: center;
+  overflow: visible;
 }
 
 .carousel {
@@ -92,6 +93,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: visible;
 }
 
 .carousel__viewport {
@@ -116,6 +118,7 @@
   justify-content: center;
   align-items: center;
   perspective: 1200px;
+  overflow: visible;
 }
 
 /* 3D Flip Card Container - Exact Eight Club Aspect Ratio & Dimensions */
@@ -261,7 +264,7 @@
 }
 
 .button-arrow:active {
-  transform: translateY(-50%) scale(0.92);
+  transform: translateY(-50%);
 }
 
 .button-arrow-icon-wrapper {
@@ -297,8 +300,153 @@
   right: calc(50% - var(--carousel-card-half) - var(--touch-target) - 4px);
 }
 
+/* ----------------------------------------------------
+   CALLOUTS & LEADER LINES STYLING
+---------------------------------------------------- */
+
+/* Integrated Top-Right Action Button (Attached to card frame) */
+.card-corner-action-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-brand-amber);
+  color: #180508;
+  border: 1.5px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+  pointer-events: auto;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-corner-action-btn:hover {
+  background: var(--color-primary);
+  color: #000000;
+}
+
+.callouts-close-btn {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Callouts Overlay Container */
+.card-callouts-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 300;
+  overflow: visible;
+}
+
+/* SVG Leader Lines Canvas */
+.callouts-svg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 310;
+}
+
+/* Leader Lines SVG Paths */
+.leader-line-main {
+  stroke: #000000;
+  stroke-width: 2px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: drawLeaderLine 0.7s ease-out forwards;
+}
+
+@keyframes drawLeaderLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.anchor-dot {
+  fill: #000000;
+  stroke: none;
+}
+
+/* Callout Box Cards (Shared Desktop & Mobile UI) */
+.callout-box {
+  background: var(--color-surface-dark);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border-radius: 12px;
+  padding: 12px 14px;
+  z-index: 320;
+  pointer-events: auto;
+  box-sizing: border-box;
+  animation: popInCallout 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Desktop Absolute Position Overlay */
+.card-callouts-overlay .callout-box {
+  position: absolute;
+}
+
+/* Single Mobile Callout Container (Below Carousel with Full Width & Fixed Height) */
+.mobile-callout-container {
+  width: 88vw;
+  max-width: 500px;
+  margin: 14px auto 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  z-index: 200;
+  pointer-events: auto;
+}
+
+.mobile-callout-container .mobile-callout-flow {
+  position: relative;
+  width: 100%;
+  min-height: 92px;
+  padding: 12px 16px;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+@keyframes popInCallout {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.callout-text {
+  font-family: 'Manrope', sans-serif;
+  font-size: var(--text-card);
+  font-weight: 400;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
 /* Responsive Media Queries */
 @media (max-width: 834px) {
+  .card-corner-action-btn {
+    display: none !important;
+  }
   .why-main-title {
     gap: var(--space-2);
   }
@@ -328,11 +476,11 @@
   .card-desc {
     font-size: 0.82rem;
   }
-  /* Issue 04 fix: at mobile, anchor arrows to viewport edges */
   .slider__nav--prev {
-    left: var(--space-4);   /* 16px from viewport edge */
+    left: var(--space-4);
   }
   .slider__nav--next {
-    right: var(--space-4);  /* 16px from viewport edge */
+    right: var(--space-4);
   }
 }
+

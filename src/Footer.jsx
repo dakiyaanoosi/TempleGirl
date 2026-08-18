@@ -2,7 +2,15 @@ import KolamBorder from './KolamBorder';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
 import './Footer.css';
 
-export default function Footer({ onOpenQrSidebar }) {
+export default function Footer({ onOpenQrSidebar, onNavigateRoute }) {
+  const handleNav = (path) => {
+    if (onNavigateRoute) {
+      onNavigateRoute(path);
+    } else {
+      window.location.pathname = path;
+    }
+  };
+
   return (
     <footer className="footer-section" id="fifth-page">
       <KolamBorder svgClassName="second-page-wave" />
@@ -52,11 +60,11 @@ export default function Footer({ onOpenQrSidebar }) {
         <nav className="footer-bottom" aria-label="Footer navigation">
           {/* Column 1: Legal & Policies */}
           <div className="footer-nav-col">
-            <button type="button" className="footer-nav-link">Privacy Policy</button>
-            <button type="button" className="footer-nav-link">Website Privacy</button>
-            <button type="button" className="footer-nav-link">Delete Account</button>
-            <button type="button" className="footer-nav-link">Terms &amp; Conditions</button>
-            <button type="button" className="footer-nav-link">Refund Policy</button>
+            <button type="button" className="footer-nav-link" onClick={() => handleNav('/privacy-policy')}>Privacy Policy</button>
+            <button type="button" className="footer-nav-link" onClick={() => handleNav('/website-privacy')}>Website Privacy</button>
+            <button type="button" className="footer-nav-link" onClick={() => handleNav('/delete-account')}>Delete Account</button>
+            <button type="button" className="footer-nav-link" onClick={() => handleNav('/terms')}>Terms &amp; Conditions</button>
+            <button type="button" className="footer-nav-link" onClick={() => handleNav('/refund')}>Refund Policy</button>
           </div>
 
           {/* Column 2: Social Links & Subscribe */}

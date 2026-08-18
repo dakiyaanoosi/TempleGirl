@@ -272,7 +272,11 @@ export default function Header() {
                 className="pill-header-brand-btn"
                 onClick={() => {
                   setActiveNav('Home');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  if (window.location.pathname !== '/' && window.onNavigateRoute) {
+                    window.onNavigateRoute('/');
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
                 }}
                 aria-label="Go to top of page"
               >
@@ -293,7 +297,12 @@ export default function Header() {
                     id={item.id}
                     type="button"
                     className={`pill-nav-link ${activeNav === item.label ? 'active' : ''}`}
-                    onClick={() => setActiveNav(item.label)}
+                    onClick={() => {
+                      setActiveNav(item.label);
+                      if (window.location.pathname !== '/' && window.onNavigateRoute) {
+                        window.onNavigateRoute('/');
+                      }
+                    }}
                   >
                     <span className="bracket left" aria-hidden="true">||</span>
                     <span className="nav-item-text" data-text={item.label}>{item.label}</span>

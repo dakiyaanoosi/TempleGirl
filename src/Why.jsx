@@ -9,25 +9,73 @@ const CARDS_DATA = [
     id: 'zero-screen',
     image: '/CardZeroScreen.webp',
     title: 'Beyond the screen',
-    desc: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.'
+    desc: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.',
+    callout: {
+      desktop: {
+        text: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.',
+        anchor: { x: 80, y: 170 },
+        elbow: { x: -20, y: 170 },
+        end: { x: -50, y: 150 },
+        boxStyle: { left: '-270px', top: '90px', width: '220px' }
+      },
+      mobile: {
+        text: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.'
+      }
+    }
   },
   {
     id: 'warm-voice',
     image: '/CardWarmVoice.webp',
     title: 'A voice they know',
-    desc: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.'
+    desc: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.',
+    callout: {
+      desktop: {
+        text: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.',
+        anchor: { x: 280, y: 200 },
+        elbow: { x: 360, y: 200 },
+        end: { x: 390, y: 180 },
+        boxStyle: { left: '390px', top: '120px', width: '220px' }
+      },
+      mobile: {
+        text: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.'
+      }
+    }
   },
   {
     id: 'temples',
     image: '/CardTemples.webp',
     title: 'Stories rooted in Bharat',
-    desc: "From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder."
+    desc: "From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder.",
+    callout: {
+      desktop: {
+        text: 'From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder.',
+        anchor: { x: 70, y: 190 },
+        elbow: { x: -20, y: 190 },
+        end: { x: -50, y: 170 },
+        boxStyle: { left: '-270px', top: '110px', width: '220px' }
+      },
+      mobile: {
+        text: 'From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder.'
+      }
+    }
   },
   {
     id: 'safe',
     image: '/CardSafe.webp',
     title: 'Safe by design',
-    desc: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.'
+    desc: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.',
+    callout: {
+      desktop: {
+        text: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.',
+        anchor: { x: 290, y: 180 },
+        elbow: { x: 370, y: 180 },
+        end: { x: 400, y: 160 },
+        boxStyle: { left: '390px', top: '100px', width: '220px' }
+      },
+      mobile: {
+        text: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.'
+      }
+    }
   }
 ];
 
@@ -45,6 +93,7 @@ export default function Why() {
   const [startX, setStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [showCallouts, setShowCallouts] = useState(true);
 
   // Responsive listener
   useEffect(() => {
@@ -67,6 +116,17 @@ export default function Why() {
   useEffect(() => { cardGapRef.current = cardGap; }, [cardGap]);
 
   const snapTweenRef = useRef(null);
+  const prevTlRef = useRef(null);
+  const nextTlRef = useRef(null);
+
+  // Clean up any running GSAP tweens on unmount
+  useEffect(() => {
+    return () => {
+      if (snapTweenRef.current) snapTweenRef.current.kill();
+      if (prevTlRef.current) prevTlRef.current.kill();
+      if (nextTlRef.current) nextTlRef.current.kill();
+    };
+  }, []);
 
   // Nav Handlers with GSAP transition engine
   const handlePrev = () => {
@@ -111,7 +171,12 @@ export default function Why() {
 
   const handleCardClick = (index) => {
     if (hasMovedRef.current) return;
-    if (index === activeIndex) return;
+
+    if (index === activeIndex) {
+      setShowCallouts(prev => !prev);
+      return;
+    }
+
     if (snapTweenRef.current) snapTweenRef.current.kill();
 
     const initialOffset = dragOffset + (index - activeIndex) * cardGapRef.current;
@@ -127,9 +192,6 @@ export default function Why() {
       onUpdate: () => setDragOffset(tweenObj.value)
     });
   };
-
-  const prevTlRef = useRef(null);
-  const nextTlRef = useRef(null);
 
   // GSAP Arrow Hover Animations
   const handlePrevMouseEnter = () => {
@@ -231,7 +293,7 @@ export default function Why() {
       {/* Eight Club Style 3D Card Carousel */}
       <div className="slider">
         <div className="slider__carrousel">
-          <div className="carousel">
+          <div className={`carousel ${isMobile && showCallouts ? 'has-open-callout' : ''}`}>
 
             {/* Viewport Boundary — accessible region with keyboard navigation */}
             <div
@@ -302,12 +364,66 @@ export default function Why() {
                             <div className="card-overlay">
                               <h3 className="card-title">{card.title}</h3>
                             </div>
+
+                            {/* Integrated Top-Right Action Button (Click Arrow / Close Cross) attached to the card (Desktop Only) */}
+                            {index === activeIndex && !isMobile && (
+                              !showCallouts ? (
+                                <button
+                                  type="button"
+                                  className="card-corner-action-btn card-click-icon-btn"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowCallouts(true);
+                                  }}
+                                  aria-label="Click to reveal details"
+                                  title="Click to reveal details"
+                                >
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+                                    <path d="M13 13l6 6" />
+                                  </svg>
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="card-corner-action-btn callouts-close-btn"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowCallouts(false);
+                                  }}
+                                  aria-label="Close callouts"
+                                  title="Close callouts"
+                                >
+                                  &times;
+                                </button>
+                              )
+                            )}
                           </div>
                         </div>
 
                         {/* Back Face */}
                         <div className="card__face card__face--back" aria-hidden="true" />
                       </div>
+
+                      {/* Desktop Callout Overlay (Absolute Positioned with Leader Line) */}
+                      {!isMobile && index === activeIndex && showCallouts && (
+                        <div className="card-callouts-overlay">
+                          <svg className="callouts-svg-canvas">
+                            <g className="leader-line-group">
+                              <path
+                                className="leader-line-main"
+                                d={`M ${card.callout.desktop.anchor.x} ${card.callout.desktop.anchor.y} L ${card.callout.desktop.elbow.x} ${card.callout.desktop.elbow.y} L ${card.callout.desktop.end.x} ${card.callout.desktop.end.y}`}
+                              />
+                              <circle className="anchor-dot" cx={card.callout.desktop.anchor.x} cy={card.callout.desktop.anchor.y} r="3.5" />
+                            </g>
+                          </svg>
+
+                          <div className="callout-box" style={card.callout.desktop.boxStyle}>
+                            <p className="callout-text">{card.callout.desktop.text}</p>
+                          </div>
+                        </div>
+                      )}
+
                     </div>
                   );
                 })}
@@ -355,6 +471,15 @@ export default function Why() {
 
           </div>
         </div>
+
+        {/* Single Mobile Callout Box (Always visible on mobile — full width) */}
+        {isMobile && (
+          <div className="mobile-callout-container">
+            <div className="callout-box mobile-callout-flow">
+              <p className="callout-text">{CARDS_DATA[activeIndex].callout.mobile.text}</p>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

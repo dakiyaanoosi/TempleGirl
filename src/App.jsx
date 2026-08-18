@@ -10,24 +10,50 @@ import Questions from './Questions';
 import Footer from './Footer';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
+import PrivacyPolicy from './PrivacyPolicy';
 
 function App() {
-  const [isDownloadRoute, setIsDownloadRoute] = useState(
-    () => window.location.pathname.startsWith('/download')
+  const [currentPath, setCurrentPath] = useState(
+    () => window.location.pathname
   );
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Helper function to navigate routes
+  const navigateTo = (path) => {
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+    window.scrollTo(0, 0);
+  };
+
   // Keep route detection reactive on client-side navigation
   useEffect(() => {
+    window.onNavigateRoute = navigateTo;
     const handlePopState = () => {
-      setIsDownloadRoute(window.location.pathname.startsWith('/download'));
+      setCurrentPath(window.location.pathname);
     };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      delete window.onNavigateRoute;
+    };
   }, []);
 
-  if (isDownloadRoute) {
+  if (currentPath.startsWith('/download')) {
     return <DownloadRedirect />;
+  }
+
+  if (currentPath === '/privacy-policy' || currentPath === '/privacy' || currentPath.endsWith('/privacy.html')) {
+    return (
+      <main>
+        <PrivacyPolicy 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </main>
+    );
   }
 
   return (
@@ -39,7 +65,10 @@ function App() {
       <Steps />
       <Reviews />
       <Questions />
-      <Footer onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+      <Footer 
+        onOpenQrSidebar={() => setIsSidebarOpen(true)} 
+        onNavigateRoute={navigateTo}
+      />
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>
@@ -47,3 +76,4 @@ function App() {
 }
 
 export default App;
+

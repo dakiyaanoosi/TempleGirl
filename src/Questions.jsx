@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Questions.css';
@@ -64,8 +64,10 @@ export default function Questions() {
     };
   }, []);
 
-  // GSAP ScrollTrigger: Desktop pin using matchMedia for reactive breakpoint handling
-  useEffect(() => {
+  // GSAP ScrollTrigger: Desktop pin using matchMedia for reactive breakpoint handling.
+  // Using useLayoutEffect ensures GSAP context revert runs synchronously BEFORE React unmounts DOM nodes,
+  // preventing 'NotFoundError: Failed to execute removeChild on Node' when switching client routes.
+  useLayoutEffect(() => {
     if (!sectionRef.current || !qnaRightRef.current) return;
 
     let ctx = gsap.context(() => {
