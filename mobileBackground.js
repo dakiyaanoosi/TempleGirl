@@ -1,5 +1,5 @@
 // Mobile Shader Background - Optimized WebGL Implementation for Mobile Screens (<768px)
-// Renders the animated film-grained Sanatani Pink & Sandalwood Brown fluid gradient.
+// Renders the smooth animated Sanatani Pink & Sandalwood Brown fluid gradient without film grain distortion.
 
 export function initMobileShaderBackground(canvas) {
   if (!canvas) return () => {};
@@ -22,8 +22,7 @@ export function initMobileShaderBackground(canvas) {
     const newWidth = Math.floor(window.innerWidth * dpr);
     const newHeight = Math.floor(window.innerHeight * dpr);
 
-    // Ignore tiny height changes caused by mobile address bar collapse/expansion during vertical scroll
-    if (Math.abs(newWidth - currentWidth) > 5 || Math.abs(newHeight - currentHeight) > 100 || currentWidth === 0) {
+    if (newWidth !== currentWidth || newHeight !== currentHeight) {
       currentWidth = newWidth;
       currentHeight = newHeight;
       canvas.width = newWidth;
@@ -47,19 +46,18 @@ export function initMobileShaderBackground(canvas) {
     uniform vec2 iResolution;
     uniform float iTime;
 
-    #define filmGrainIntensity 0.08
-
     mat2 Rot(float a){
       float s = sin(a);
       float c = cos(a);
       return mat2(c,-s,s,c);
     }
 
-    // Bounded hash function preventing 16-bit half-float mantissa overflow on mobile GPUs (Adreno / Mali)
+    // Sine-less 2D hash preventing 16-bit half-float mantissa overflow & distortion on mobile GPUs
     vec2 hash(vec2 p){
-      p = mod(p, 10000.0);
-      p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-      return fract(sin(p) * 43758.5453);
+      p = mod(p, 100.0);
+      vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.xx + p3.yz) * p3.zy);
     }
 
     float noise(in vec2 p){
@@ -68,64 +66,57 @@ export function initMobileShaderBackground(canvas) {
       vec2 u = f * f * (3.0 - 2.0 * f);
 
       float n = mix(
-        mix(dot(-1. + 2. * hash(i + vec2(0,0)), f - vec2(0,0)),
-            dot(-1. + 2. * hash(i + vec2(1,0)), f - vec2(1,0)), u.x),
-        mix(dot(-1. + 2. * hash(i + vec2(0,1)), f - vec2(0,1)),
-            dot(-1. + 2. * hash(i + vec2(1,1)), f - vec2(1,1)), u.x),
+        mix(dot(-1.0 + 2.0 * hash(i + vec2(0.0, 0.0)), f - vec2(0.0, 0.0)),
+            dot(-1.0 + 2.0 * hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
+        mix(dot(-1.0 + 2.0 * hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)),
+            dot(-1.0 + 2.0 * hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x),
         u.y);
-      return .5 + .5 * n;
-    }
-
-    // Animated film grain seed eliminates static burn-in / "dirty screen" marks on mobile OLED screens
-    float filmGrainNoise(in vec2 uv, in float time){
-      return length(hash(uv * 1000.0 + vec2(mod(time * 10.0, 100.0), mod(time * 7.0, 100.0))));
+      return 0.5 + 0.5 * n;
     }
 
     void mainImage(out vec4 fragColor, in vec2 fragCoord){
-      vec2 uv = fragCoord / iResolution.xy;
-
-      // Isotropic coordinate normalization tailored for portrait mobile screens (<768px)
+      // Isotropic coordinate normalization tailored for mobile screen aspect ratios
       vec2 tuv = (fragCoord - 0.5 * iResolution.xy) / min(iResolution.x, iResolution.y);
 
-      // Bounded animation time input
-      float tTime = mod(iTime, 3600.0);
+      float TWO_PI = 6.28318530718;
 
-      float degree = noise(vec2(tTime * .04, tuv.x * tuv.y));
+      // Rotation noise angle over bounded time
+      float degree = noise(vec2(mod(iTime * 0.04, 100.0), tuv.x * tuv.y));
 
-      tuv *= Rot(radians((degree - .5) * 720. + 180.));
+      tuv *= Rot(radians((degree - 0.5) * 720.0 + 180.0));
 
       float frequency = 4.5;
-      float amplitude = 25.;
-      float speed = tTime * 1.8;
+      float amplitude = 25.0;
+      
+      // Bounded wave speed input prevents sin(large_number) precision degradation over time
+      float speed = mod(iTime * 1.8, TWO_PI);
+
       tuv.x += sin(tuv.y * frequency + speed) / amplitude;
-      tuv.y += sin(tuv.x * frequency * 1.5 + speed) / (amplitude * .5);
+      tuv.y += sin(tuv.x * frequency * 1.5 + speed) / (amplitude * 0.5);
 
       // Sanatani Lotus, Sandalwood & Terracotta color palette (Pink & Brown Theme)
-      vec3 lotusPink = vec3(236.0, 102.0, 148.0) / 255.;     // Radiant Lotus / Gulal Pink
-      vec3 sandalwoodBrown = vec3(54.0, 28.0, 24.0) / 255.;   // Deep Sandalwood & Earth Brown
-      vec3 terracotta = vec3(188.0, 88.0, 54.0) / 255.;       // Warm Clay Terracotta
-      vec3 saffronGold = vec3(238.0, 152.0, 48.0) / 255.;     // Sacred Saffron Gold Glow
+      vec3 lotusPink = vec3(236.0, 102.0, 148.0) / 255.0;     // Radiant Lotus / Gulal Pink
+      vec3 sandalwoodBrown = vec3(54.0, 28.0, 24.0) / 255.0;   // Deep Sandalwood & Earth Brown
+      vec3 terracotta = vec3(188.0, 88.0, 54.0) / 255.0;       // Warm Clay Terracotta
+      vec3 saffronGold = vec3(238.0, 152.0, 48.0) / 255.0;     // Sacred Saffron Gold Glow
 
-      vec3 gulalPink = vec3(225.0, 65.0, 125.0) / 255.;      // Rich Kumkum / Gulal Pink
-      vec3 darkMahogany = vec3(36.0, 16.0, 14.0) / 255.;      // Deep Temple Mahogany
-      vec3 copperBronze = vec3(158.0, 72.0, 42.0) / 255.;     // Copper Bronze Earth
-      vec3 softBlushPink = vec3(245.0, 160.0, 188.0) / 255.;  // Soft Illuminated Petal Pink
+      vec3 gulalPink = vec3(225.0, 65.0, 125.0) / 255.0;      // Rich Kumkum / Gulal Pink
+      vec3 darkMahogany = vec3(36.0, 16.0, 14.0) / 255.0;      // Deep Temple Mahogany
+      vec3 copperBronze = vec3(158.0, 72.0, 42.0) / 255.0;     // Copper Bronze Earth
+      vec3 softBlushPink = vec3(245.0, 160.0, 188.0) / 255.0;  // Soft Illuminated Petal Pink
 
-      float cycle = sin(tTime * .4);
-      float t = (sign(cycle) * pow(abs(cycle), .6) + 1.) / 2.;
+      float cycle = sin(mod(iTime * 0.4, TWO_PI));
+      float t = (sign(cycle) * pow(abs(cycle), 0.6) + 1.0) / 2.0;
 
       vec3 color1 = mix(lotusPink, gulalPink, t);
       vec3 color2 = mix(sandalwoodBrown, darkMahogany, t);
       vec3 color3 = mix(terracotta, copperBronze, t);
       vec3 color4 = mix(saffronGold, softBlushPink, t);
 
-      vec3 layer1 = mix(color3, color2, smoothstep(-.4, .4, (tuv * Rot(radians(-5.))).x));
-      vec3 layer2 = mix(color4, color1, smoothstep(-.4, .4, (tuv * Rot(radians(-5.))).x));
+      vec3 layer1 = mix(color3, color2, smoothstep(-0.4, 0.4, (tuv * Rot(radians(-5.0))).x));
+      vec3 layer2 = mix(color4, color1, smoothstep(-0.4, 0.4, (tuv * Rot(radians(-5.0))).x));
 
-      vec3 color = mix(layer1, layer2, smoothstep(.6, -.4, tuv.y));
-
-      // Apply animated film grain
-      color = color - filmGrainNoise(uv, tTime) * filmGrainIntensity;
+      vec3 color = mix(layer1, layer2, smoothstep(0.6, -0.4, tuv.y));
 
       fragColor = vec4(color, 1.0);
     }
@@ -176,23 +167,18 @@ export function initMobileShaderBackground(canvas) {
   const iTime = gl.getUniformLocation(program, "iTime");
 
   let startTime = performance.now();
+  const PERIOD = Math.PI * 2000; // Exact multiple of 2*PI ensuring seamless loop with zero jump
 
   function render() {
     if (isContextLost) return;
     if (!document.hidden) {
-      const time = (performance.now() - startTime) / 1000;
+      const time = ((performance.now() - startTime) / 1000) % PERIOD;
       gl.uniform2f(iResolution, canvas.width, canvas.height);
       gl.uniform1f(iTime, time);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
     animationFrameId = requestAnimationFrame(render);
   }
-
-  const handleVisibilityChange = () => {
-    if (!document.hidden) {
-      startTime = performance.now() - ((performance.now() - startTime));
-    }
-  };
 
   const handleContextLost = (e) => {
     e.preventDefault();
@@ -209,7 +195,6 @@ export function initMobileShaderBackground(canvas) {
     render();
   };
 
-  document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost, false);
   canvas.addEventListener("webglcontextrestored", handleContextRestored, false);
 
@@ -217,12 +202,12 @@ export function initMobileShaderBackground(canvas) {
 
   return () => {
     window.removeEventListener("resize", resize);
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
     canvas.removeEventListener("webglcontextlost", handleContextLost);
     canvas.removeEventListener("webglcontextrestored", handleContextRestored);
 
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
     }
 
     if (gl && !gl.isContextLost()) {
