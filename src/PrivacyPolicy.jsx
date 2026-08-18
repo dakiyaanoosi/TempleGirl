@@ -82,8 +82,12 @@ export default function PrivacyPolicy({ onOpenQrSidebar, onNavigateHome, onNavig
               <p>
                 This policy covers the Temple Girl Kids mobile app only. For how we handle data on the templegirl.com website, see our{' '}
                 <a
-                  href="/pages/privacy.html"
+                  href="/website-privacy"
                   className="policy-animated-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onNavigateRoute) onNavigateRoute('/website-privacy');
+                  }}
                   onMouseEnter={handleLinkMouseEnter}
                   onMouseLeave={handleLinkMouseLeave}
                 >
@@ -368,8 +372,8 @@ export default function PrivacyPolicy({ onOpenQrSidebar, onNavigateHome, onNavig
                 <span className="policy-animated-underline" />
               </a>
               <address className="policy-contact-address">
-                Mangaluru, Dakshina Kannada<br />
-                Karnataka 575001, India
+                23-9-568/6, Swasti Nilaya, Mangala Nagar 2nd Cross,<br />
+                Mangaladevi Temple, Mangaluru, Karnataka 575001, India
               </address>
             </div>
           </div>

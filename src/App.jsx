@@ -11,6 +11,10 @@ import Footer from './Footer';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
 import PrivacyPolicy from './PrivacyPolicy';
+import WebsitePrivacyPolicy from './WebsitePrivacyPolicy';
+import DeleteAccount from './DeleteAccount';
+import Terms from './Terms';
+import RefundPolicy from './RefundPolicy';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(
@@ -40,6 +44,62 @@ function App() {
 
   if (currentPath.startsWith('/download')) {
     return <DownloadRedirect />;
+  }
+
+  if (currentPath === '/refund' || currentPath === '/pages/refund.html' || currentPath.endsWith('/refund.html')) {
+    return (
+      <main>
+        <RefundPolicy 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </main>
+    );
+  }
+
+  if (currentPath === '/terms' || currentPath === '/pages/terms.html' || currentPath.endsWith('/terms.html')) {
+    return (
+      <main>
+        <Terms 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </main>
+    );
+  }
+
+  if (currentPath === '/delete-account' || currentPath === '/pages/account-deletion.html' || currentPath.endsWith('/account-deletion.html')) {
+    return (
+      <main>
+        <DeleteAccount 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </main>
+    );
+  }
+
+  if (currentPath === '/website-privacy' || currentPath === '/pages/website-privacy.html' || currentPath.endsWith('/website-privacy.html')) {
+    return (
+      <main>
+        <WebsitePrivacyPolicy 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </main>
+    );
   }
 
   if (currentPath === '/privacy-policy' || currentPath === '/privacy' || currentPath.endsWith('/privacy.html')) {
