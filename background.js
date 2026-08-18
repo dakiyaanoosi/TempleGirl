@@ -1,23 +1,48 @@
-// Shader Background - Raw WebGL Implementation (Sanatani Pink & Sandalwood Brown Theme)
+// Shader Background - Production-Ready WebGL Desktop Implementation
+// (Sanatani Pink & Sandalwood Brown Theme)
 
 export function initShaderBackground(canvas) {
   if (!canvas) return () => {};
 
-  const gl = canvas.getContext("webgl");
+  const glOptions = {
+    alpha: false,
+    depth: false,
+    stencil: false,
+    antialias: false,
+    powerPreference: "default",
+    preserveDrawingBuffer: false,
+  };
+
+  const gl =
+    canvas.getContext("webgl", glOptions) ||
+    canvas.getContext("experimental-webgl", glOptions);
+
   if (!gl) {
-    console.error("WebGL not supported");
+    console.error("Desktop Shader: WebGL not supported");
     return () => {};
   }
 
-  let animationFrameId;
+  // State Variables
+  let animationFrameId = null;
+  let isContextLost = false;
+  let isCleanedUp = false;
+  let currentWidth = 0;
+  let currentHeight = 0;
 
-  const resize = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-  };
-  resize();
-  window.addEventListener("resize", resize);
+  // GPU Resource Handles
+  let program = null;
+  let vertShader = null;
+  let fragShader = null;
+  let positionBuffer = null;
+
+  // Attribute & Uniform Locations
+  let positionLocation = -1;
+  let iResolutionLocation = null;
+  let iTimeLocation = null;
+
+  // Timing State
+  let accumulatedTime = 0;
+  let lastFrameTime = performance.now();
 
   const vertexShaderSource = `
     attribute vec2 position;
@@ -115,73 +140,232 @@ export function initShaderBackground(canvas) {
     }
   `;
 
-  function compile(type, source) {
+  // Safely cleanup GPU objects without throwing errors
+  function cleanupGPUResources() {
+    if (!gl) return;
+
+    try {
+      const contextIsLost = gl.isContextLost();
+
+      if (positionBuffer && !contextIsLost) {
+        gl.deleteBuffer(positionBuffer);
+      }
+      positionBuffer = null;
+
+      if (program && !contextIsLost) {
+        if (vertShader) {
+          gl.detachShader(program, vertShader);
+          gl.deleteShader(vertShader);
+        }
+        if (fragShader) {
+          gl.detachShader(program, fragShader);
+          gl.deleteShader(fragShader);
+        }
+        gl.deleteProgram(program);
+      } else {
+        if (vertShader && !contextIsLost) gl.deleteShader(vertShader);
+        if (fragShader && !contextIsLost) gl.deleteShader(fragShader);
+      }
+
+      program = null;
+      vertShader = null;
+      fragShader = null;
+      positionLocation = -1;
+      iResolutionLocation = null;
+      iTimeLocation = null;
+    } catch (err) {
+      console.warn("Desktop Shader: Error during GPU resource cleanup", err);
+    }
+  }
+
+  // Shader Compiler Helper
+  function compileShader(type, source) {
     const shader = gl.createShader(type);
+    if (!shader) return null;
+
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
+
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error(gl.getShaderInfoLog(shader));
+      console.error("Desktop Shader Compile Error:", gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
       return null;
     }
     return shader;
   }
 
-  const program = gl.createProgram();
-  const vertShader = compile(gl.VERTEX_SHADER, vertexShaderSource);
-  const fragShader = compile(gl.FRAGMENT_SHADER, fragmentShaderSource);
-  if (!vertShader || !fragShader) return () => {};
+  // Complete WebGL Resource Creation (used on initial setup and context restoration)
+  function setupWebGLResources() {
+    cleanupGPUResources();
 
-  gl.attachShader(program, vertShader);
-  gl.attachShader(program, fragShader);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(program));
-    return () => {};
-  }
-  gl.useProgram(program);
+    if (gl.isContextLost()) return false;
 
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    -1,-1, 1,-1, -1,1, 1,1
-  ]), gl.STATIC_DRAW);
+    vertShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+    fragShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-  const position = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(position);
-  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-  const iResolution = gl.getUniformLocation(program, "iResolution");
-  const iTime = gl.getUniformLocation(program, "iTime");
-
-  let startTime = performance.now();
-
-  function render() {
-    // Skip GPU draw when tab is hidden — saves battery & CPU on background tabs
-    if (!document.hidden) {
-      const time = (performance.now() - startTime) / 1000;
-      gl.uniform2f(iResolution, canvas.width, canvas.height);
-      gl.uniform1f(iTime, time);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    if (!vertShader || !fragShader) {
+      cleanupGPUResources();
+      return false;
     }
+
+    program = gl.createProgram();
+    if (!program) {
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error("Desktop Shader Link Error:", gl.getProgramInfoLog(program));
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.useProgram(program);
+
+    positionBuffer = gl.createBuffer();
+    if (!positionBuffer) {
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+      gl.STATIC_DRAW
+    );
+
+    positionLocation = gl.getAttribLocation(program, "position");
+    if (positionLocation < 0) {
+      console.error("Desktop Shader: Failed to get position attribute location");
+      cleanupGPUResources();
+      return false;
+    }
+
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    iResolutionLocation = gl.getUniformLocation(program, "iResolution");
+    iTimeLocation = gl.getUniformLocation(program, "iTime");
+
+    if (!iResolutionLocation || !iTimeLocation) {
+      console.error("Desktop Shader: Failed to get uniform locations");
+      cleanupGPUResources();
+      return false;
+    }
+
+    // Reset dimensions to force viewport calculation for the new context
+    currentWidth = 0;
+    currentHeight = 0;
+    resize();
+
+    return true;
+  }
+
+  // Resize Handler matching exact desktop window resolution
+  const resize = () => {
+    if (isContextLost || isCleanedUp || !gl) return;
+
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+
+    if (newWidth !== currentWidth || newHeight !== currentHeight || currentWidth === 0) {
+      currentWidth = newWidth;
+      currentHeight = newHeight;
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    }
+  };
+
+  // Render Loop with unthrottled desktop RAF and accumulated time
+  function render() {
+    if (isCleanedUp || isContextLost) return;
+
+    if (!document.hidden) {
+      const now = performance.now();
+      const rawDelta = (now - lastFrameTime) / 1000;
+      lastFrameTime = now;
+
+      // Cap delta at 0.1s to prevent jumps if tab/frame was stalled
+      const cappedDelta = Math.max(0, Math.min(rawDelta, 0.1));
+      accumulatedTime += cappedDelta;
+
+      if (gl && program) {
+        gl.useProgram(program);
+        gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+        gl.uniform1f(iTimeLocation, accumulatedTime);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+    }
+
     animationFrameId = requestAnimationFrame(render);
   }
 
-  // Re-anchor start time after tab becomes visible to avoid animation jump
+  function stopAnimationLoop() {
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
+  function startAnimationLoop() {
+    stopAnimationLoop();
+    lastFrameTime = performance.now();
+    animationFrameId = requestAnimationFrame(render);
+  }
+
+  // Event Handlers
   const handleVisibilityChange = () => {
     if (!document.hidden) {
-      startTime = performance.now() - ((performance.now() - startTime));
+      // Re-anchor lastFrameTime so returning from hidden tab doesn't produce time delta spike
+      lastFrameTime = performance.now();
     }
   };
+
+  const handleContextLost = (e) => {
+    e.preventDefault();
+    isContextLost = true;
+    stopAnimationLoop();
+  };
+
+  const handleContextRestored = () => {
+    isContextLost = false;
+    if (setupWebGLResources()) {
+      startAnimationLoop();
+    } else {
+      console.error("Desktop Shader: Failed to restore WebGL resources.");
+    }
+  };
+
+  // Initial Setup
+  if (!setupWebGLResources()) {
+    return () => {};
+  }
+
+  window.addEventListener("resize", resize);
   document.addEventListener("visibilitychange", handleVisibilityChange);
+  canvas.addEventListener("webglcontextlost", handleContextLost, false);
+  canvas.addEventListener("webglcontextrestored", handleContextRestored, false);
 
-  render();
+  startAnimationLoop();
 
+  // Robust, Safe Cleanup Function
   return () => {
+    if (isCleanedUp) return;
+    isCleanedUp = true;
+
+    stopAnimationLoop();
+
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", handleVisibilityChange);
-    if (animationFrameId) {
-      cancelAnimationFrame(animationFrameId);
-    }
+    canvas.removeEventListener("webglcontextlost", handleContextLost);
+    canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+
+    cleanupGPUResources();
   };
 }
