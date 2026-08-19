@@ -16,6 +16,7 @@ import DeleteAccount from './DeleteAccount';
 import Terms from './Terms';
 import RefundPolicy from './RefundPolicy';
 import Contact from './Contact';
+import ManageSubscription from './ManageSubscription';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(
@@ -101,6 +102,16 @@ function App() {
     if (currentPath === '/privacy-policy' || currentPath === '/privacy' || currentPath.endsWith('/privacy.html')) {
       return (
         <PrivacyPolicy 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+        />
+      );
+    }
+
+    if (currentPath === '/manage-subscription' || currentPath === '/pages/manage-subscription' || currentPath === '/pages/manage-subscription.html' || currentPath.endsWith('/manage-subscription.html')) {
+      return (
+        <ManageSubscription 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}

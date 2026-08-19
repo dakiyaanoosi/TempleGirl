@@ -74,7 +74,7 @@ export default function Header({ currentPath }) {
     const path = currentPath || window.location.pathname;
     if (path === '/contact' || path === '/pages/contact.html' || path.endsWith('/contact.html')) {
       setActiveNav('Contacts');
-    } else if (path === '/refund' || path === '/pages/refund.html' || path.endsWith('/refund.html')) {
+    } else if (path === '/manage-subscription' || path === '/pages/manage-subscription' || path === '/pages/manage-subscription.html' || path.endsWith('/manage-subscription.html')) {
       setActiveNav('Manage Subscriptions');
     } else if (path === '/') {
       setActiveNav('Home');
@@ -99,9 +99,9 @@ export default function Header({ currentPath }) {
       }
     } else if (label === 'Manage Subscriptions') {
       if (window.onNavigateRoute) {
-        window.onNavigateRoute('/refund');
+        window.onNavigateRoute('/manage-subscription');
       } else {
-        window.location.href = '/refund';
+        window.location.href = '/manage-subscription';
       }
     }
   };

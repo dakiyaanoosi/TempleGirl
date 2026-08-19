@@ -1,0 +1,456 @@
+/* Manage Subscription Flowty-inspired glassmorphism styling — Typographically aligned with PrivacyPolicy */
+
+.sub-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: 3.5rem;
+  width: 100%;
+}
+
+.sub-hero-title-group {
+  margin-bottom: 3.5rem;
+}
+
+.sub-hero-title-line {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(4.5rem, 11vw, 7.8rem);
+  font-weight: 350;
+  color: #ffffff;
+  letter-spacing: -0.035em;
+  line-height: 0.90;
+  margin: 0;
+}
+
+/* 2-Column Hero Bottom Bar (Matches Privacy Policy Hero Grid) */
+.sub-hero-bottom-row {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) 1fr;
+  gap: clamp(3rem, 10vw, 12rem);
+  align-items: center;
+  width: 100%;
+}
+
+.sub-hero-desc {
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.sub-hero-right {
+  justify-self: end;
+  text-align: right;
+  max-width: 440px;
+}
+
+.sub-hero-right-note {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.sub-tax-note {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.35;
+  display: block;
+  margin-top: 0.35rem;
+}
+
+/* Pricing Section with Top-Centered Toggle Switch */
+.sub-pricing-section {
+  padding-top: 3.5rem;
+  margin-bottom: 5rem;
+  width: 100%;
+}
+
+.sub-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3.5rem;
+  width: 100%;
+}
+
+/* Capsule Toggle Switcher (Flowty Style) */
+.sub-toggle-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(18, 18, 22, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.sub-toggle-option {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 0.5rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sub-toggle-option.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.sub-save-text {
+  color: #34d399;
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+/* Pricing Grid (Flowty Replica) */
+.sub-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.sub-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 2.75rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.sub-card.featured {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sub-card-header {
+  margin-bottom: 2rem;
+}
+
+.sub-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0 0 0.6rem 0;
+  line-height: 1.1;
+}
+
+.sub-card-desc {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.35;
+  margin: 0 0 1.75rem 0;
+}
+
+.sub-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.sub-price-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2.8rem, 5vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  color: #F2B84B;
+  line-height: 1;
+}
+
+.sub-price-period {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+.sub-price-subtext {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2rem;
+}
+
+/* CTA Buttons inside Cards */
+.sub-cta-btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  box-sizing: border-box;
+  margin-bottom: 2rem;
+}
+
+.sub-cta-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.sub-cta-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.sub-cta-btn.primary {
+  background: #ffffff;
+  color: #0d0e15;
+  border: 1px solid #ffffff;
+  box-shadow: none;
+}
+
+.sub-cta-btn.primary:hover {
+  background: #ffffff;
+  transform: none;
+  box-shadow: none;
+}
+
+.sub-cta-btn.primary:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+/* Features List (Flowty Pill Style Rows with Left Linear Gradients) */
+.sub-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.sub-feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.18) 0%, rgba(34, 197, 94, 0.03) 45%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 1.1rem 1.35rem;
+  border-radius: 20px;
+  font-size: 1.05rem;
+  color: #ffffff;
+  line-height: 1.35;
+  box-sizing: border-box;
+}
+
+.sub-feature-item.disabled {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.18) 0%, rgba(239, 68, 68, 0.03) 45%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sub-icon-check {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  color: #22c55e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+}
+
+.sub-icon-cross {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .sub-hero-title-group {
+    margin-bottom: 2.75rem;
+  }
+  .sub-hero-bottom-row {
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+  .sub-card {
+    padding: 2.25rem 1.75rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .sub-hero {
+    margin-bottom: 2.5rem;
+  }
+  .sub-hero-title-group {
+    margin-bottom: 2.25rem;
+  }
+  .sub-hero-bottom-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .sub-hero-desc,
+  .sub-hero-right {
+    justify-self: start;
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .sub-pricing-section {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .sub-pricing-grid {
+    display: contents;
+  }
+
+  .sub-card:not(.featured) {
+    order: 1;
+    margin-bottom: 2.25rem;
+  }
+
+  .sub-toggle-wrapper {
+    order: 2;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+
+  .sub-toggle-container {
+    justify-self: center;
+  }
+
+  .sub-card.featured {
+    order: 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .sub-hero-title-line {
+    font-size: clamp(3.2rem, 10vw, 4.8rem);
+  }
+  .sub-hero-desc {
+    font-size: 1.05rem;
+  }
+  .sub-hero-right-note {
+    font-size: 1rem;
+  }
+  .sub-card {
+    padding: 2rem 1.5rem;
+    border-radius: 24px;
+  }
+  .sub-card-header {
+    margin-bottom: 1.5rem;
+  }
+  .sub-card-desc {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .sub-price-subtext {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .sub-cta-btn {
+    margin-bottom: 1.5rem;
+  }
+  .sub-feature-item {
+    padding: 0.95rem 1.15rem;
+    font-size: 0.98rem;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sub-hero {
+    margin-bottom: 2rem;
+  }
+  .sub-hero-title-group {
+    margin-bottom: 1.5rem;
+  }
+  .sub-hero-title-line {
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+    letter-spacing: -0.025em;
+  }
+  .sub-hero-desc {
+    font-size: 0.98rem;
+    line-height: 1.4;
+  }
+  .sub-hero-right-note {
+    font-size: 0.95rem;
+  }
+  .sub-toggle-wrapper {
+    margin-bottom: 1.5rem;
+  }
+  .sub-toggle-container {
+    padding: 4px 10px;
+    gap: 0.35rem;
+  }
+  .sub-toggle-option {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.88rem;
+    gap: 0.25rem;
+  }
+  .sub-save-text {
+    font-size: 0.82rem;
+  }
+  .sub-card {
+    padding: 1.6rem 1.2rem;
+    border-radius: 20px;
+  }
+  .sub-card-title {
+    font-size: 1.75rem;
+  }
+  .sub-price-num {
+    font-size: 2.6rem;
+  }
+  .sub-price-period {
+    font-size: 1rem;
+  }
+  .sub-cta-btn {
+    padding: 0.85rem 1.1rem;
+    font-size: 0.95rem;
+  }
+  .sub-feature-list {
+    gap: 0.65rem;
+  }
+  .sub-feature-item {
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    border-radius: 14px;
+  }
+  .sub-icon-check,
+  .sub-icon-cross {
+    margin-left: 0.5rem;
+  }
+}

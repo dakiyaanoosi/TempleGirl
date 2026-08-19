@@ -287,6 +287,7 @@
 /* GSAP Animated Underline Links */
 .policy-animated-link {
   position: relative;
+  top: 2.5px;
   color: #ffffff;
   text-decoration: none;
   display: inline-block;
@@ -804,7 +805,7 @@
 }
 
 .minimal-terms-text .policy-animated-link {
-  vertical-align: middle;
+  vertical-align: baseline;
 }
 
 @media (max-width: 768px) {
