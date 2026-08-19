@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Questions.css';
 
-export default function Questions() {
+export default function Questions({ onNavigateRoute }) {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const qnaRightRef = useRef(null);
@@ -188,8 +188,18 @@ export default function Questions() {
             <p className="qna-intro-text">
               Got questions? We've answered the most common ones below. Still curious? Feel free to reach out to us directly -{' '}
               <a
-                href="mailto:support@templegirlkids.com"
+                href="/contact"
                 className="qna-help-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigateRoute) {
+                    onNavigateRoute('/contact');
+                  } else if (window.onNavigateRoute) {
+                    window.onNavigateRoute('/contact');
+                  } else {
+                    window.location.href = '/contact';
+                  }
+                }}
                 onMouseEnter={handleLinkMouseEnter}
                 onMouseLeave={handleLinkMouseLeave}
               >

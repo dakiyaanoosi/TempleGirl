@@ -65,7 +65,7 @@ export default function Header({ currentPath }) {
 
   const navItems = [
     { id: 'nav-home', label: 'Home' },
-    { id: 'nav-contacts', label: 'Contacts' },
+    { id: 'nav-contacts', label: 'Contact' },
     { id: 'nav-subscriptions', label: 'Manage Subscriptions' },
   ];
 
@@ -73,7 +73,7 @@ export default function Header({ currentPath }) {
   useEffect(() => {
     const path = currentPath || window.location.pathname;
     if (path === '/contact' || path === '/pages/contact.html' || path.endsWith('/contact.html')) {
-      setActiveNav('Contacts');
+      setActiveNav('Contact');
     } else if (path === '/manage-subscription' || path === '/pages/manage-subscription' || path === '/pages/manage-subscription.html' || path.endsWith('/manage-subscription.html')) {
       setActiveNav('Manage Subscriptions');
     } else if (path === '/') {
@@ -91,7 +91,7 @@ export default function Header({ currentPath }) {
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    } else if (label === 'Contacts') {
+    } else if (label === 'Contact' || label === 'Contacts') {
       if (window.onNavigateRoute) {
         window.onNavigateRoute('/contact');
       } else {
@@ -240,7 +240,8 @@ export default function Header({ currentPath }) {
       }, 0);
 
       tl.to(headerEl, {
-        backgroundColor: '#D8D8E2',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
         duration: 0.75,
         ease: 'power2.out',
       }, 0);

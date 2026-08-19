@@ -126,7 +126,7 @@ function App() {
         <Why />
         <Steps />
         <Reviews />
-        <Questions />
+        <Questions onNavigateRoute={navigateTo} />
         <Footer 
           onOpenQrSidebar={() => setIsSidebarOpen(true)} 
           onNavigateRoute={navigateTo}
