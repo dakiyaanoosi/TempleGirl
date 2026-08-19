@@ -25,15 +25,12 @@ export default function SmoothScroll({ children, currentPath }) {
       orientation: 'vertical',
       gestureOrientation: 'vertical',
 
-      // Desktop / wheel
+      // Desktop / wheel smooth scrolling
       smoothWheel: true,
       wheelMultiplier: 1,
 
-      // Mobile / touch
-      syncTouch: true,
-      syncTouchLerp: 0.08,
-      touchMultiplier: 1.15,
-      touchInertiaMultiplier: 1.2,
+      // Mobile / touch: use native 120Hz GPU momentum scrolling for ultra-smooth mobile feel
+      syncTouch: false,
 
       // GSAP controls the RAF loop
       autoRaf: false,
