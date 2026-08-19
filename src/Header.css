@@ -362,17 +362,17 @@
 
 /* Issue 10: Mobile nav links need 44px minimum vertical tap target */
 .mobile-nav-item .pill-nav-link {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(18, 18, 22, 0.65);
   padding: 4px 0;      /* restored to original visual padding */
 }
 
 .mobile-nav-item .pill-nav-link.active,
 .mobile-nav-item .pill-nav-link:hover {
-  color: #ffffff;
+  color: #000;
 }
 
 .mobile-nav-item .pill-nav-link .bracket {
-  color: #ffffff;
+  color: #000;
 }
 
 .mobile-menu-brand {

@@ -240,8 +240,7 @@ export default function Header({ currentPath }) {
       }, 0);
 
       tl.to(headerEl, {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: '#D8D8E2',
         duration: 0.75,
         ease: 'power2.out',
       }, 0);
