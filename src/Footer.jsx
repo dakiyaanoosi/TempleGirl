@@ -2,7 +2,29 @@ import KolamBorder from './KolamBorder';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
 import './Footer.css';
 
-export default function Footer({ onOpenQrSidebar, onNavigateRoute }) {
+export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }) {
+  const activePath = currentPath || (typeof window !== 'undefined' ? window.location.pathname : '');
+
+  const isLinkActive = (path) => {
+    if (!activePath) return false;
+    if (path === '/privacy-policy') {
+      return activePath === '/privacy-policy' || activePath === '/privacy' || activePath.endsWith('/privacy.html');
+    }
+    if (path === '/website-privacy') {
+      return activePath === '/website-privacy' || activePath === '/pages/website-privacy.html' || activePath.endsWith('/website-privacy.html');
+    }
+    if (path === '/delete-account') {
+      return activePath === '/delete-account' || activePath === '/pages/account-deletion.html' || activePath.endsWith('/account-deletion.html');
+    }
+    if (path === '/terms') {
+      return activePath === '/terms' || activePath === '/pages/terms.html' || activePath.endsWith('/terms.html');
+    }
+    if (path === '/refund') {
+      return activePath === '/refund' || activePath === '/pages/refund.html' || activePath.endsWith('/refund.html');
+    }
+    return activePath === path;
+  };
+
   const handleNav = (path) => {
     if (onNavigateRoute) {
       onNavigateRoute(path);
@@ -60,11 +82,41 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute }) {
         <nav className="footer-bottom" aria-label="Footer navigation">
           {/* Column 1: Legal & Policies */}
           <div className="footer-nav-col">
-            <button type="button" className="footer-nav-link" onClick={() => handleNav('/privacy-policy')}>Privacy Policy</button>
-            <button type="button" className="footer-nav-link" onClick={() => handleNav('/website-privacy')}>Website Privacy</button>
-            <button type="button" className="footer-nav-link" onClick={() => handleNav('/delete-account')}>Delete Account</button>
-            <button type="button" className="footer-nav-link" onClick={() => handleNav('/terms')}>Terms &amp; Conditions</button>
-            <button type="button" className="footer-nav-link" onClick={() => handleNav('/refund')}>Refund Policy</button>
+            <button
+              type="button"
+              className={`footer-nav-link ${isLinkActive('/privacy-policy') ? 'active' : ''}`}
+              onClick={() => handleNav('/privacy-policy')}
+            >
+              Privacy Policy
+            </button>
+            <button
+              type="button"
+              className={`footer-nav-link ${isLinkActive('/website-privacy') ? 'active' : ''}`}
+              onClick={() => handleNav('/website-privacy')}
+            >
+              Website Privacy
+            </button>
+            <button
+              type="button"
+              className={`footer-nav-link ${isLinkActive('/delete-account') ? 'active' : ''}`}
+              onClick={() => handleNav('/delete-account')}
+            >
+              Delete Account
+            </button>
+            <button
+              type="button"
+              className={`footer-nav-link ${isLinkActive('/terms') ? 'active' : ''}`}
+              onClick={() => handleNav('/terms')}
+            >
+              Terms &amp; Conditions
+            </button>
+            <button
+              type="button"
+              className={`footer-nav-link ${isLinkActive('/refund') ? 'active' : ''}`}
+              onClick={() => handleNav('/refund')}
+            >
+              Refund Policy
+            </button>
           </div>
 
           {/* Column 2: Social Links & Subscribe */}

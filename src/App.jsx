@@ -47,103 +47,88 @@ function App() {
     return <DownloadRedirect />;
   }
 
-  if (currentPath === '/contact' || currentPath === '/pages/contact.html' || currentPath.endsWith('/contact.html')) {
-    return (
-      <main>
+  const renderPage = () => {
+    if (currentPath === '/contact' || currentPath === '/pages/contact.html' || currentPath.endsWith('/contact.html')) {
+      return (
         <Contact 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
         />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </main>
-    );
-  }
+      );
+    }
 
-  if (currentPath === '/refund' || currentPath === '/pages/refund.html' || currentPath.endsWith('/refund.html')) {
-    return (
-      <main>
+    if (currentPath === '/refund' || currentPath === '/pages/refund.html' || currentPath.endsWith('/refund.html')) {
+      return (
         <RefundPolicy 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
         />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </main>
-    );
-  }
+      );
+    }
 
-  if (currentPath === '/terms' || currentPath === '/pages/terms.html' || currentPath.endsWith('/terms.html')) {
-    return (
-      <main>
+    if (currentPath === '/terms' || currentPath === '/pages/terms.html' || currentPath.endsWith('/terms.html')) {
+      return (
         <Terms 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
         />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </main>
-    );
-  }
+      );
+    }
 
-  if (currentPath === '/delete-account' || currentPath === '/pages/account-deletion.html' || currentPath.endsWith('/account-deletion.html')) {
-    return (
-      <main>
+    if (currentPath === '/delete-account' || currentPath === '/pages/account-deletion.html' || currentPath.endsWith('/account-deletion.html')) {
+      return (
         <DeleteAccount 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
         />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </main>
-    );
-  }
+      );
+    }
 
-  if (currentPath === '/website-privacy' || currentPath === '/pages/website-privacy.html' || currentPath.endsWith('/website-privacy.html')) {
-    return (
-      <main>
+    if (currentPath === '/website-privacy' || currentPath === '/pages/website-privacy.html' || currentPath.endsWith('/website-privacy.html')) {
+      return (
         <WebsitePrivacyPolicy 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
         />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </main>
-    );
-  }
+      );
+    }
 
-  if (currentPath === '/privacy-policy' || currentPath === '/privacy' || currentPath.endsWith('/privacy.html')) {
-    return (
-      <main>
+    if (currentPath === '/privacy-policy' || currentPath === '/privacy' || currentPath.endsWith('/privacy.html')) {
+      return (
         <PrivacyPolicy 
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
         />
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </main>
+      );
+    }
+
+    return (
+      <>
+        <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+        <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+        <Why />
+        <Steps />
+        <Reviews />
+        <Questions />
+        <Footer 
+          onOpenQrSidebar={() => setIsSidebarOpen(true)} 
+          onNavigateRoute={navigateTo}
+          currentPath={currentPath}
+        />
+      </>
     );
-  }
+  };
 
   return (
     <main>
-      <Header />
-      <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-      <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-      <Why />
-      <Steps />
-      <Reviews />
-      <Questions />
-      <Footer 
-        onOpenQrSidebar={() => setIsSidebarOpen(true)} 
-        onNavigateRoute={navigateTo}
-      />
+      <Header currentPath={currentPath} />
+      {renderPage()}
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <ShaderBackground />
     </main>
@@ -151,4 +136,3 @@ function App() {
 }
 
 export default App;
-

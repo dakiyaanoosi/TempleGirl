@@ -4,7 +4,7 @@ import { handleRadialMouseMove } from './utils/radialMouseMove';
 import { useBodyScrollLock } from './hooks/useBodyScrollLock';
 import './Header.css';
 
-export default function Header() {
+export default function Header({ currentPath }) {
   const [activeNav, setActiveNav] = useState('Home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -71,15 +71,17 @@ export default function Header() {
 
   // Sync activeNav with current location
   useEffect(() => {
-    const path = window.location.pathname;
+    const path = currentPath || window.location.pathname;
     if (path === '/contact' || path === '/pages/contact.html' || path.endsWith('/contact.html')) {
       setActiveNav('Contacts');
     } else if (path === '/refund' || path === '/pages/refund.html' || path.endsWith('/refund.html')) {
       setActiveNav('Manage Subscriptions');
     } else if (path === '/') {
       setActiveNav('Home');
+    } else {
+      setActiveNav('');
     }
-  }, []);
+  }, [currentPath]);
 
   const handleNavClick = (label) => {
     setActiveNav(label);

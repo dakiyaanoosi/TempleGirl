@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
-import Header from './Header';
 import Footer from './Footer';
 import './PrivacyPolicy.css';
 
@@ -55,8 +54,6 @@ export default function RefundPolicy({ onOpenQrSidebar, onNavigateRoute }) {
 
   return (
     <div className="policy-page">
-      {/* Standard Site Header */}
-      <Header />
 
       <main className="policy-container">
         {/* Hero Header */}

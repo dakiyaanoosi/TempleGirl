@@ -127,8 +127,7 @@
 
 .footer-nav-link.active {
   color: #ffffff;
-  text-decoration: underline;
-  text-underline-offset: 6px;
+  text-decoration: none;
 }
 
 /* Responsive Media Queries — Issue 14: clamp() handles fluid scaling, minimal overrides needed */
