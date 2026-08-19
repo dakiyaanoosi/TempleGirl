@@ -133,7 +133,7 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
             </div>
 
             {/* Box 2: Business */}
-            <p className="policy-contact-label" style={{ marginTop: '1.5rem' }}>Business &amp; Partnerships</p>
+            <p className="policy-contact-label">Business &amp; Partnerships</p>
             <div className="policy-contact-box">
               <a
                 href="mailto:namaste@templegirl.com"
@@ -148,7 +148,7 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
             </div>
 
             {/* Box 3: Registered Office */}
-            <p className="policy-contact-label" style={{ marginTop: '1.5rem' }}>Registered Office</p>
+            <p className="policy-contact-label">Registered Office</p>
             <div className="policy-contact-box">
               <address className="policy-contact-address">
                 23-9-568/6, Swasti Nilaya, Mangala Nagar 2nd Cross,<br />

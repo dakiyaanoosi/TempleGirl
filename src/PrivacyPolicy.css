@@ -316,15 +316,20 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.25rem 1.75rem;
   border-radius: 12px;
-  margin-top: 0.5rem;
+  margin-top: 0;
 }
 
+.policy-content-col p.policy-contact-label,
 .policy-contact-label {
   font-size: 1.1rem;
   font-weight: 700;
   color: #ffffff;
-  margin: 1.25rem 0 0.5rem 0;
+  margin: 1.75rem 0 0.35rem 0;
   font-family: 'Outfit', sans-serif;
+}
+
+.policy-content-col h2 + p.policy-contact-label {
+  margin-top: 0.5rem;
 }
 
 .policy-contact-desc-text {
@@ -725,16 +730,20 @@
   top: calc(100% + 8px);
   left: 0;
   width: 100%;
+  /* background: rgba(255, 255, 255, 0.2); */
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 0.5rem 1.5rem;
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
   z-index: 50;
   display: flex;
   flex-direction: column;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  isolation: isolate;
 }
 
 .minimal-dropdown-option {
