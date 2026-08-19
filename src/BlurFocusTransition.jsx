@@ -116,15 +116,15 @@ export default function BlurFocusTransition({
         gsap.fromTo(
           elementsToAnimate,
           {
-            filter: 'blur(10px)',
-            opacity: 0.8,
+            filter: 'blur(16px)',
+            opacity: 0,
           },
           {
             filter: 'blur(0px)',
             opacity: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            stagger: targets.length > 0 ? 0.04 : 0,
+            duration: 1.6,
+            ease: 'power2.out',
+            stagger: targets.length > 0 ? 0.1 : 0,
 
             onComplete: () => {
               gsap.set(elementsToAnimate, {
