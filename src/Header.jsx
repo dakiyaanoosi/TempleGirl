@@ -346,8 +346,8 @@ export default function Header({ currentPath }) {
                 <button
                   id="nav-subscribe"
                   type="button"
-                  className={`subscribe-btn ${activeNav === 'SUBSCRIBE' ? 'active' : ''}`}
-                  onClick={() => setActiveNav('SUBSCRIBE')}
+                  className={`subscribe-btn ${activeNav === 'Manage Subscriptions' || activeNav === 'SUBSCRIBE' ? 'active' : ''}`}
+                  onClick={() => handleNavClick('Manage Subscriptions')}
                   onMouseMove={handleRadialMouseMove}
                   onMouseEnter={handleRadialMouseMove}
                   onMouseLeave={handleRadialMouseMove}
@@ -393,7 +393,11 @@ export default function Header({ currentPath }) {
                     onClick={() => {
                       setActiveNav('Home');
                       closeMenu();
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      if (window.location.pathname !== '/' && window.onNavigateRoute) {
+                        window.onNavigateRoute('/');
+                      } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
                     }}
                     aria-label="Go to top of page"
                   >
@@ -407,7 +411,7 @@ export default function Header({ currentPath }) {
                   type="button"
                   className="mobile-subscribe-btn"
                   onClick={() => {
-                    setActiveNav('SUBSCRIBE');
+                    handleNavClick('Manage Subscriptions');
                     closeMenu();
                   }}
                   onMouseMove={handleRadialMouseMove}

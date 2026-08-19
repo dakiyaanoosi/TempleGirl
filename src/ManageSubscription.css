@@ -238,7 +238,6 @@
 
 .sub-cta-btn.primary:active {
   opacity: 0.85;
-  transform: scale(0.98);
 }
 
 /* Features List (Flowty Pill Style Rows with Left Linear Gradients) */
