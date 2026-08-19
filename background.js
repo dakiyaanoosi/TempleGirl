@@ -282,28 +282,37 @@ export function initShaderBackground(canvas) {
     }
   };
 
-  // Render Loop with unthrottled desktop RAF and accumulated time
-  function render() {
+  // Render Loop with 60 FPS throttling for high-refresh desktop monitors
+  const TARGET_FPS = 60;
+  const FRAME_INTERVAL = 1000 / TARGET_FPS;
+  let lastRenderTimestamp = performance.now();
+
+  function render(timestamp) {
     if (isCleanedUp || isContextLost) return;
 
-    if (!document.hidden) {
-      const now = performance.now();
-      const rawDelta = (now - lastFrameTime) / 1000;
-      lastFrameTime = now;
-
-      // Cap delta at 0.1s to prevent jumps if tab/frame was stalled
-      const cappedDelta = Math.max(0, Math.min(rawDelta, 0.1));
-      accumulatedTime += cappedDelta;
-
-      if (gl && program) {
-        gl.useProgram(program);
-        gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
-        gl.uniform1f(iTimeLocation, accumulatedTime);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      }
-    }
-
     animationFrameId = requestAnimationFrame(render);
+
+    if (document.hidden) return;
+
+    const elapsed = (timestamp || performance.now()) - lastRenderTimestamp;
+    if (elapsed < FRAME_INTERVAL - 1.0) return;
+
+    lastRenderTimestamp = (timestamp || performance.now()) - (elapsed % FRAME_INTERVAL);
+
+    const now = performance.now();
+    const rawDelta = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
+
+    // Cap delta at 0.1s to prevent jumps if tab/frame was stalled
+    const cappedDelta = Math.max(0, Math.min(rawDelta, 0.1));
+    accumulatedTime += cappedDelta;
+
+    if (gl && program) {
+      gl.useProgram(program);
+      gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+      gl.uniform1f(iTimeLocation, accumulatedTime);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   function stopAnimationLoop() {

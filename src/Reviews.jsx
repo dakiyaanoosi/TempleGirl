@@ -13,17 +13,28 @@ export default function Reviews() {
 
   // Fetch real review data from public/review.json
   useEffect(() => {
-    fetch('/review.json')
-      .then((res) => res.json())
-      .then((data) => {
+    const controller = new AbortController();
+
+    async function loadReviews() {
+      try {
+        const res = await fetch('/review.json', { signal: controller.signal });
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: Failed to fetch review data`);
+        }
+        const data = await res.json();
         if (Array.isArray(data)) {
           setReviewsData(data);
         }
-      })
-      .catch((err) => {
-        console.error("Failed to load review data:", err);
-        setFetchError(true);
-      });
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error("Failed to load review data:", err);
+          setFetchError(true);
+        }
+      }
+    }
+
+    loadReviews();
+    return () => controller.abort();
   }, []);
 
   // Mouse Drag to Scroll handlers

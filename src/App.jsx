@@ -15,6 +15,8 @@ import BlurFocusTransition from './BlurFocusTransition';
 import { useBlurFocusNavigation, BlurFocusContext } from './BlurFocusContext';
 import { NavigationContext } from './NavigationContext';
 
+import { ROUTES, isRouteActive } from './utils/routes';
+
 // Route-level components: lazy-loaded with explicit preloading helpers
 const loadPrivacyPolicy      = () => import('./PrivacyPolicy');
 const loadWebsitePrivacyPolicy = () => import('./WebsitePrivacyPolicy');
@@ -66,7 +68,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
   }, [triggerTransition, performDirectNavigate]);
 
   const renderPage = () => {
-    if (currentPath === '/contact' || currentPath === '/pages/contact.html' || currentPath.endsWith('/contact.html')) {
+    if (isRouteActive(currentPath, ROUTES.CONTACT)) {
       return (
         <Contact
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
@@ -76,7 +78,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    if (currentPath === '/refund' || currentPath === '/pages/refund.html' || currentPath.endsWith('/refund.html')) {
+    if (isRouteActive(currentPath, ROUTES.REFUND)) {
       return (
         <RefundPolicy
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
@@ -86,7 +88,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    if (currentPath === '/terms' || currentPath === '/pages/terms.html' || currentPath.endsWith('/terms.html')) {
+    if (isRouteActive(currentPath, ROUTES.TERMS)) {
       return (
         <Terms
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
@@ -96,7 +98,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    if (currentPath === '/delete-account' || currentPath === '/pages/account-deletion.html' || currentPath.endsWith('/account-deletion.html')) {
+    if (isRouteActive(currentPath, ROUTES.DELETE_ACCOUNT)) {
       return (
         <DeleteAccount
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
@@ -106,7 +108,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    if (currentPath === '/website-privacy' || currentPath === '/pages/website-privacy.html' || currentPath.endsWith('/website-privacy.html')) {
+    if (isRouteActive(currentPath, ROUTES.WEBSITE_PRIVACY)) {
       return (
         <WebsitePrivacyPolicy
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
@@ -116,7 +118,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    if (currentPath === '/privacy-policy' || currentPath === '/privacy' || currentPath.endsWith('/privacy.html')) {
+    if (isRouteActive(currentPath, ROUTES.PRIVACY)) {
       return (
         <PrivacyPolicy
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
@@ -126,7 +128,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    if (currentPath === '/manage-subscription' || currentPath === '/pages/manage-subscription' || currentPath === '/pages/manage-subscription.html' || currentPath.endsWith('/manage-subscription.html')) {
+    if (isRouteActive(currentPath, ROUTES.MANAGE_SUBSCRIPTION)) {
       return (
         <ManageSubscription
           onOpenQrSidebar={() => setIsSidebarOpen(true)}

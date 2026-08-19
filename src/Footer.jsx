@@ -1,28 +1,13 @@
 import KolamBorder from './KolamBorder';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
+import { isRouteActive } from './utils/routes';
 import './Footer.css';
 
 export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }) {
   const activePath = currentPath || (typeof window !== 'undefined' ? window.location.pathname : '');
 
   const isLinkActive = (path) => {
-    if (!activePath) return false;
-    if (path === '/privacy-policy') {
-      return activePath === '/privacy-policy' || activePath === '/privacy' || activePath.endsWith('/privacy.html');
-    }
-    if (path === '/website-privacy') {
-      return activePath === '/website-privacy' || activePath === '/pages/website-privacy.html' || activePath.endsWith('/website-privacy.html');
-    }
-    if (path === '/delete-account') {
-      return activePath === '/delete-account' || activePath === '/pages/account-deletion.html' || activePath.endsWith('/account-deletion.html');
-    }
-    if (path === '/terms') {
-      return activePath === '/terms' || activePath === '/pages/terms.html' || activePath.endsWith('/terms.html');
-    }
-    if (path === '/refund') {
-      return activePath === '/refund' || activePath === '/pages/refund.html' || activePath.endsWith('/refund.html');
-    }
-    return activePath === path;
+    return isRouteActive(activePath, path);
   };
 
   const handleNav = (path) => {

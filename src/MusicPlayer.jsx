@@ -10,16 +10,22 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (!audioRef.current || hasEnded) return;
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
       if (onPlayStateChange) onPlayStateChange(false);
     } else {
-      audioRef.current.play();
-      setIsPlaying(true);
-      if (onPlayStateChange) onPlayStateChange(true);
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        if (onPlayStateChange) onPlayStateChange(true);
+      } catch (err) {
+        console.warn('[MusicPlayer] Audio playback prevented by browser or stream error:', err);
+        setIsPlaying(false);
+        if (onPlayStateChange) onPlayStateChange(false);
+      }
     }
   };
 

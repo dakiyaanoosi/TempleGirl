@@ -224,6 +224,7 @@ export default function BlurFocusTransition({
 
           // Wait for incoming page content to mount (handling React.lazy / Suspense)
           let attempts = 0;
+          const MAX_ATTEMPTS = 180; // ~3s timeout safety fallback
           const animateIncoming = () => {
             const currentContainer = containerRef.current;
             if (!currentContainer) {
@@ -235,8 +236,7 @@ export default function BlurFocusTransition({
             const isLoaderPresent = currentContainer.querySelector('.page-loader') !== null;
             const newTargets = getNavigationAnimatableElements(currentContainer);
 
-            // Wait for incoming page content to mount (handling React.lazy / Suspense)
-            if ((!isLoaderPresent && newTargets.length > 0) || attempts > 300) {
+            if (!isLoaderPresent && newTargets.length > 0) {
               // Pre-set initial hidden blurred state on new route targets
               gsap.set(newTargets, {
                 filter: 'blur(10px)',
@@ -272,9 +272,17 @@ export default function BlurFocusTransition({
                 ease: 'power3.out',
                 stagger: newTargets.length > 0 ? 0.03 : 0,
               });
-            } else {
+            } else if (attempts < MAX_ATTEMPTS) {
               attempts++;
               requestAnimationFrame(animateIncoming);
+            } else {
+              // Safety timeout fallback: force clear inline blur and unlock scroll/navigation
+              if (newTargets.length > 0) {
+                gsap.set(newTargets, { clearProps: 'filter,opacity,willChange' });
+              }
+              isNavigatingRef.current = false;
+              activeTimelineRef.current = null;
+              if (lenis) lenis.start();
             }
           };
 

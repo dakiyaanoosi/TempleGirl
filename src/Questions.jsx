@@ -25,17 +25,28 @@ export default function Questions({ onNavigateRoute }) {
 
 // Fetch Q&A data from public/qna.json
   useEffect(() => {
-    fetch('/qna.json')
-      .then((res) => res.json())
-      .then((data) => {
+    const controller = new AbortController();
+
+    async function loadQna() {
+      try {
+        const res = await fetch('/qna.json', { signal: controller.signal });
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: Failed to fetch Q&A data`);
+        }
+        const data = await res.json();
         if (Array.isArray(data)) {
           setQnaData(data);
         }
-      })
-      .catch((err) => {
-        console.error("Failed to load Q&A data:", err);
-        setQnaError(true);
-      });
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error("Failed to load Q&A data:", err);
+          setQnaError(true);
+        }
+      }
+    }
+
+    loadQna();
+    return () => controller.abort();
   }, []);
 
   // Continuous ultra-smooth GSAP marquee tween — Issue 06: start at x=0 so first word is never clipped
