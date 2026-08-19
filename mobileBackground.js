@@ -123,7 +123,7 @@ export function initMobileShaderBackground(canvas) {
       vec3 gulalPink = vec3(225.0, 65.0, 125.0) / 255.0;      // Rich Kumkum / Gulal Pink
       vec3 darkMahogany = vec3(36.0, 16.0, 14.0) / 255.0;      // Deep Temple Mahogany
       vec3 copperBronze = vec3(158.0, 72.0, 42.0) / 255.0;     // Copper Bronze Earth
-      vec3 softBlushPink = vec3(245.0, 160.0, 188.0) / 255.0;  // Soft Illuminated Petal Pink
+      vec3 deepRose = vec3(169.0,81.0,115.0)/255.;      // Deep Rose / Wine Pink 
 
       float cycle = sin(mod(iTime * 0.4, TWO_PI));
       float t = (sign(cycle) * pow(abs(cycle), 0.6) + 1.0) / 2.0;
@@ -131,7 +131,7 @@ export function initMobileShaderBackground(canvas) {
       vec3 color1 = mix(lotusPink, gulalPink, t);
       vec3 color2 = mix(sandalwoodBrown, darkMahogany, t);
       vec3 color3 = mix(terracotta, copperBronze, t);
-      vec3 color4 = mix(saffronGold, softBlushPink, t);
+      vec3 color4 = mix(saffronGold, deepRose, t);
 
       // Cached rotated layer coordinates to avoid redundant matrix-vector multiplication
       vec2 layerUV = tuv * Rot(radians(-5.0));

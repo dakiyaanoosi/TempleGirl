@@ -456,11 +456,15 @@
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    min-height: auto !important;
+    min-height: 84px !important;
+    height: 84px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   .callout-text {
     font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-    font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+    font-size: 0.95rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.96);
     line-height: 1.45;
@@ -470,6 +474,7 @@
   }
   .mobile-callout-container {
     margin-top: 12px !important;
+    height: 84px !important;
   }
   .why-main-title {
     gap: var(--space-2);
