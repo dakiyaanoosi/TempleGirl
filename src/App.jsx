@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import Header from './Header';
 import ShaderBackground from './ShaderBackground';
 import Hero from './Hero';
@@ -11,53 +11,59 @@ import Footer from './Footer';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
 import SmoothScroll from './SmoothScroll';
+import BlurFocusTransition from './BlurFocusTransition';
+import { useBlurFocusNavigation, BlurFocusContext } from './BlurFocusContext';
 import { NavigationContext } from './NavigationContext';
 
-// Route-level components: lazy-loaded so the home-page bundle stays lean.
-// Only downloaded when the user actually navigates to that route.
-const PrivacyPolicy      = lazy(() => import('./PrivacyPolicy'));
-const WebsitePrivacyPolicy = lazy(() => import('./WebsitePrivacyPolicy'));
-const DeleteAccount      = lazy(() => import('./DeleteAccount'));
-const Terms              = lazy(() => import('./Terms'));
-const RefundPolicy       = lazy(() => import('./RefundPolicy'));
-const Contact            = lazy(() => import('./Contact'));
-const ManageSubscription = lazy(() => import('./ManageSubscription'));
+// Route-level components: lazy-loaded with explicit preloading helpers
+const loadPrivacyPolicy      = () => import('./PrivacyPolicy');
+const loadWebsitePrivacyPolicy = () => import('./WebsitePrivacyPolicy');
+const loadDeleteAccount      = () => import('./DeleteAccount');
+const loadTerms              = () => import('./Terms');
+const loadRefundPolicy       = () => import('./RefundPolicy');
+const loadContact            = () => import('./Contact');
+const loadManageSubscription = () => import('./ManageSubscription');
+
+const PrivacyPolicy      = lazy(loadPrivacyPolicy);
+const WebsitePrivacyPolicy = lazy(loadWebsitePrivacyPolicy);
+const DeleteAccount      = lazy(loadDeleteAccount);
+const Terms              = lazy(loadTerms);
+const RefundPolicy       = lazy(loadRefundPolicy);
+const Contact            = lazy(loadContact);
+const ManageSubscription = lazy(loadManageSubscription);
+
+// Helper function to pre-fetch all lazy route chunks in background
+const preloadAllRoutes = () => {
+  loadPrivacyPolicy().catch(() => {});
+  loadWebsitePrivacyPolicy().catch(() => {});
+  loadDeleteAccount().catch(() => {});
+  loadTerms().catch(() => {});
+  loadRefundPolicy().catch(() => {});
+  loadContact().catch(() => {});
+  loadManageSubscription().catch(() => {});
+};
 
 const PageLoader = () => (
-  <div style={{
+  <div className="page-loader" style={{
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    height: '60vh', color: 'rgba(255,255,255,0.5)',
+    height: '60vh', color: 'rgba(255,255,255,0.85)',
     fontFamily: "'Manrope', sans-serif", fontSize: '1rem',
   }}>
     Loading…
   </div>
 );
 
-function App() {
-  const [currentPath, setCurrentPath] = useState(
-    () => window.location.pathname
-  );
+function AppInner({ currentPath, performDirectNavigate }) {
+  const triggerTransition = useBlurFocusNavigation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Navigation function — shared via context, no more window.onNavigateRoute
-  const navigateTo = (path) => {
-    window.history.pushState({}, '', path);
-    setCurrentPath(path);
-    window.scrollTo(0, 0);
-  };
-
-  // Keep route detection reactive on browser back/forward
-  useEffect(() => {
-    const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  if (currentPath.startsWith('/download')) {
-    return <DownloadRedirect />;
-  }
+  const navigateTo = useCallback((path) => {
+    if (triggerTransition) {
+      triggerTransition(path);
+    } else {
+      performDirectNavigate(path);
+    }
+  }, [triggerTransition, performDirectNavigate]);
 
   const renderPage = () => {
     if (currentPath === '/contact' || currentPath === '/pages/contact.html' || currentPath.endsWith('/contact.html')) {
@@ -149,22 +155,51 @@ function App() {
 
   return (
     <NavigationContext.Provider value={navigateTo}>
-      <SmoothScroll currentPath={currentPath}>
-        {/* Skip navigation — hidden until focused by keyboard users (WCAG 2.4.1) */}
-        <a href="#main-content" className="skip-link">Skip to main content</a>
+      {/* Skip navigation — hidden until focused by keyboard users (WCAG 2.4.1) */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
 
-        <Header currentPath={currentPath} />
+      <Header currentPath={currentPath} />
 
-        <main id="main-content">
-          <Suspense fallback={<PageLoader />}>
-            {renderPage()}
-          </Suspense>
-        </main>
+      <main id="main-content">
+        <Suspense fallback={<PageLoader />}>
+          {renderPage()}
+        </Suspense>
+      </main>
 
-        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <ShaderBackground />
-      </SmoothScroll>
+      <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
     </NavigationContext.Provider>
+  );
+}
+
+function App() {
+  const [currentPath, setCurrentPath] = useState(
+    () => window.location.pathname
+  );
+
+  // Preload all lazy route JS chunks in background right after initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      preloadAllRoutes();
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const performDirectNavigate = useCallback((path) => {
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+  }, []);
+
+  if (currentPath.startsWith('/download')) {
+    return <DownloadRedirect />;
+  }
+
+  return (
+    <SmoothScroll currentPath={currentPath}>
+      <ShaderBackground />
+      <BlurFocusTransition currentPath={currentPath} onNavigate={performDirectNavigate}>
+        <AppInner currentPath={currentPath} performDirectNavigate={performDirectNavigate} />
+      </BlurFocusTransition>
+    </SmoothScroll>
   );
 }
 
