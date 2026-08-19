@@ -13,7 +13,7 @@ const CARDS_DATA = [
     callout: {
       desktop: {
         text: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.',
-        anchor: { x: 80, y: 170 },
+        anchor: { x: 45, y: 170 },
         elbow: { x: -20, y: 170 },
         end: { x: -50, y: 150 },
         boxStyle: { left: '-330px', top: '70px', width: '300px' }
@@ -31,7 +31,7 @@ const CARDS_DATA = [
     callout: {
       desktop: {
         text: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.',
-        anchor: { x: 280, y: 200 },
+        anchor: { x: 305, y: 200 },
         elbow: { x: 360, y: 200 },
         end: { x: 390, y: 180 },
         boxStyle: { left: '390px', top: '100px', width: '300px' }
@@ -49,7 +49,7 @@ const CARDS_DATA = [
     callout: {
       desktop: {
         text: 'From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder.',
-        anchor: { x: 70, y: 190 },
+        anchor: { x: 45, y: 190 },
         elbow: { x: -20, y: 190 },
         end: { x: -50, y: 170 },
         boxStyle: { left: '-330px', top: '90px', width: '300px' }
@@ -67,7 +67,7 @@ const CARDS_DATA = [
     callout: {
       desktop: {
         text: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.',
-        anchor: { x: 290, y: 180 },
+        anchor: { x: 305, y: 180 },
         elbow: { x: 370, y: 180 },
         end: { x: 400, y: 160 },
         boxStyle: { left: '390px', top: '80px', width: '300px' }
@@ -277,6 +277,28 @@ export default function Why() {
     });
   };
 
+  const calloutBoxRef = useRef(null);
+  const [calloutBoxHeight, setCalloutBoxHeight] = useState(130);
+
+  useEffect(() => {
+    if (!calloutBoxRef.current) return;
+    const el = calloutBoxRef.current;
+    if (el.offsetHeight) {
+      setCalloutBoxHeight(Math.round(el.offsetHeight));
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const h = entry.borderBoxSize && entry.borderBoxSize[0]
+          ? entry.borderBoxSize[0].blockSize
+          : el.offsetHeight;
+        if (h) setCalloutBoxHeight(Math.round(h));
+      }
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [activeIndex, showCallouts, isMobile, viewportWidth]);
+
   return (
     <section className="why-page-section" id="why">
       {/* Top Kolam Wave Border — shared component */}
@@ -406,23 +428,53 @@ export default function Why() {
                       </div>
 
                       {/* Desktop Callout Overlay (Absolute Positioned with Leader Line) */}
-                      {!isMobile && index === activeIndex && showCallouts && (
-                        <div className="card-callouts-overlay">
-                          <svg className="callouts-svg-canvas">
-                            <g className="leader-line-group">
-                              <path
-                                className="leader-line-main"
-                                d={`M ${card.callout.desktop.anchor.x} ${card.callout.desktop.anchor.y} L ${card.callout.desktop.elbow.x} ${card.callout.desktop.elbow.y} L ${card.callout.desktop.end.x} ${card.callout.desktop.end.y}`}
-                              />
-                              <circle className="anchor-dot" cx={card.callout.desktop.anchor.x} cy={card.callout.desktop.anchor.y} r="3.5" />
-                            </g>
-                          </svg>
+                      {!isMobile && index === activeIndex && showCallouts && (() => {
+                        const boxTop = parseInt(card.callout.desktop.boxStyle.top, 10);
+                        const boxLeft = parseInt(card.callout.desktop.boxStyle.left, 10);
+                        const boxWidth = parseInt(card.callout.desktop.boxStyle.width, 10);
+                        const isLeftBox = boxLeft < 0;
 
-                          <div className="callout-box" style={card.callout.desktop.boxStyle}>
-                            <p className="callout-text">{card.callout.desktop.text}</p>
+                        const endX = isLeftBox ? (boxLeft + boxWidth) : boxLeft;
+                        const endY = boxTop + Math.round(calloutBoxHeight / 2);
+                        const anchor = card.callout.desktop.anchor;
+
+                        // Perfectly balanced Bezier curve: enters callout midpoint 100% horizontally
+                        const dx = endX - anchor.x;
+                        const cp1x = anchor.x + dx * 0.45;
+                        const cp1y = anchor.y;
+                        const cp2x = isLeftBox ? (endX + 35) : (endX - 35);
+                        const cp2y = endY;
+
+                        // Symmetrical Chevron Arrowhead perfectly aligned along horizontal axis
+                        const chvSize = 6;
+                        const chvHeight = 4.5;
+                        const chvX = isLeftBox ? (endX + chvSize) : (endX - chvSize);
+                        const chvY1 = endY - chvHeight;
+                        const chvY2 = endY + chvHeight;
+
+                        const leaderPath = `M ${anchor.x} ${anchor.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endX} ${endY} M ${chvX} ${chvY1} L ${endX} ${endY} L ${chvX} ${chvY2}`;
+
+                        return (
+                          <div className="card-callouts-overlay">
+                            <svg className="callouts-svg-canvas">
+                              <g className="leader-line-group">
+                                <path
+                                  className="leader-line-main"
+                                  d={leaderPath}
+                                />
+                              </g>
+                            </svg>
+
+                            <div
+                              ref={calloutBoxRef}
+                              className="callout-box"
+                              style={card.callout.desktop.boxStyle}
+                            >
+                              <p className="callout-text">{card.callout.desktop.text}</p>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        );
+                      })()}
 
                     </div>
                   );

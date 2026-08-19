@@ -97,66 +97,51 @@ export default function RefundPolicy({ onOpenQrSidebar, onNavigateRoute }) {
             {/* Column 1: All Subscriptions */}
             <div className="policy-summary-col">
               <h3 className="policy-summary-col-title">
-                <svg
-                  className="policy-title-svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                  <path d="M12 11h4" />
-                  <path d="M12 16h4" />
-                  <path d="M8 11h.01" />
-                  <path d="M8 16h.01" />
-                </svg>
-                <span>All subscriptions</span>
+                All subscriptions
               </h3>
-              <ul className="policy-summary-list">
-                <li className="policy-summary-item">
-                  <span className="policy-summary-bullet">✕</span>
+              <div className="policy-summary-list">
+                <div className="policy-summary-item sub-item-negative">
                   <span>
-                    Temple Girl Kids subscriptions are <strong>non-refundable</strong> — whether purchased on the website (Razorpay), Google Play, or the Apple App Store.
+                    Temple Girl Kids subscriptions are <strong>non-refundable</strong> — website (Razorpay), Google Play, or Apple App Store.
                   </span>
-                </li>
-                <li className="policy-summary-item">
-                  <span className="policy-summary-bullet">✕</span>
+                  <span className="sub-icon-cross">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </span>
+                </div>
+                <div className="policy-summary-item sub-item-positive">
                   <span>
                     You may <strong>cancel at any time</strong>; you keep full premium access until the end of your current billing period.
                   </span>
-                </li>
-                <li className="policy-summary-item">
-                  <span className="policy-summary-bullet">✕</span>
+                  <span className="sub-icon-check">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </span>
+                </div>
+                <div className="policy-summary-item sub-item-negative">
                   <span>
                     There are <strong>no partial refunds</strong> for unused time within a billing period.
                   </span>
-                </li>
-              </ul>
+                  <span className="sub-icon-cross">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Column 2: How to Cancel */}
             <div className="policy-summary-col">
               <h3 className="policy-summary-col-title">
-                <svg
-                  className="policy-title-svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                  <path d="M12 18h.01" />
-                </svg>
-                <span>How to cancel</span>
+                How to cancel
               </h3>
-              <ul className="policy-summary-list">
-                <li className="policy-summary-item">
-                  <span className="policy-summary-bullet">✓</span>
+              <div className="policy-summary-list">
+                <div className="policy-summary-item sub-item-positive">
                   <span>
                     <strong>Website (Razorpay):</strong> email{' '}
                     <a
@@ -168,22 +153,35 @@ export default function RefundPolicy({ onOpenQrSidebar, onNavigateRoute }) {
                       support@templegirl.com
                       <span className="policy-animated-underline" />
                     </a>{' '}
-                    or use the manage-subscription page.
+                    or use manage subscription page.
                   </span>
-                </li>
-                <li className="policy-summary-item">
-                  <span className="policy-summary-bullet">✓</span>
+                  <span className="sub-icon-check">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </span>
+                </div>
+                <div className="policy-summary-item sub-item-positive">
                   <span>
                     <strong>Google Play:</strong> Play Store &rarr; Payments &amp; subscriptions &rarr; Subscriptions.
                   </span>
-                </li>
-                <li className="policy-summary-item">
-                  <span className="policy-summary-bullet">✓</span>
+                  <span className="sub-icon-check">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </span>
+                </div>
+                <div className="policy-summary-item sub-item-positive">
                   <span>
                     <strong>Apple App Store:</strong> Settings &rarr; [your name] &rarr; Subscriptions.
                   </span>
-                </li>
-              </ul>
+                  <span className="sub-icon-check">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>

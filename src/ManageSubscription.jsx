@@ -55,6 +55,29 @@ export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute })
     });
   };
 
+  const handleListenFreeClick = () => {
+    const ua = navigator.userAgent || '';
+    const isMobileDevice =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
+      (window.innerWidth <= 768 && 'ontouchstart' in window);
+
+    if (isMobileDevice) {
+      const isIOS =
+        /iPhone|iPad|iPod/i.test(ua) ||
+        (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
+
+      if (isIOS) {
+        window.open('https://apps.apple.com/us/app/temple-girl-kids/id6772048283', '_blank', 'noopener,noreferrer');
+      } else {
+        window.open('https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl', '_blank', 'noopener,noreferrer');
+      }
+    } else {
+      if (onOpenQrSidebar) {
+        onOpenQrSidebar();
+      }
+    }
+  };
+
   return (
     <div className="policy-page">
       <main className="policy-container">
@@ -139,7 +162,7 @@ export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute })
               <button
                 type="button"
                 className="sub-cta-btn secondary"
-                onClick={onOpenQrSidebar}
+                onClick={handleListenFreeClick}
               >
                 Listen Free in App
               </button>
