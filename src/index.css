@@ -23,6 +23,22 @@ body,
   overflow-x: hidden;
   overflow-y: auto;
   background-color: var(--color-bg-base);
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;     /* Firefox */
+}
+
+/* Completely hide scrollbars across all elements for webkit browsers */
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 canvas#shader6-canvas {
@@ -62,7 +78,7 @@ canvas#shader6-canvas {
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
-  z-index: 99999;
+  z-index: var(--z-skip-link, 9999);
   text-decoration: none;
   transition: top 0.2s ease;
   white-space: nowrap;

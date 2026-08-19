@@ -3,7 +3,7 @@
   top: 28px;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 100;
+  z-index: var(--z-header, 500);
   width: 70vw;
   max-width: 1280px;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -529,6 +529,6 @@
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 90;
+  z-index: var(--z-overlay, 100);
   cursor: pointer;
 }

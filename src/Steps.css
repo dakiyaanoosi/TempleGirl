@@ -59,7 +59,7 @@
   -webkit-backdrop-filter: var(--blur-strong);
   border-radius: var(--radius-card);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: var(--space-10) 34px;
+  padding: var(--space-10) var(--space-8);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

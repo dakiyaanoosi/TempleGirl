@@ -131,7 +131,7 @@
 }
 
 .star-empty {
-  color: #3F3F48;
+  color: rgba(255, 255, 255, 0.28); /* ~3.4:1 contrast ratio against dark glass */
 }
 
 .card-date {

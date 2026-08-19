@@ -87,7 +87,13 @@
   --transition-slide:    transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --------------------------------------------------
-     Touch Target Minimum
+     Elevation & Z-Index Scale Architecture
      -------------------------------------------------- */
-  --touch-target: 44px;
+  --z-base:       1;
+  --z-card:       10;
+  --z-overlay:    100;
+  --z-header:     500;
+  --z-drawer:     900;
+  --z-modal:      1000;
+  --z-skip-link:  9999;
 }

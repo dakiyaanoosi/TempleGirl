@@ -292,12 +292,12 @@
 
 /* Left Arrow: flush against left edge of active card */
 .slider__nav--prev {
-  left: calc(50% - var(--carousel-card-half) - var(--touch-target) - 4px);
+  left: calc(50% - var(--carousel-card-half) - 27px - 4px);
 }
 
 /* Right Arrow: flush against right edge of active card */
 .slider__nav--next {
-  right: calc(50% - var(--carousel-card-half) - var(--touch-target) - 4px);
+  right: calc(50% - var(--carousel-card-half) - 27px - 4px);
 }
 
 /* ----------------------------------------------------

@@ -79,7 +79,7 @@
 }
 
 .text-highlight {
-  color: #F2B84B;
+  color: var(--color-brand-amber);
   font-weight: 500;
 }
 
@@ -91,7 +91,7 @@
   width: 48px;
   height: 48px;
   margin-right: 14px;
-  color: #F2B84B;
+  color: var(--color-brand-amber);
   animation: subtleFloat 4.5s ease-in-out infinite;
 }
 
