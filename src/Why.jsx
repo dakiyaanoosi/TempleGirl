@@ -16,7 +16,7 @@ const CARDS_DATA = [
         anchor: { x: 80, y: 170 },
         elbow: { x: -20, y: 170 },
         end: { x: -50, y: 150 },
-        boxStyle: { left: '-270px', top: '90px', width: '220px' }
+        boxStyle: { left: '-330px', top: '70px', width: '300px' }
       },
       mobile: {
         text: 'Audio-only stories that give children something better than screen time — a world to imagine, wonder about, and dream in.'
@@ -34,7 +34,7 @@ const CARDS_DATA = [
         anchor: { x: 280, y: 200 },
         elbow: { x: 360, y: 200 },
         end: { x: 390, y: 180 },
-        boxStyle: { left: '390px', top: '120px', width: '220px' }
+        boxStyle: { left: '390px', top: '100px', width: '300px' }
       },
       mobile: {
         text: 'Every story is narrated by Namratha — warm, familiar, and comforting, turning bedtime into a ritual children look forward to.'
@@ -52,7 +52,7 @@ const CARDS_DATA = [
         anchor: { x: 70, y: 190 },
         elbow: { x: -20, y: 190 },
         end: { x: -50, y: 170 },
-        boxStyle: { left: '-270px', top: '110px', width: '220px' }
+        boxStyle: { left: '-330px', top: '90px', width: '300px' }
       },
       mobile: {
         text: 'From Tirupati to Guruvayur, every story begins in a real temple, carrying its legends, traditions, and timeless wonder.'
@@ -70,7 +70,7 @@ const CARDS_DATA = [
         anchor: { x: 290, y: 180 },
         elbow: { x: 370, y: 180 },
         end: { x: 400, y: 160 },
-        boxStyle: { left: '390px', top: '100px', width: '220px' }
+        boxStyle: { left: '390px', top: '80px', width: '300px' }
       },
       mobile: {
         text: 'No ads. No distractions. No inappropriate content. Just thoughtful stories created for curious little minds.'

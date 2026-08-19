@@ -94,10 +94,10 @@
   width: 380px;
   height: fit-content;
   min-height: auto;        /* restored to original */
-  background: var(--color-surface-dark);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: var(--blur-glass);
   -webkit-backdrop-filter: var(--blur-glass);
-  border: 1.5px solid var(--color-border-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-card);
   padding: var(--space-10);
   box-sizing: border-box;

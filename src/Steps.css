@@ -54,11 +54,11 @@
 
 .step-card {
   position: relative;
-  background: var(--color-surface-dark-md);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: var(--blur-strong);
   -webkit-backdrop-filter: var(--blur-strong);
   border-radius: var(--radius-card);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: var(--space-10) 34px;
   display: flex;
   flex-direction: column;
