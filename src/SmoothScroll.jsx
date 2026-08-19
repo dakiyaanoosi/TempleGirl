@@ -17,13 +17,16 @@ export default function SmoothScroll({ children, currentPath }) {
   // Initialize Lenis & synchronize with GSAP ticker
   useEffect(() => {
     const instance = new Lenis({
-      duration: 1.1,
+      duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
+      syncTouch: true,
+      syncTouchLerp: 0.075,
+      touchInertiaMultiplier: 1.8,
       wheelMultiplier: 1,
-      touchMultiplier: 1,
+      touchMultiplier: 1.5,
     });
 
     setLenis(instance);
