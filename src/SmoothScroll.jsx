@@ -31,6 +31,7 @@ export default function SmoothScroll({ children, currentPath }) {
 
       // Mobile / touch smooth scrolling enabled via Lenis
       syncTouch: true,
+      touchMultiplier: 1.5,
 
       // GSAP controls the RAF loop
       autoRaf: false,
