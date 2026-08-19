@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext, useContext, useLayoutEffect } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,32 +14,44 @@ export function useLenis() {
 export default function SmoothScroll({ children, currentPath }) {
   const [lenis, setLenis] = useState(null);
 
-  // Initialize Lenis & synchronize with GSAP ticker
+  // Initialize Lenis and synchronize it with GSAP
   useEffect(() => {
     const instance = new Lenis({
+      // Core smooth scrolling
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
+
+      // Scroll direction
       orientation: 'vertical',
       gestureOrientation: 'vertical',
+
+      // Desktop / wheel
       smoothWheel: true,
-      syncTouch: true,
-      syncTouchLerp: 0.075,
-      touchInertiaMultiplier: 1.8,
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+
+      // Mobile / touch
+      syncTouch: true,
+      syncTouchLerp: 0.08,
+      touchMultiplier: 1.15,
+      touchInertiaMultiplier: 1.2,
+
+      // GSAP controls the RAF loop
+      autoRaf: false,
     });
 
     setLenis(instance);
 
-    // Sync Lenis scroll events to GSAP ScrollTrigger
+    // Synchronize Lenis with ScrollTrigger
     instance.on('scroll', ScrollTrigger.update);
 
-    // Drive Lenis RAF loop via GSAP ticker
+    // Drive Lenis through GSAP's ticker
     const updateTicker = (time) => {
       instance.raf(time * 1000);
     };
 
     gsap.ticker.add(updateTicker);
+
+    // Disable GSAP's automatic lag correction
     gsap.ticker.lagSmoothing(0);
 
     return () => {
@@ -49,19 +61,23 @@ export default function SmoothScroll({ children, currentPath }) {
     };
   }, []);
 
-  // Handle route change: scroll to top and refresh ScrollTrigger
+  // Handle route changes
   useEffect(() => {
     if (!lenis) return;
 
-    // Instantly reset scroll position on route transitions
-    lenis.scrollTo(0, { immediate: true });
+    // Instantly move the new page to the top
+    lenis.scrollTo(0, {
+      immediate: true,
+    });
 
-    // Allow DOM to settle before recalculating ScrollTrigger bounds
-    const timeout = setTimeout(() => {
+    // Allow the new page layout to settle
+    const frame = requestAnimationFrame(() => {
       ScrollTrigger.refresh();
-    }, 50);
+    });
 
-    return () => clearTimeout(timeout);
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [currentPath, lenis]);
 
   return (
