@@ -10,6 +10,7 @@ import Questions from './Questions';
 import Footer from './Footer';
 import QrSidebar from './QrSidebar';
 import DownloadRedirect from './DownloadRedirect';
+import SmoothScroll from './SmoothScroll';
 import { NavigationContext } from './NavigationContext';
 
 // Route-level components: lazy-loaded so the home-page bundle stays lean.
@@ -148,19 +149,21 @@ function App() {
 
   return (
     <NavigationContext.Provider value={navigateTo}>
-      {/* Skip navigation — hidden until focused by keyboard users (WCAG 2.4.1) */}
-      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <SmoothScroll currentPath={currentPath}>
+        {/* Skip navigation — hidden until focused by keyboard users (WCAG 2.4.1) */}
+        <a href="#main-content" className="skip-link">Skip to main content</a>
 
-      <Header currentPath={currentPath} />
+        <Header currentPath={currentPath} />
 
-      <main id="main-content">
-        <Suspense fallback={<PageLoader />}>
-          {renderPage()}
-        </Suspense>
-      </main>
+        <main id="main-content">
+          <Suspense fallback={<PageLoader />}>
+            {renderPage()}
+          </Suspense>
+        </main>
 
-      <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <ShaderBackground />
+        <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <ShaderBackground />
+      </SmoothScroll>
     </NavigationContext.Provider>
   );
 }

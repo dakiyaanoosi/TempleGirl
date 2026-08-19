@@ -1,4 +1,5 @@
 @import './tokens.css';
+@import 'lenis/dist/lenis.css';
 
 * {
   margin: 0;
@@ -21,10 +22,14 @@ body,
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
   background-color: var(--color-bg-base);
   -ms-overflow-style: none !important;  /* IE and Edge */
   scrollbar-width: none !important;     /* Firefox */
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
 /* Completely hide scrollbars across all elements for webkit browsers */
