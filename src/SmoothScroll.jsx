@@ -29,9 +29,8 @@ export default function SmoothScroll({ children, currentPath }) {
       smoothWheel: true,
       wheelMultiplier: 1,
 
-      // Mobile / touch smooth scrolling enabled via Lenis
-      syncTouch: true,
-      touchMultiplier: 1.5,
+      // Mobile / touch: use native 120Hz GPU momentum scrolling for ultra-smooth mobile feel
+      syncTouch: false,
 
       // GSAP controls the RAF loop
       autoRaf: false,
