@@ -1,0 +1,191 @@
+/**
+ * policy-shared.css
+ * Shared base styles used by both PrivacyPolicy and ManageSubscription pages.
+ * Import this file instead of PrivacyPolicy.css in components that only need
+ * the layout/base classes (.policy-page, .policy-container, etc.).
+ *
+ * PrivacyPolicy.css imports this file and adds its own specific rules on top.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* Base page wrapper */
+.policy-page {
+  min-height: 100vh;
+  width: 100%;
+  background: transparent;
+  color: #ffffff;
+  font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Main layout container */
+.policy-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 7rem 3.5rem 0 3.5rem;
+  box-sizing: border-box;
+}
+
+/* Full-width section divider */
+.policy-divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0;
+}
+
+.policy-hero-divider {
+  display: none;
+}
+
+/* Section grid layout */
+.policy-section {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: clamp(3rem, 14vw, 15rem);
+  align-items: start;
+  padding: 5rem 0;
+}
+
+.policy-num-col {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 0.25rem;
+}
+
+.policy-num-text {
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 400;
+  font-family: 'Outfit', sans-serif;
+  color: #f2b84b;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  display: inline-block;
+  user-select: none;
+}
+
+.policy-content-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.policy-section-heading {
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.08;
+  font-family: 'Outfit', sans-serif;
+}
+
+.policy-content-col p:not(.minimal-terms-text) {
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 1.25rem 0;
+  max-width: 100%;
+}
+
+/* Animated underline links (GSAP target) */
+.policy-animated-link {
+  position: relative;
+  top: 2.5px;
+  color: #ffffff;
+  text-decoration: none;
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 2px;
+  vertical-align: baseline;
+}
+
+.policy-animated-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ffffff;
+  transform: translateX(0%);
+  will-change: transform;
+}
+
+/* Contact info box */
+.policy-contact-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem 1.75rem;
+  border-radius: 12px;
+  margin-top: 0;
+}
+
+.policy-content-col p.policy-contact-label,
+.policy-contact-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 1.75rem 0 0.35rem 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+.policy-contact-desc-text {
+  font-size: 0.95rem;
+  color: rgb(255, 255, 255);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.policy-contact-email {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-decoration: none;
+  width: max-content;
+  max-width: 100%;
+  align-self: flex-start;
+}
+
+.policy-contact-address {
+  font-style: normal;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* Responsive overrides */
+@media (max-width: 768px) {
+  .policy-container {
+    padding: 4.75rem 1.25rem 0 1.25rem;
+  }
+
+  .policy-section {
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem 1rem;
+    padding: 2.5rem 0;
+  }
+
+  .policy-num-text {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+
+  .policy-section-heading {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+
+  .policy-hero-divider {
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+}

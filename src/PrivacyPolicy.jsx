@@ -1,56 +1,14 @@
 import { useEffect } from 'react';
-import { gsap } from 'gsap';
 import Footer from './Footer';
+import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
 import './PrivacyPolicy.css';
 
 export default function PrivacyPolicy({ onOpenQrSidebar, onNavigateHome, onNavigateRoute }) {
+  const { handleMouseEnter: handleLinkMouseEnter, handleMouseLeave: handleLinkMouseLeave } = useAnimatedUnderline();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // GSAP Mouse Enter Underline Animation (matches Questions.jsx "We're here to help")
-  const handleLinkMouseEnter = (e) => {
-    const underline = e.currentTarget.querySelector('.policy-animated-underline');
-    if (!underline) return;
-    gsap.killTweensOf(underline);
-
-    const tl = gsap.timeline();
-    tl.to(underline, {
-      xPercent: 100,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .set(underline, {
-      xPercent: -100
-    })
-    .to(underline, {
-      xPercent: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-  };
-
-  // GSAP Mouse Leave Underline Animation
-  const handleLinkMouseLeave = (e) => {
-    const underline = e.currentTarget.querySelector('.policy-animated-underline');
-    if (!underline) return;
-    gsap.killTweensOf(underline);
-
-    const tl = gsap.timeline();
-    tl.to(underline, {
-      xPercent: -100,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .set(underline, {
-      xPercent: 100
-    })
-    .to(underline, {
-      xPercent: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-  };
 
   return (
     <div className="policy-page">

@@ -2,9 +2,11 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
 import { useBodyScrollLock } from './hooks/useBodyScrollLock';
+import { useNavigation } from './NavigationContext';
 import './Header.css';
 
 export default function Header({ currentPath }) {
+  const navigateTo = useNavigation();
   const [activeNav, setActiveNav] = useState('Home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -53,11 +55,27 @@ export default function Header({ currentPath }) {
     };
   }, [isMenuOpen]);
 
-  // Escape key closes the mobile menu
+  // Escape key closes the mobile menu + Tab focus trap within header
   useEffect(() => {
     if (!isMenuOpen) return;
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') closeMenu();
+      if (e.key === 'Escape') { closeMenu(); return; }
+      if (e.key !== 'Tab') return;
+
+      const focusable = headerRef.current?.querySelectorAll(
+        'button:not([disabled]), a[href]:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -86,23 +104,15 @@ export default function Header({ currentPath }) {
   const handleNavClick = (label) => {
     setActiveNav(label);
     if (label === 'Home') {
-      if (window.location.pathname !== '/' && window.onNavigateRoute) {
-        window.onNavigateRoute('/');
+      if (window.location.pathname !== '/') {
+        navigateTo('/');
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else if (label === 'Contact' || label === 'Contacts') {
-      if (window.onNavigateRoute) {
-        window.onNavigateRoute('/contact');
-      } else {
-        window.location.href = '/contact';
-      }
+      navigateTo('/contact');
     } else if (label === 'Manage Subscriptions') {
-      if (window.onNavigateRoute) {
-        window.onNavigateRoute('/manage-subscription');
-      } else {
-        window.location.href = '/manage-subscription';
-      }
+      navigateTo('/manage-subscription');
     }
   };
 
@@ -309,13 +319,13 @@ export default function Header({ currentPath }) {
                 className="pill-header-brand-btn"
                 onClick={() => {
                   setActiveNav('Home');
-                  if (window.location.pathname !== '/' && window.onNavigateRoute) {
-                    window.onNavigateRoute('/');
+                  if (window.location.pathname !== '/') {
+                    navigateTo('/');
                   } else {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }
                 }}
-                aria-label="Go to top of page"
+                aria-label="Go to home page"
               >
                 <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="header-brand-svg" width={77} height={32} />
               </button>
@@ -359,7 +369,13 @@ export default function Header({ currentPath }) {
           </div>
 
           {isMenuOpen && (
-            <div ref={menuContentRef} className="mobile-menu-content">
+            <div
+              ref={menuContentRef}
+              className="mobile-menu-content"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
+            >
               <div className="mobile-menu-header">
                 <ul className="mobile-nav-list" role="list">
                   {navItems.map((item, index) => (
@@ -393,13 +409,13 @@ export default function Header({ currentPath }) {
                     onClick={() => {
                       setActiveNav('Home');
                       closeMenu();
-                      if (window.location.pathname !== '/' && window.onNavigateRoute) {
-                        window.onNavigateRoute('/');
+                      if (window.location.pathname !== '/') {
+                        navigateTo('/');
                       } else {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }
                     }}
-                    aria-label="Go to top of page"
+                    aria-label="Go to home page"
                   >
                     <img src="/templeGirlKids.svg" alt="Temple Girl Kids" className="mobile-brand-svg" width={77} height={32} />
                   </button>

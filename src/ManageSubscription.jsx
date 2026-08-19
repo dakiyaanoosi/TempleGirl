@@ -1,59 +1,16 @@
 import { useEffect, useState } from 'react';
-import { gsap } from 'gsap';
 import Footer from './Footer';
-import './PrivacyPolicy.css';
+import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
+import './styles/policy-shared.css';
 import './ManageSubscription.css';
 
 export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute }) {
+  const { handleMouseEnter: handleLinkMouseEnter, handleMouseLeave: handleLinkMouseLeave } = useAnimatedUnderline();
   const [billingCycle, setBillingCycle] = useState('annual'); // 'monthly' | 'annual'
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // GSAP Mouse Enter Underline Animation for email & text links
-  const handleLinkMouseEnter = (e) => {
-    const underline = e.currentTarget.querySelector('.policy-animated-underline');
-    if (!underline) return;
-    gsap.killTweensOf(underline);
-
-    const tl = gsap.timeline();
-    tl.to(underline, {
-      xPercent: 100,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .set(underline, {
-      xPercent: -100
-    })
-    .to(underline, {
-      xPercent: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-  };
-
-  // GSAP Mouse Leave Underline Animation
-  const handleLinkMouseLeave = (e) => {
-    const underline = e.currentTarget.querySelector('.policy-animated-underline');
-    if (!underline) return;
-    gsap.killTweensOf(underline);
-
-    const tl = gsap.timeline();
-    tl.to(underline, {
-      xPercent: -100,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .set(underline, {
-      xPercent: 100
-    })
-    .to(underline, {
-      xPercent: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-  };
 
   const handleListenFreeClick = () => {
     const ua = navigator.userAgent || '';

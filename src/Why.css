@@ -325,8 +325,8 @@
 }
 
 .card-corner-action-btn:hover {
-  background: var(--color-primary);
-  color: #000000;
+  background: var(--color-brand-amber);
+  color: #180508;
 }
 
 .callouts-close-btn {
@@ -433,7 +433,7 @@
 .callout-text {
   font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: var(--text-card);
-  font-weight: 450;
+  font-weight: 400;  /* 450 is only meaningful for variable fonts; Outfit ships as static */
   color: #ffffff;
   line-height: 1.5;
   margin: 0;

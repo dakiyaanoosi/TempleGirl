@@ -3,6 +3,10 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Questions.css';
 
+// Register once at module load — guarantees it's available before any component
+// lifecycle runs, eliminating the race condition between useEffect and useLayoutEffect.
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Questions({ onNavigateRoute }) {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
@@ -10,6 +14,7 @@ export default function Questions({ onNavigateRoute }) {
   const underlineRef = useRef(null);
 
   const [qnaData, setQnaData] = useState([]);
+  const [qnaError, setQnaError] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   // Array(8) value is never used — only the index matters for the key
   const marqueeItems = Array(8).fill(null);
@@ -18,12 +23,7 @@ export default function Questions({ onNavigateRoute }) {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
-  // Register plugin once inside an effect (not at module level)
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-  }, []);
-
-  // Fetch Q&A data from public/qna.json
+// Fetch Q&A data from public/qna.json
   useEffect(() => {
     fetch('/qna.json')
       .then((res) => res.json())
@@ -32,7 +32,10 @@ export default function Questions({ onNavigateRoute }) {
           setQnaData(data);
         }
       })
-      .catch((err) => console.error("Failed to load Q&A data:", err));
+      .catch((err) => {
+        console.error("Failed to load Q&A data:", err);
+        setQnaError(true);
+      });
   }, []);
 
   // Continuous ultra-smooth GSAP marquee tween — Issue 06: start at x=0 so first word is never clipped
@@ -192,13 +195,7 @@ export default function Questions({ onNavigateRoute }) {
                 className="qna-help-link"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (onNavigateRoute) {
-                    onNavigateRoute('/contact');
-                  } else if (window.onNavigateRoute) {
-                    window.onNavigateRoute('/contact');
-                  } else {
-                    window.location.href = '/contact';
-                  }
+                  if (onNavigateRoute) onNavigateRoute('/contact');
                 }}
                 onMouseEnter={handleLinkMouseEnter}
                 onMouseLeave={handleLinkMouseLeave}
@@ -212,6 +209,11 @@ export default function Questions({ onNavigateRoute }) {
           {/* Right Column: Q&A List inside overflow wrapper */}
           <div className="qna-right-wrapper">
             <div ref={qnaRightRef} className="qna-right-col">
+              {qnaError && (
+                <p style={{ color: 'rgba(255,255,255,0.5)', padding: '1rem 0', fontFamily: "'Manrope', sans-serif" }}>
+                  Couldn't load questions. Please refresh the page.
+                </p>
+              )}
               {qnaData.map((item, index) => {
                 const isOpen = openIndex === index;
                 return (

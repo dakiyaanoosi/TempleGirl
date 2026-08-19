@@ -6,6 +6,7 @@ export default function Reviews() {
   const sliderRef = useRef(null);
 
   const [reviewsData, setReviewsData] = useState([]);
+  const [fetchError, setFetchError] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
@@ -19,7 +20,10 @@ export default function Reviews() {
           setReviewsData(data);
         }
       })
-      .catch((err) => console.error("Failed to load review data:", err));
+      .catch((err) => {
+        console.error("Failed to load review data:", err);
+        setFetchError(true);
+      });
   }, []);
 
   // Mouse Drag to Scroll handlers
@@ -82,6 +86,14 @@ export default function Reviews() {
 
       {/* Full-Bleed 100vw Screen Width Reviews Carousel */}
       <div className="reviews-carousel-wrapper">
+        {fetchError && (
+          <p style={{
+            textAlign: 'center', padding: '2rem',
+            color: 'rgba(255,255,255,0.55)', fontFamily: "'Manrope', sans-serif",
+          }}>
+            Couldn't load reviews. Please refresh to try again.
+          </p>
+        )}
         <div
           ref={sliderRef}
           className={`reviews-slider-track ${isMouseDown ? 'is-grabbing' : ''}`}

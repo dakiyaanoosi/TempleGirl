@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { gsap } from 'gsap';
 import Footer from './Footer';
+import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
 import './PrivacyPolicy.css';
 
 export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
+  const { handleMouseEnter: handleLinkMouseEnter, handleMouseLeave: handleLinkMouseLeave } = useAnimatedUnderline();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -18,50 +19,6 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // GSAP Mouse Enter Underline Animation
-  const handleLinkMouseEnter = (e) => {
-    const underline = e.currentTarget.querySelector('.policy-animated-underline');
-    if (!underline) return;
-    gsap.killTweensOf(underline);
-
-    const tl = gsap.timeline();
-    tl.to(underline, {
-      xPercent: 100,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .set(underline, {
-      xPercent: -100
-    })
-    .to(underline, {
-      xPercent: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-  };
-
-  // GSAP Mouse Leave Underline Animation
-  const handleLinkMouseLeave = (e) => {
-    const underline = e.currentTarget.querySelector('.policy-animated-underline');
-    if (!underline) return;
-    gsap.killTweensOf(underline);
-
-    const tl = gsap.timeline();
-    tl.to(underline, {
-      xPercent: -100,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .set(underline, {
-      xPercent: 100
-    })
-    .to(underline, {
-      xPercent: 0,
-      duration: 0.4,
-      ease: 'power2.out'
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -170,10 +127,12 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
               <form onSubmit={handleSubmit} className="minimal-form-stack">
                 {/* Field 1: Name */}
                 <div className="minimal-field-group">
+                  <label htmlFor="minimal-name" className="sr-only">Your Name</label>
                   <input
                     id="minimal-name"
                     type="text"
                     required
+                    aria-required="true"
                     className="minimal-input"
                     placeholder="Your Name *"
                     value={formData.name}
@@ -183,10 +142,12 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
 
                 {/* Field 2: Email */}
                 <div className="minimal-field-group">
+                  <label htmlFor="minimal-email" className="sr-only">Email Address</label>
                   <input
                     id="minimal-email"
                     type="email"
                     required
+                    aria-required="true"
                     className="minimal-input"
                     placeholder="Email Address *"
                     value={formData.email}
@@ -194,11 +155,25 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
                   />
                 </div>
 
-                {/* Field 3: Subject Dropdown */}
+                {/* Field 3: Subject Dropdown — keyboard accessible combobox */}
                 <div className="minimal-field-group">
                   <div
+                    id="minimal-subject"
                     className={`minimal-select-trigger ${isDropdownOpen ? 'open' : ''}`}
+                    role="combobox"
+                    aria-haspopup="listbox"
+                    aria-expanded={isDropdownOpen}
+                    aria-label="Subject"
+                    aria-controls="subject-listbox"
+                    tabIndex={0}
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setIsDropdownOpen(!isDropdownOpen);
+                      }
+                      if (e.key === 'Escape') setIsDropdownOpen(false);
+                    }}
                   >
                     <span className={`minimal-select-text ${!formData.subject ? 'placeholder' : ''}`}>
                       {formData.subject ? formData.subject : 'Subject *'}
@@ -213,17 +188,25 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      aria-hidden="true"
                     >
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                   </div>
 
                   {isDropdownOpen && (
-                    <div className="minimal-dropdown-card">
+                    <div
+                      id="subject-listbox"
+                      role="listbox"
+                      aria-label="Subject options"
+                      className="minimal-dropdown-card"
+                    >
                       {subjectOptions.map((opt) => (
                         <button
                           key={opt}
                           type="button"
+                          role="option"
+                          aria-selected={formData.subject === opt}
                           className={`minimal-dropdown-option ${formData.subject === opt ? 'selected' : ''}`}
                           onClick={() => {
                             setFormData({ ...formData, subject: opt });

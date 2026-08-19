@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+// Steps.jsx — purely presentational; no hooks needed
 import KolamBorder from './KolamBorder';
 import './Steps.css';
 

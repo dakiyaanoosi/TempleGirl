@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import './DownloadRedirect.css';
 
 export default function DownloadRedirect() {
   useEffect(() => {
@@ -16,20 +17,8 @@ export default function DownloadRedirect() {
   }, []);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        width: '100vw',
-        backgroundColor: '#000000',
-        color: '#ffffff',
-        fontFamily: "'Manrope', sans-serif",
-        fontSize: '1.2rem',
-      }}
-    >
-      <p>Redirecting to store...</p>
+    <div className="download-redirect-page">
+      <p>Redirecting to store…</p>
     </div>
   );
 }

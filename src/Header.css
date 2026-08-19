@@ -247,6 +247,12 @@
   opacity: 0.75;
 }
 
+.mobile-menu-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
 /* R5: active press state  */
 .mobile-menu-toggle:active {
   opacity: 0.5;
@@ -446,6 +452,11 @@
   color: #000000;
 }
 
+.mobile-subscribe-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 4px;
+}
+
 .mobile-close-container {
   display: flex;
   justify-content: center;
@@ -495,6 +506,12 @@
 
 .mobile-menu-close-btn:hover {
   color: #000000;
+}
+
+.mobile-menu-close-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 4px;
+  border-radius: 12px;
 }
 
 .mobile-menu-close-btn svg {

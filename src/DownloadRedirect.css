@@ -1,0 +1,13 @@
+/* DownloadRedirect — full-screen loading state shown while the OS redirect fires */
+.download-redirect-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--color-bg-base, #000000);
+  color: var(--color-text-primary, #ffffff);
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+}

@@ -162,22 +162,22 @@ export default function Hero({ onOpenQrSidebar }) {
 
       {/* Bottom Stats Section */}
       <div className="hero-stats-container">
-        <div className="stat-card" role="figure" aria-label="Zero screen time required — audio only">
+        <figure className="stat-card" aria-label="Zero screen time required — audio only">
           <span className="stat-number" aria-hidden="true">0</span>
-          <span className="stat-label">SCREEN TIME</span>
-        </div>
-        <div className="stat-card" role="figure" aria-label="Two new stories every week">
+          <figcaption className="stat-label">SCREEN TIME</figcaption>
+        </figure>
+        <figure className="stat-card" aria-label="Two new stories every week">
           <span className="stat-number" aria-hidden="true">2</span>
-          <span className="stat-label">NEW STORIES EVERY WEEK</span>
-        </div>
-        <div className="stat-card" role="figure" aria-label="Two million plus families trust us">
+          <figcaption className="stat-label">NEW STORIES EVERY WEEK</figcaption>
+        </figure>
+        <figure className="stat-card" aria-label="Two million plus families trust us">
           <span className="stat-number" aria-hidden="true">2M+</span>
-          <span className="stat-label">FAMILIES TRUST US</span>
-        </div>
-        <div className="stat-card" role="figure" aria-label="Zero advertisements, ever">
+          <figcaption className="stat-label">FAMILIES TRUST US</figcaption>
+        </figure>
+        <figure className="stat-card" aria-label="Zero advertisements, ever">
           <span className="stat-number" aria-hidden="true">0</span>
-          <span className="stat-label">ADS. EVER.</span>
-        </div>
+          <figcaption className="stat-label">ADS. EVER.</figcaption>
+        </figure>
       </div>
     </section>
   );

@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /download
+Disallow: /download/
 
 Sitemap: https://templegirlkids.com/sitemap.xml
