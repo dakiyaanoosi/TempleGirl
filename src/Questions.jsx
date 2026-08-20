@@ -49,28 +49,17 @@ export default function Questions({ onNavigateRoute }) {
     return () => controller.abort();
   }, []);
 
-  // Continuous ultra-smooth GSAP marquee tween — Issue 06: start at x=0 so first word is never clipped
+  // Continuous ultra-smooth GSAP marquee tween using percentage transform for seamless looping
   useEffect(() => {
     if (!trackRef.current) return;
 
-    const groupEls = trackRef.current.querySelectorAll('.marquee-group');
-    if (!groupEls.length) return;
-
-    // Measure the width of a single group after first paint
-    const singleGroupWidth = groupEls[0].offsetWidth || 0;
-    if (singleGroupWidth === 0) return;
-
-    // Always start at x=0 — first character is always clean/visible
-    gsap.set(trackRef.current, { x: 0 });
+    gsap.set(trackRef.current, { xPercent: 0 });
 
     const marqueeTween = gsap.to(trackRef.current, {
-      x: -singleGroupWidth,
+      xPercent: -50,
       ease: 'none',
       duration: 50,
-      repeat: -1,
-      modifiers: {
-        x: gsap.utils.unitize((value) => parseFloat(value) % singleGroupWidth)
-      }
+      repeat: -1
     });
 
     return () => {
@@ -109,8 +98,9 @@ export default function Questions({ onNavigateRoute }) {
               start: 'top top',
               end: () => `+=${scrollDist}`,
               pin: true,
-              scrub: true,
-              anticipatePin: 1,
+              pinType: 'transform',
+              scrub: 1,
+              anticipatePin: 0,
               invalidateOnRefresh: true
             }
           });

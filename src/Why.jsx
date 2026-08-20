@@ -427,54 +427,18 @@ export default function Why() {
                         <div className="card__face card__face--back" aria-hidden="true" />
                       </div>
 
-                      {/* Desktop Callout Overlay (Absolute Positioned with Leader Line) */}
-                      {!isMobile && index === activeIndex && showCallouts && (() => {
-                        const boxTop = parseInt(card.callout.desktop.boxStyle.top, 10);
-                        const boxLeft = parseInt(card.callout.desktop.boxStyle.left, 10);
-                        const boxWidth = parseInt(card.callout.desktop.boxStyle.width, 10);
-                        const isLeftBox = boxLeft < 0;
-
-                        const endX = isLeftBox ? (boxLeft + boxWidth) : boxLeft;
-                        const endY = boxTop + Math.round(calloutBoxHeight / 2);
-                        const anchor = card.callout.desktop.anchor;
-
-                        // Perfectly balanced Bezier curve: enters callout midpoint 100% horizontally
-                        const dx = endX - anchor.x;
-                        const cp1x = anchor.x + dx * 0.45;
-                        const cp1y = anchor.y;
-                        const cp2x = isLeftBox ? (endX + 35) : (endX - 35);
-                        const cp2y = endY;
-
-                        // Symmetrical Chevron Arrowhead perfectly aligned along horizontal axis
-                        const chvSize = 6;
-                        const chvHeight = 4.5;
-                        const chvX = isLeftBox ? (endX + chvSize) : (endX - chvSize);
-                        const chvY1 = endY - chvHeight;
-                        const chvY2 = endY + chvHeight;
-
-                        const leaderPath = `M ${anchor.x} ${anchor.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endX} ${endY} M ${chvX} ${chvY1} L ${endX} ${endY} L ${chvX} ${chvY2}`;
-
-                        return (
-                          <div className="card-callouts-overlay">
-                            <svg className="callouts-svg-canvas">
-                              <g className="leader-line-group">
-                                <path
-                                  className="leader-line-main"
-                                  d={leaderPath}
-                                />
-                              </g>
-                            </svg>
-
-                            <div
-                              ref={calloutBoxRef}
-                              className="callout-box"
-                              style={card.callout.desktop.boxStyle}
-                            >
-                              <p className="callout-text">{card.callout.desktop.text}</p>
-                            </div>
+                      {/* Desktop Callout Overlay */}
+                      {!isMobile && index === activeIndex && showCallouts && (
+                        <div className="card-callouts-overlay">
+                          <div
+                            ref={calloutBoxRef}
+                            className="callout-box"
+                            style={card.callout.desktop.boxStyle}
+                          >
+                            <p className="callout-text">{card.callout.desktop.text}</p>
                           </div>
-                        );
-                      })()}
+                        </div>
+                      )}
 
                     </div>
                   );

@@ -18,8 +18,8 @@ export default function SmoothScroll({ children, currentPath }) {
   useEffect(() => {
     const instance = new Lenis({
       // Core smooth scrolling
-      duration: 1.2,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
+      duration: 1,
+      easing: (t) => 1 - Math.pow(1 - t, 2.5),
 
       // Scroll direction
       orientation: 'vertical',
@@ -27,7 +27,7 @@ export default function SmoothScroll({ children, currentPath }) {
 
       // Desktop / wheel smooth scrolling
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.15,
 
       // Mobile / touch: use native 120Hz GPU momentum scrolling for ultra-smooth mobile feel
       syncTouch: false,
@@ -50,6 +50,11 @@ export default function SmoothScroll({ children, currentPath }) {
 
     // Disable GSAP's automatic lag correction
     gsap.ticker.lagSmoothing(0);
+
+    // Refresh ScrollTrigger to calculate accurate pin metrics with Lenis
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
 
     return () => {
       gsap.ticker.remove(updateTicker);
