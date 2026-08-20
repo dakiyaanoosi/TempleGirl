@@ -122,7 +122,7 @@ export default function BlurFocusTransition({
           {
             filter: 'blur(0px)',
             opacity: 1,
-            duration: 1.2,
+            duration: 1.8,
             ease: 'power2.out',
             stagger: targets.length > 0 ? 0.1 : 0,
 
