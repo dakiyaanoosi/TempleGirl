@@ -101,11 +101,10 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
 
   return (
     <div className={`music-player-layout ${hasEnded ? 'ended-hidden' : ''}`}>
-      {/* preload="none" prevents the 5MB .aac file from buffering on page load */}
       <audio
         ref={audioRef}
         src="/krishna_the_little_butter_thief.aac"
-        preload="none"
+        preload="auto"
         aria-label="Krishna - The Little Butter Thief story audio"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
