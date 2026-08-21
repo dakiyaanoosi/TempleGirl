@@ -447,12 +447,11 @@
   }
   .callout-box,
   .mobile-callout-container .mobile-callout-flow {
-    background: transparent !important;
-    border: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: var(--blur-glass) !important;
+    -webkit-backdrop-filter: var(--blur-glass) !important;
+    padding: var(--space-4) var(--space-4) !important;
     min-height: 84px !important;
     height: 84px !important;
     display: flex !important;
