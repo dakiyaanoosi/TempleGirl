@@ -20,7 +20,7 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
 
   return (
     <footer className="footer-section" id="fifth-page">
-      <KolamBorder svgClassName="second-page-wave" />
+      <KolamBorder containerClassName="footer-kolam-border" svgClassName="second-page-wave" />
 
       <div className="footer-container">
         {/* Hero CTA Center Content */}
