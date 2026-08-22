@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Footer from './Footer';
 import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
 import './PrivacyPolicy.css';
@@ -7,6 +7,7 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
   const { handleMouseEnter: handleLinkMouseEnter, handleMouseLeave: handleLinkMouseLeave } = useAnimatedUnderline();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const subjectOptions = [
     'Subscription or billing',
@@ -19,6 +20,25 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Close subject options dropdown when clicking anywhere outside or clicking/focusing other fields
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -156,7 +176,7 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
                 </div>
 
                 {/* Field 3: Subject Dropdown — keyboard accessible combobox */}
-                <div className="minimal-field-group">
+                <div ref={dropdownRef} className="minimal-field-group">
                   <div
                     id="minimal-subject"
                     className={`minimal-select-trigger ${isDropdownOpen ? 'open' : ''}`}
