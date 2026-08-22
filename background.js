@@ -26,6 +26,8 @@ export function initShaderBackground(canvas) {
   let animationFrameId = null;
   let isContextLost = false;
   let isCleanedUp = false;
+  let isIntersecting = true;
+  let observer = null;
   let currentWidth = 0;
   let currentHeight = 0;
 
@@ -288,7 +290,7 @@ export function initShaderBackground(canvas) {
   let lastRenderTimestamp = performance.now();
 
   function render(timestamp) {
-    if (isCleanedUp || isContextLost) return;
+    if (isCleanedUp || isContextLost || !isIntersecting) return;
 
     animationFrameId = requestAnimationFrame(render);
 
@@ -307,6 +309,11 @@ export function initShaderBackground(canvas) {
     const cappedDelta = Math.max(0, Math.min(rawDelta, 0.1));
     accumulatedTime += cappedDelta;
 
+    const MAX_ACCUMULATED_TIME = Math.PI * 200;
+    if (accumulatedTime >= MAX_ACCUMULATED_TIME) {
+      accumulatedTime %= MAX_ACCUMULATED_TIME;
+    }
+
     if (gl && program) {
       gl.useProgram(program);
       gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
@@ -324,6 +331,7 @@ export function initShaderBackground(canvas) {
 
   function startAnimationLoop() {
     stopAnimationLoop();
+    if (!isIntersecting) return;
     lastFrameTime = performance.now();
     animationFrameId = requestAnimationFrame(render);
   }
@@ -333,6 +341,11 @@ export function initShaderBackground(canvas) {
     if (!document.hidden) {
       // Re-anchor lastFrameTime so returning from hidden tab doesn't produce time delta spike
       lastFrameTime = performance.now();
+      if (isIntersecting && !isContextLost && !isCleanedUp && animationFrameId === null) {
+        startAnimationLoop();
+      }
+    } else {
+      stopAnimationLoop();
     }
   };
 
@@ -356,6 +369,25 @@ export function initShaderBackground(canvas) {
     return () => {};
   }
 
+  if (typeof IntersectionObserver !== "undefined") {
+    observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const visible = entry ? entry.isIntersecting : true;
+        if (visible !== isIntersecting) {
+          isIntersecting = visible;
+          if (isIntersecting) {
+            startAnimationLoop();
+          } else {
+            stopAnimationLoop();
+          }
+        }
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(canvas);
+  }
+
   window.addEventListener("resize", resize);
   document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost, false);
@@ -369,6 +401,11 @@ export function initShaderBackground(canvas) {
     isCleanedUp = true;
 
     stopAnimationLoop();
+
+    if (observer) {
+      observer.disconnect();
+      observer = null;
+    }
 
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", handleVisibilityChange);

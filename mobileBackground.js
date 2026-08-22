@@ -7,9 +7,9 @@ export function initMobileShaderBackground(canvas) {
   // 1. Rendering Configuration Constants
   const TARGET_FPS = 30;
   const FRAME_INTERVAL = 1000 / TARGET_FPS; // ~33.33ms per frame
-  const MAX_DPR = 1.25;
-  const RENDER_SCALE = 0.8;
-  const MAX_ACCUMULATED_TIME = Math.PI * 20000; // Safe upper bound for accumulated animation time
+  const MAX_DPR = 1.0;
+  const RENDER_SCALE = 0.5;
+  const MAX_ACCUMULATED_TIME = Math.PI * 200; // Safe upper bound (~628s) to preserve mediump float precision
 
   // 2. WebGL Context Initialization Options
   const glOptions = {
@@ -34,6 +34,8 @@ export function initMobileShaderBackground(canvas) {
   let animationFrameId = null;
   let isContextLost = false;
   let isCleanedUp = false;
+  let isIntersecting = true;
+  let observer = null;
   let currentWidth = 0;
   let currentHeight = 0;
 
@@ -300,7 +302,7 @@ export function initMobileShaderBackground(canvas) {
 
   // Render Loop with ~30 FPS Throttle and Bounded Delta Control
   function render(timestamp) {
-    if (isCleanedUp || isContextLost) return;
+    if (isCleanedUp || isContextLost || !isIntersecting) return;
 
     animationFrameId = requestAnimationFrame(render);
 
@@ -346,6 +348,7 @@ export function initMobileShaderBackground(canvas) {
 
   function startAnimationLoop() {
     stopAnimationLoop();
+    if (!isIntersecting) return;
     lastFrameTime = performance.now();
     lastRenderTimestamp = performance.now();
     animationFrameId = requestAnimationFrame(render);
@@ -357,6 +360,11 @@ export function initMobileShaderBackground(canvas) {
       // Reset timestamps on tab focus to avoid time delta spikes
       lastFrameTime = performance.now();
       lastRenderTimestamp = performance.now();
+      if (isIntersecting && !isContextLost && !isCleanedUp && animationFrameId === null) {
+        startAnimationLoop();
+      }
+    } else {
+      stopAnimationLoop();
     }
   };
 
@@ -380,6 +388,25 @@ export function initMobileShaderBackground(canvas) {
     return () => {};
   }
 
+  if (typeof IntersectionObserver !== "undefined") {
+    observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const visible = entry ? entry.isIntersecting : true;
+        if (visible !== isIntersecting) {
+          isIntersecting = visible;
+          if (isIntersecting) {
+            startAnimationLoop();
+          } else {
+            stopAnimationLoop();
+          }
+        }
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(canvas);
+  }
+
   window.addEventListener("resize", resize);
   document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost, false);
@@ -393,6 +420,11 @@ export function initMobileShaderBackground(canvas) {
     isCleanedUp = true;
 
     stopAnimationLoop();
+
+    if (observer) {
+      observer.disconnect();
+      observer = null;
+    }
 
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", handleVisibilityChange);
