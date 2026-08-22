@@ -368,7 +368,7 @@
   }
 }
 
-@media (min-width: 825px) and (max-aspect-ratio: 1.2) {
+@media (min-width: 825px) and (max-aspect-ratio: 0.75) {
   .fourth-page-section {
     height: auto;
     min-height: auto;
