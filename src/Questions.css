@@ -367,3 +367,22 @@
     font-size: 1.25rem;
   }
 }
+
+@media (max-aspect-ratio: 1.2) {
+  .fourth-page-section {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+  }
+  .fourth-page-content {
+    height: auto;
+  }
+  .qna-split-container {
+    height: auto;
+  }
+  .qna-right-wrapper {
+    height: auto;
+    overflow: visible;
+  }
+}
+
