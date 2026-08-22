@@ -386,7 +386,7 @@
   }
 }
 
-@media (max-aspect-ratio: 1.2) {
+@media (min-width: 769px) and (max-aspect-ratio: 1.2) {
   .hero-section {
     min-height: auto;
     padding-top: 100px;
