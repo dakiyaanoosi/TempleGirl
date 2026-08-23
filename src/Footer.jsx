@@ -1,6 +1,14 @@
 import KolamBorder from './KolamBorder';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
 import { isRouteActive } from './utils/routes';
+import {
+  APP_STORE_URL,
+  PLAY_STORE_URL,
+  INSTAGRAM_URL,
+  YOUTUBE_URL,
+  LINKEDIN_URL,
+  FACEBOOK_URL,
+} from './config';
 import './Footer.css';
 
 export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }) {
@@ -14,12 +22,14 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
     if (onNavigateRoute) {
       onNavigateRoute(path);
     } else {
-      window.location.pathname = path;
+      // Fall back to a clean SPA navigation instead of a hard reload
+      window.history.pushState({}, '', path);
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
   };
 
   return (
-    <footer className="footer-section" id="fifth-page">
+    <footer className="footer-section" id="footer-section">
       <KolamBorder containerClassName="footer-kolam-border" svgClassName="second-page-wave" />
 
       <div className="footer-container">
@@ -32,7 +42,7 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
 
           <div className="hero-store-buttons">
             <a
-              href="https://apps.apple.com/us/app/temple-girl-kids/id6772048283"
+              href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn-link"
@@ -40,7 +50,7 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
               <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" width={114} height={38} />
             </a>
             <a
-              href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
+              href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn-link"
@@ -106,10 +116,10 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
 
           {/* Column 2: Social Links & Subscribe */}
           <div className="footer-nav-col">
-            <a href="https://www.instagram.com/thetemplegirl" target="_blank" rel="noopener noreferrer" className="footer-nav-link">Instagram</a>
-            <a href="https://www.youtube.com/@thetemplegirl" target="_blank" rel="noopener noreferrer" className="footer-nav-link">YouTube</a>
-            <a href="https://www.linkedin.com/in/templegirl/" target="_blank" rel="noopener noreferrer" className="footer-nav-link">LinkedIn</a>
-            <a href="https://www.facebook.com/people/The-Temple-Girl/61554364524093/" target="_blank" rel="noopener noreferrer" className="footer-nav-link">Facebook</a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="footer-nav-link">Instagram</a>
+            <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="footer-nav-link">YouTube</a>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="footer-nav-link">LinkedIn</a>
+            <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="footer-nav-link">Facebook</a>
             <button
               type="button"
               className="footer-nav-link"
@@ -123,3 +133,4 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
     </footer>
   );
 }
+

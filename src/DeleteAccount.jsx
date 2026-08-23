@@ -19,9 +19,11 @@ export default function DeleteAccount({ onOpenQrSidebar, onNavigateRoute }) {
           <div className="policy-hero-grid">
             <div className="policy-hero-left">
               <div className="policy-title-group">
-                <h1 className="policy-title-line">Delete</h1>
-                <h1 className="policy-title-line">Your</h1>
-                <h1 className="policy-title-line">Account</h1>
+              <h1 className="policy-title-line">
+                <span style={{ display: 'block' }}>Delete</span>
+                <span style={{ display: 'block' }}>Your</span>
+                <span style={{ display: 'block' }}>Account</span>
+              </h1>
               </div>
 
               <div className="policy-intro-text">

@@ -18,6 +18,13 @@
   --color-border-muted:      #A6A6A6;
   --color-bg-base:           #24100e;
 
+  /* Menu expanded state */
+  --color-menu-bg:           #D8D8E2;   /* Mobile header expanded background */
+
+  /* Custom component colors */
+  --color-lotus-stem:        #8eb331;   /* Lotus stem / vertical lines in Music section */
+
+
   /* Text */
   --color-text-primary:      #ffffff;
   --color-text-muted:        rgba(255, 255, 255, 0.85);

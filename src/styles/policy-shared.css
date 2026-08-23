@@ -5,9 +5,11 @@
  * the layout/base classes (.policy-page, .policy-container, etc.).
  *
  * PrivacyPolicy.css imports this file and adds its own specific rules on top.
+ *
+ * Note: 'Plus Jakarta Sans' is loaded via index.html non-blocking font strategy.
+ * Do NOT add a @import for Google Fonts here — it blocks rendering.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 /* Base page wrapper */
 .policy-page {

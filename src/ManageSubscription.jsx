@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Footer from './Footer';
 import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
+import { APP_STORE_URL, PLAY_STORE_URL } from './config';
 import './styles/policy-shared.css';
 import './ManageSubscription.css';
 
@@ -24,9 +25,9 @@ export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute })
         (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
 
       if (isIOS) {
-        window.open('https://apps.apple.com/us/app/temple-girl-kids/id6772048283', '_blank', 'noopener,noreferrer');
+        window.open(APP_STORE_URL, '_blank', 'noopener,noreferrer');
       } else {
-        window.open('https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl', '_blank', 'noopener,noreferrer');
+        window.open(PLAY_STORE_URL, '_blank', 'noopener,noreferrer');
       }
     } else {
       if (onOpenQrSidebar) {
@@ -42,8 +43,10 @@ export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute })
         {/* Top Hero Section (Flowty Reference Layout) */}
         <section className="sub-hero">
           <div className="sub-hero-title-group">
-            <h1 className="sub-hero-title-line">Manage Your</h1>
-            <h1 className="sub-hero-title-line">Subscription</h1>
+            <h1 className="sub-hero-title-line">
+              <span style={{ display: 'block' }}>Manage Your</span>
+              <span style={{ display: 'block' }}>Subscription</span>
+            </h1>
           </div>
 
           <div className="sub-hero-bottom-row">

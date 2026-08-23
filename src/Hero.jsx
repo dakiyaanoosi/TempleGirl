@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
+import { APP_STORE_URL, PLAY_STORE_URL } from './config';
 import './Hero.css';
 
 const WORDS = [
@@ -116,7 +117,7 @@ export default function Hero({ onOpenQrSidebar }) {
           </p>
           <div className="hero-store-buttons">
             <a
-              href="https://apps.apple.com/us/app/temple-girl-kids/id6772048283"
+              href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn-link"
@@ -124,7 +125,7 @@ export default function Hero({ onOpenQrSidebar }) {
               <img src="/appStore.svg" alt="Download on the App Store" className="store-btn-img" width={114} height={38} />
             </a>
             <a
-              href="https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl"
+              href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="store-btn-link"

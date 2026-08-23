@@ -11,30 +11,42 @@ export default function Reviews() {
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
 
-  // Fetch real review data from public/review.json
+  // Fetch real review data from public/review.json with retry
   useEffect(() => {
     const controller = new AbortController();
+    let isMounted = true;
+
+    async function fetchWithRetry(url, retries = 3, delay = 600) {
+      for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        } catch (err) {
+          if (err.name === 'AbortError') throw err;
+          if (attempt < retries - 1) {
+            await new Promise((r) => setTimeout(r, delay * 2 ** attempt));
+          } else {
+            throw err;
+          }
+        }
+      }
+    }
 
     async function loadReviews() {
       try {
-        const res = await fetch('/review.json', { signal: controller.signal });
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: Failed to fetch review data`);
-        }
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setReviewsData(data);
-        }
+        const data = await fetchWithRetry('/review.json');
+        if (isMounted && Array.isArray(data)) setReviewsData(data);
       } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.error("Failed to load review data:", err);
+        if (isMounted && err.name !== 'AbortError') {
+          console.error('Failed to load review data after retries:', err);
           setFetchError(true);
         }
       }
     }
 
     loadReviews();
-    return () => controller.abort();
+    return () => { isMounted = false; controller.abort(); };
   }, []);
 
   // Mouse Drag to Scroll handlers
@@ -79,7 +91,7 @@ export default function Reviews() {
   };
 
   return (
-    <section className="third-page-section" id="third-page">
+    <section className="third-page-section" id="reviews-section">
       {/* Responsive Top Kolam Wave Border — shared component */}
       <KolamBorder svgClassName="third-page-wave" />
 

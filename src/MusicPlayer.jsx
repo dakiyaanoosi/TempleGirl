@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Play, Pause } from 'lucide-react';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
+import { APP_STORE_URL, PLAY_STORE_URL } from './config';
 import './MusicPlayer.css';
 
 export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
@@ -79,9 +80,9 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
         (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
 
       if (isIOS) {
-        window.open('https://apps.apple.com/us/app/temple-girl-kids/id6772048283', '_blank', 'noopener,noreferrer');
+        window.open(APP_STORE_URL, '_blank', 'noopener,noreferrer');
       } else {
-        window.open('https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl', '_blank', 'noopener,noreferrer');
+        window.open(PLAY_STORE_URL, '_blank', 'noopener,noreferrer');
       }
     } else {
       if (onOpenQrSidebar) {
@@ -104,7 +105,7 @@ export default function MusicPlayer({ onPlayStateChange, onOpenQrSidebar }) {
       <audio
         ref={audioRef}
         src="/krishna_the_little_butter_thief.aac"
-        preload="auto"
+        preload="metadata"
         aria-label="Krishna - The Little Butter Thief story audio"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}

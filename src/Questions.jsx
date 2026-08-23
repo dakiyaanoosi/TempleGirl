@@ -23,30 +23,42 @@ export default function Questions({ onNavigateRoute }) {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
-// Fetch Q&A data from public/qna.json
+// Fetch Q&A data from public/qna.json with retry
   useEffect(() => {
     const controller = new AbortController();
+    let isMounted = true;
+
+    async function fetchWithRetry(url, retries = 3, delay = 600) {
+      for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        } catch (err) {
+          if (err.name === 'AbortError') throw err;
+          if (attempt < retries - 1) {
+            await new Promise((r) => setTimeout(r, delay * 2 ** attempt));
+          } else {
+            throw err;
+          }
+        }
+      }
+    }
 
     async function loadQna() {
       try {
-        const res = await fetch('/qna.json', { signal: controller.signal });
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: Failed to fetch Q&A data`);
-        }
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setQnaData(data);
-        }
+        const data = await fetchWithRetry('/qna.json');
+        if (isMounted && Array.isArray(data)) setQnaData(data);
       } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.error("Failed to load Q&A data:", err);
+        if (isMounted && err.name !== 'AbortError') {
+          console.error('Failed to load Q&A data after retries:', err);
           setQnaError(true);
         }
       }
     }
 
     loadQna();
-    return () => controller.abort();
+    return () => { isMounted = false; controller.abort(); };
   }, []);
 
   // Continuous ultra-smooth GSAP marquee tween using percentage transform for seamless looping
@@ -158,7 +170,7 @@ export default function Questions({ onNavigateRoute }) {
   };
 
   return (
-    <section ref={sectionRef} className="fourth-page-section" id="fourth-page">
+    <section ref={sectionRef} className="fourth-page-section" id="faq-section">
       {/* Infinite Moving Marquee Header powered by GSAP */}
       <div className="fourth-page-marquee-wrapper" aria-hidden="true">
         <div ref={trackRef} className="fourth-page-marquee-track">

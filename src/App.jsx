@@ -48,10 +48,16 @@ const preloadAllRoutes = () => {
 const PageLoader = () => (
   <div className="page-loader" style={{
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    height: '60vh', color: 'rgba(255,255,255,0.85)',
-    fontFamily: "'Manrope', sans-serif", fontSize: '1rem',
+    height: '60vh',
   }}>
-    Loading…
+    <div style={{
+      width: '36px', height: '36px',
+      border: '3px solid rgba(242,184,75,0.2)',
+      borderTop: '3px solid #F2B84B',
+      borderRadius: '50%',
+      animation: 'page-loader-spin 0.75s linear infinite',
+    }} />
+    <style>{`@keyframes page-loader-spin { to { transform: rotate(360deg); } }`}</style>
   </div>
 );
 
@@ -184,6 +190,15 @@ function App() {
       preloadAllRoutes();
     }, 400);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Keep React state in sync when browser Back/Forward buttons are used.
+  // Without this, history.pushState updates the URL but React's currentPath
+  // state diverges from window.location.pathname.
+  useEffect(() => {
+    const handlePop = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
   }, []);
 
   const performDirectNavigate = useCallback((path) => {

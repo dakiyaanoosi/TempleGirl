@@ -1,8 +1,12 @@
 import { Component } from 'react';
+import './ErrorBoundary.css';
 
 /**
  * Top-level error boundary. Catches any unhandled runtime error in the React
  * tree and renders a graceful fallback instead of a blank white screen.
+ *
+ * Error reporting: swap console.error for Sentry.captureException(error, { extra: info })
+ * when an observability platform is added.
  */
 export default class ErrorBoundary extends Component {
   state = { hasError: false };
@@ -13,44 +17,20 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error('[ErrorBoundary] Uncaught error:', error, info.componentStack);
+    // TODO: Sentry.captureException(error, { extra: info });
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            backgroundColor: '#24100e',
-            color: '#ffffff',
-            fontFamily: "'Manrope', sans-serif",
-            gap: '1.2rem',
-            padding: '2rem',
-            textAlign: 'center',
-          }}
-        >
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>
-            Something went wrong
-          </h1>
-          <p style={{ opacity: 0.7, maxWidth: '360px', lineHeight: 1.5 }}>
+        <div className="error-boundary">
+          <h1 className="error-boundary__title">Something went wrong</h1>
+          <p className="error-boundary__message">
             An unexpected error occurred. Please refresh the page to continue.
           </p>
           <button
+            className="error-boundary__btn"
             onClick={() => window.location.reload()}
-            style={{
-              padding: '10px 24px',
-              background: '#F2B84B',
-              color: '#000',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 700,
-              fontSize: '1rem',
-            }}
           >
             Reload Page
           </button>

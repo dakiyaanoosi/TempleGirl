@@ -15,7 +15,7 @@
 }
 
 .pill-header {
-  background: rgba(18, 18, 22, 0.2);
+  background: var(--color-surface-dark);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border-radius: 14px;

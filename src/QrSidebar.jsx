@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useBodyScrollLock } from './hooks/useBodyScrollLock';
+import { DOWNLOAD_URL } from './config';
 import './QrSidebar.css';
 
 export default function QrSidebar({ isOpen, onClose }) {
@@ -11,10 +12,10 @@ export default function QrSidebar({ isOpen, onClose }) {
   // Shared, reference-counted body scroll lock
   useBodyScrollLock(isOpen);
 
+  // Use the canonical production URL so staging/preview builds don't
+  // encode the wrong origin in the QR code.
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setDownloadUrl(`${window.location.origin}/download`);
-    }
+    setDownloadUrl(DOWNLOAD_URL);
   }, []);
 
   // Focus trap + Escape key when sidebar is open

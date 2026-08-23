@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import Footer from './Footer';
 import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
+import { SUPPORT_EMAIL, BUSINESS_EMAIL, COMPANY_ADDRESS } from './config';
 import './PrivacyPolicy.css';
 
 export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
@@ -55,8 +56,10 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
           <div className="policy-hero-grid">
             <div className="policy-hero-left">
               <div className="policy-title-group">
-                <h1 className="policy-title-line">Get in</h1>
-                <h1 className="policy-title-line">Touch</h1>
+              <h1 className="policy-title-line">
+                <span style={{ display: 'block' }}>Get in</span>
+                <span style={{ display: 'block' }}>Touch</span>
+              </h1>
               </div>
 
               <div className="policy-intro-text">
@@ -215,28 +218,35 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
                   </div>
 
                   {isDropdownOpen && (
-                    <div
+                    <ul
                       id="subject-listbox"
                       role="listbox"
                       aria-label="Subject options"
                       className="minimal-dropdown-card"
                     >
                       {subjectOptions.map((opt) => (
-                        <button
+                        <li
                           key={opt}
-                          type="button"
                           role="option"
                           aria-selected={formData.subject === opt}
                           className={`minimal-dropdown-option ${formData.subject === opt ? 'selected' : ''}`}
+                          tabIndex={0}
                           onClick={() => {
                             setFormData({ ...formData, subject: opt });
                             setIsDropdownOpen(false);
                           }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setFormData({ ...formData, subject: opt });
+                              setIsDropdownOpen(false);
+                            }
+                          }}
                         >
                           {opt}
-                        </button>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   )}
                 </div>
 
@@ -245,6 +255,8 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
                   <textarea
                     id="minimal-message"
                     required
+                    aria-required="true"
+                    aria-label="Your Message"
                     className="minimal-textarea"
                     placeholder="Your Message... *"
                     value={formData.message}
@@ -265,7 +277,7 @@ export default function Contact({ onOpenQrSidebar, onNavigateRoute }) {
                       className="policy-animated-link"
                       onClick={(e) => {
                         e.preventDefault();
-                        if (onNavigateRoute) onNavigateRoute('/privacy');
+                        if (onNavigateRoute) onNavigateRoute('/privacy-policy');
                       }}
                       onMouseEnter={handleLinkMouseEnter}
                       onMouseLeave={handleLinkMouseLeave}

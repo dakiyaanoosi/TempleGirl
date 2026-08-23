@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { APP_STORE_URL, PLAY_STORE_URL } from './config';
 import './DownloadRedirect.css';
 
 export default function DownloadRedirect() {
@@ -10,9 +11,9 @@ export default function DownloadRedirect() {
       (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
 
     if (isIOS) {
-      window.location.href = 'https://apps.apple.com/us/app/temple-girl-kids/id6772048283';
+      window.location.href = APP_STORE_URL;
     } else {
-      window.location.href = 'https://play.google.com/store/apps/details?id=com.templegirlkids.templegirl';
+      window.location.href = PLAY_STORE_URL;
     }
   }, []);
 

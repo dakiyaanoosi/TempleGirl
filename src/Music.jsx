@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import KolamBorder from './KolamBorder';
 import MusicPlayer from './MusicPlayer';
+import { useWindowWidth } from './hooks/useWindowWidth';
 import './Music.css';
 
 export default function Music({ onOpenQrSidebar }) {
@@ -17,30 +18,24 @@ export default function Music({ onOpenQrSidebar }) {
   const leftColRef = useRef(null);
   const rightColRef = useRef(null);
 
+  // Use shared useWindowWidth hook — single resize listener across all components
+  const windowWidth = useWindowWidth();
+
+  // Dynamic responsive dimensions derived from windowWidth + direct DOM reads
   const [containerWidth, setContainerWidth] = useState(1200);
   const [linesWidth, setLinesWidth] = useState(600);
   const [playerHeight, setPlayerHeight] = useState(420);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Dynamic responsive listener measuring music player column height & stem width & breakpoint
   useEffect(() => {
-    const updateDimensions = () => {
-      if (sectionRef.current) {
-        setContainerWidth(sectionRef.current.clientWidth || 1200);
-      }
-      if (rightColRef.current) {
-        setLinesWidth(rightColRef.current.clientWidth || 600);
-      }
-      if (leftColRef.current) {
-        const h = leftColRef.current.clientHeight;
-        if (h > 100) setPlayerHeight(h);
-      }
-      setIsMobile(window.innerWidth <= 834);
-    };
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
+    if (sectionRef.current) setContainerWidth(sectionRef.current.clientWidth || 1200);
+    if (rightColRef.current) setLinesWidth(rightColRef.current.clientWidth || 600);
+    if (leftColRef.current) {
+      const h = leftColRef.current.clientHeight;
+      if (h > 100) setPlayerHeight(h);
+    }
+    setIsMobile(windowWidth <= 834);
+  }, [windowWidth]);
 
   // 834px breakpoint adaptation: full container width & standard 180px stem height on mobile/tablet
   const activeLinesWidth = isMobile ? containerWidth : linesWidth;
@@ -115,11 +110,32 @@ export default function Music({ onOpenQrSidebar }) {
     };
 
     gsap.ticker.add(onTick);
-    return () => gsap.ticker.remove(onTick);
+
+    // Pause the ticker when the section is not visible to save CPU
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          gsap.ticker.add(onTick);
+          isVisible = true;
+        } else if (!entry.isIntersecting && isVisible) {
+          gsap.ticker.remove(onTick);
+          isVisible = false;
+        }
+      },
+      { threshold: 0.01 }
+    );
+    const el = sectionRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      gsap.ticker.remove(onTick);
+      observer.disconnect();
+    };
   }, []); // stable — runs once only
 
   return (
-    <section ref={sectionRef} className="second-page-section" id="second-page">
+    <section ref={sectionRef} className="second-page-section" id="music-section">
       {/* Reusable KolamBorder replaces 40 lines of duplicated wave logic */}
       <KolamBorder svgClassName="second-page-wave" />
 

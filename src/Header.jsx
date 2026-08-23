@@ -250,7 +250,7 @@ export default function Header({ currentPath }) {
       }, 0);
 
       tl.to(headerEl, {
-        backgroundColor: '#D8D8E2',
+        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-menu-bg').trim() || '#D8D8E2',
         duration: 0.75,
         ease: 'power2.out',
       }, 0);

@@ -33,11 +33,6 @@ html.lenis body {
 }
 
 /* Completely hide scrollbars across all elements for webkit browsers */
-* {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
-}
-
 ::-webkit-scrollbar,
 *::-webkit-scrollbar {
   display: none !important;

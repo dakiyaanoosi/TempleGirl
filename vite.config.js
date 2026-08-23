@@ -7,6 +7,8 @@ export default defineConfig({
   build: {
     target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
     cssTarget: 'safari14',
+    sourcemap: 'hidden',
+    chunkSizeWarningLimit: 500,
     rollupOptions: {
       output: {
         // Vite 8 / Rollup 4+ requires manualChunks as a function

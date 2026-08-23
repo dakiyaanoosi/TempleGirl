@@ -1,0 +1,17 @@
+{
+  "monthly": {
+    "price": "₹249",
+    "period": "month",
+    "subtext": "Billed every 30 days. Cancel anytime."
+  },
+  "annual": {
+    "price": "₹1,999",
+    "period": "year",
+    "subtext": "Billed once annually (equivalent to ~₹166/month).",
+    "savingsLabel": "• Save 33%"
+  },
+  "free": {
+    "price": "₹0",
+    "subtext": "Forever free. No credit card required."
+  }
+}
