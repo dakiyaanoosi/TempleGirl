@@ -18,7 +18,7 @@ export default function SmoothScroll({ children, currentPath }) {
   useEffect(() => {
     const instance = new Lenis({
       // Core smooth scrolling - subtle, responsive, and natural feel
-      duration: 0.8,
+      duration: 1,
       easing: (t) => 1 - Math.pow(1 - t, 3),
 
       // Scroll direction
