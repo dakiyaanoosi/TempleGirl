@@ -9,20 +9,33 @@ import { useEffect } from 'react';
  */
 const scrollLock = (() => {
   let count = 0;
-  let savedOverflow = '';
+  let savedBodyOverflow = '';
+  let savedHtmlOverflow = '';
 
   return {
     lock() {
       if (count === 0) {
-        savedOverflow = document.body.style.overflow;
+        savedBodyOverflow = document.body.style.overflow;
+        savedHtmlOverflow = document.documentElement.style.overflow;
+
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+
+        if (window.lenis) {
+          window.lenis.stop();
+        }
       }
       count += 1;
     },
     unlock() {
       count = Math.max(0, count - 1);
       if (count === 0) {
-        document.body.style.overflow = savedOverflow;
+        document.body.style.overflow = savedBodyOverflow;
+        document.documentElement.style.overflow = savedHtmlOverflow;
+
+        if (window.lenis) {
+          window.lenis.start();
+        }
       }
     },
   };

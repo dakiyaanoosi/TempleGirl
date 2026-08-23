@@ -17,15 +17,15 @@ export default function SmoothScroll({ children, currentPath }) {
   // Initialize Lenis and synchronize it with GSAP
   useEffect(() => {
     const instance = new Lenis({
-      // Core smooth scrolling
-      duration: 1,
-      easing: (t) => 1 - Math.pow(1 - t, 2.5),
+      // Core smooth scrolling - subtle, responsive, and natural feel
+      duration: 0.8,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
 
       // Scroll direction
       orientation: 'vertical',
       gestureOrientation: 'vertical',
 
-      // Desktop / wheel smooth scrolling
+      // Desktop / wheel smooth scrolling (subtle movement without over-glide)
       smoothWheel: true,
       wheelMultiplier: 1.15,
 
@@ -37,6 +37,7 @@ export default function SmoothScroll({ children, currentPath }) {
     });
 
     setLenis(instance);
+    window.lenis = instance;
 
     // Synchronize Lenis with ScrollTrigger
     instance.on('scroll', ScrollTrigger.update);
@@ -59,6 +60,7 @@ export default function SmoothScroll({ children, currentPath }) {
     return () => {
       gsap.ticker.remove(updateTicker);
       instance.destroy();
+      delete window.lenis;
       setLenis(null);
     };
   }, []);

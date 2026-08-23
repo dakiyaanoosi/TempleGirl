@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { useBodyScrollLock } from './hooks/useBodyScrollLock';
 import { MOCK_PLANS, validateMockCoupon, createMockSubscription } from './services/mockData';
 import './CheckoutModal.css';
 
 export default function CheckoutModal({ isOpen, onClose, planKey = 'annual', onSuccess }) {
+  // Shared, reference-counted body & Lenis scroll lock
+  useBodyScrollLock(isOpen);
   const [step, setStep] = useState(1); // 1: Phone, 2: OTP, 3: Review & Pay (Summary + Coupon + Billing), 4: Success
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -272,8 +275,8 @@ export default function CheckoutModal({ isOpen, onClose, planKey = 'annual', onS
   };
 
   return (
-    <div className="checkout-modal-overlay" onClick={onClose}>
-      <div className="checkout-modal-card" onClick={(e) => e.stopPropagation()}>
+    <div className="checkout-modal-overlay" onClick={onClose} data-lenis-prevent>
+      <div className="checkout-modal-card" onClick={(e) => e.stopPropagation()} data-lenis-prevent>
         <button
           type="button"
           className="checkout-close-btn"

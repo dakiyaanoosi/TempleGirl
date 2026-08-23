@@ -300,6 +300,7 @@ export default function Header({ currentPath }) {
           className="mobile-menu-backdrop"
           onClick={closeMenu}
           aria-hidden="true"
+          data-lenis-prevent
         />
       )}
       <header className={`pill-header-container ${isHidden ? 'header-hidden' : ''}`}>
@@ -380,6 +381,7 @@ export default function Header({ currentPath }) {
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
+              data-lenis-prevent
             >
               <div className="mobile-menu-header">
                 <ul className="mobile-nav-list" role="list">

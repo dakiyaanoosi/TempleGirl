@@ -64,6 +64,7 @@ export default function QrSidebar({ isOpen, onClose }) {
         className={`qr-sidebar-backdrop ${isOpen ? 'open' : ''}`}
         onClick={onClose}
         aria-hidden="true"
+        data-lenis-prevent
       />
       <aside
         ref={sidebarRef}
@@ -71,6 +72,7 @@ export default function QrSidebar({ isOpen, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label="Scan QR code to download Temple Girl Kids"
+        data-lenis-prevent
       >
         <button
           ref={closeBtnRef}

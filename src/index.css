@@ -65,31 +65,6 @@ canvas#shader6-canvas {
   border: 0;
 }
 
-/* Skip navigation link — visible on keyboard focus, bypasses header (WCAG 2.4.1) */
-.skip-link {
-  position: fixed;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #F2B84B;
-  color: #000000;
-  padding: 10px 20px;
-  border-radius: 0 0 10px 10px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  z-index: var(--z-skip-link, 9999);
-  text-decoration: none;
-  transition: top 0.2s ease;
-  white-space: nowrap;
-}
-
-.skip-link:focus {
-  top: 0;
-  outline: 2px solid #000;
-  outline-offset: 2px;
-}
-
 /* Page loader for lazy-loaded route Suspense fallback */
 .page-loader {
   display: flex;

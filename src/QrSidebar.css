@@ -4,6 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -11,6 +12,8 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s linear;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .qr-sidebar-backdrop.open {
@@ -25,6 +28,7 @@
   width: 480px;
   max-width: 90vw;
   height: 100vh;
+  height: 100dvh;
   background: var(--color-menu-bg, #D8D8E2);
   z-index: var(--z-modal, 1000);
   transform: translateX(100%);
@@ -35,6 +39,9 @@
   flex-direction: column;
   color: #111111;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.25);
   font-family: 'Outfit', sans-serif;
 }
