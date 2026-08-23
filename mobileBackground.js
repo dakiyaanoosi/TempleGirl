@@ -383,6 +383,22 @@ export function initMobileShaderBackground(canvas) {
     }
   };
 
+  // 1.5-minute (90s) WebGL process recycling to prevent GPU memory bloat / thermal throttling on mobile
+  const RECYCLE_INTERVAL = 90 * 1000; // 90 seconds (1.5 minutes)
+  let recycleTimer = null;
+
+  function scheduleRecycle() {
+    if (recycleTimer) clearTimeout(recycleTimer);
+    recycleTimer = setTimeout(() => {
+      if (!isCleanedUp && !isContextLost) {
+        const savedTime = accumulatedTime;
+        setupWebGLResources();
+        accumulatedTime = savedTime;
+        scheduleRecycle();
+      }
+    }, RECYCLE_INTERVAL);
+  }
+
   // Initial WebGL Setup
   if (!setupWebGLResources()) {
     return () => {};
@@ -413,11 +429,17 @@ export function initMobileShaderBackground(canvas) {
   canvas.addEventListener("webglcontextrestored", handleContextRestored, false);
 
   startAnimationLoop();
+  scheduleRecycle();
 
   // Robust, Safe Cleanup Function
   return () => {
     if (isCleanedUp) return;
     isCleanedUp = true;
+
+    if (recycleTimer) {
+      clearTimeout(recycleTimer);
+      recycleTimer = null;
+    }
 
     stopAnimationLoop();
 
