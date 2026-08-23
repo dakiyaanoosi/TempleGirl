@@ -30,7 +30,7 @@
 }
 
 .checkout-modal-card {
-  background: rgba(0, 0, 0, 0.5);
+  background: #000;
   border-radius: var(--radius-card, 24px);
   width: 100%;
   max-width: 480px;
