@@ -122,8 +122,8 @@ export default function Footer({ onOpenQrSidebar, onNavigateRoute, currentPath }
             <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="footer-nav-link">Facebook</a>
             <button
               type="button"
-              className="footer-nav-link"
-              onClick={() => { if (onOpenQrSidebar) onOpenQrSidebar(); }}
+              className={`footer-nav-link ${isLinkActive('/subscribe') ? 'active' : ''}`}
+              onClick={() => handleNav('/subscribe')}
             >
               Subscribe
             </button>

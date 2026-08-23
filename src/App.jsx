@@ -9,6 +9,7 @@ import Reviews from './Reviews';
 import Questions from './Questions';
 import Footer from './Footer';
 import QrSidebar from './QrSidebar';
+import CheckoutModal from './CheckoutModal';
 import DownloadRedirect from './DownloadRedirect';
 import SmoothScroll from './SmoothScroll';
 import BlurFocusTransition from './BlurFocusTransition';
@@ -24,6 +25,7 @@ const loadDeleteAccount      = () => import('./DeleteAccount');
 const loadTerms              = () => import('./Terms');
 const loadRefundPolicy       = () => import('./RefundPolicy');
 const loadContact            = () => import('./Contact');
+const loadSubscribe          = () => import('./Subscribe');
 const loadManageSubscription = () => import('./ManageSubscription');
 
 const PrivacyPolicy      = lazy(loadPrivacyPolicy);
@@ -32,6 +34,7 @@ const DeleteAccount      = lazy(loadDeleteAccount);
 const Terms              = lazy(loadTerms);
 const RefundPolicy       = lazy(loadRefundPolicy);
 const Contact            = lazy(loadContact);
+const Subscribe          = lazy(loadSubscribe);
 const ManageSubscription = lazy(loadManageSubscription);
 
 // Helper function to pre-fetch all lazy route chunks in background
@@ -42,28 +45,21 @@ const preloadAllRoutes = () => {
   loadTerms().catch(() => {});
   loadRefundPolicy().catch(() => {});
   loadContact().catch(() => {});
+  loadSubscribe().catch(() => {});
   loadManageSubscription().catch(() => {});
 };
 
 const PageLoader = () => (
-  <div className="page-loader" style={{
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    height: '60vh',
-  }}>
-    <div style={{
-      width: '36px', height: '36px',
-      border: '3px solid rgba(242,184,75,0.2)',
-      borderTop: '3px solid #F2B84B',
-      borderRadius: '50%',
-      animation: 'page-loader-spin 0.75s linear infinite',
-    }} />
-    <style>{`@keyframes page-loader-spin { to { transform: rotate(360deg); } }`}</style>
+  <div className="page-loader">
+    <div className="page-loader-spinner" />
   </div>
 );
 
 function AppInner({ currentPath, performDirectNavigate }) {
   const triggerTransition = useBlurFocusNavigation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [checkoutPlanKey, setCheckoutPlanKey] = useState('annual');
 
   const navigateTo = useCallback((path) => {
     if (triggerTransition) {
@@ -72,6 +68,11 @@ function AppInner({ currentPath, performDirectNavigate }) {
       performDirectNavigate(path);
     }
   }, [triggerTransition, performDirectNavigate]);
+
+  const handleOpenCheckout = (planKey = 'annual') => {
+    setCheckoutPlanKey(planKey);
+    setIsCheckoutOpen(true);
+  };
 
   const renderPage = () => {
     if (isRouteActive(currentPath, ROUTES.CONTACT)) {
@@ -134,12 +135,24 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
+    if (isRouteActive(currentPath, ROUTES.SUBSCRIBE)) {
+      return (
+        <Subscribe
+          onOpenQrSidebar={() => setIsSidebarOpen(true)}
+          onNavigateHome={() => navigateTo('/')}
+          onNavigateRoute={navigateTo}
+          onOpenCheckoutModal={handleOpenCheckout}
+        />
+      );
+    }
+
     if (isRouteActive(currentPath, ROUTES.MANAGE_SUBSCRIPTION)) {
       return (
         <ManageSubscription
           onOpenQrSidebar={() => setIsSidebarOpen(true)}
           onNavigateHome={() => navigateTo('/')}
           onNavigateRoute={navigateTo}
+          onOpenCheckoutModal={handleOpenCheckout}
         />
       );
     }
@@ -175,6 +188,15 @@ function AppInner({ currentPath, performDirectNavigate }) {
       </main>
 
       <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        planKey={checkoutPlanKey}
+        onSuccess={() => {
+          // On subscription success, navigate to Manage Subscription
+          navigateTo('/manage-subscription');
+        }}
+      />
     </NavigationContext.Provider>
   );
 }

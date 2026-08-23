@@ -1,61 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Footer from './Footer';
 import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
-import { APP_STORE_URL, PLAY_STORE_URL } from './config';
 import './styles/policy-shared.css';
 import './ManageSubscription.css';
 
 export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute }) {
   const { handleMouseEnter: handleLinkMouseEnter, handleMouseLeave: handleLinkMouseLeave } = useAnimatedUnderline();
-  const [billingCycle, setBillingCycle] = useState('annual'); // 'monthly' | 'annual'
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleListenFreeClick = () => {
-    const ua = navigator.userAgent || '';
-    const isMobileDevice =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
-      (window.innerWidth <= 768 && 'ontouchstart' in window);
-
-    if (isMobileDevice) {
-      const isIOS =
-        /iPhone|iPad|iPod/i.test(ua) ||
-        (navigator.maxTouchPoints > 1 && /Mac/.test(ua));
-
-      if (isIOS) {
-        window.open(APP_STORE_URL, '_blank', 'noopener,noreferrer');
-      } else {
-        window.open(PLAY_STORE_URL, '_blank', 'noopener,noreferrer');
-      }
-    } else {
-      if (onOpenQrSidebar) {
-        onOpenQrSidebar();
-      }
-    }
-  };
-
   return (
     <div className="policy-page">
       <main className="policy-container">
         
-        {/* Top Hero Section (Flowty Reference Layout) */}
+        {/* Page Hero Header */}
         <section className="sub-hero">
           <div className="sub-hero-title-group">
             <h1 className="sub-hero-title-line">
-              <span style={{ display: 'block' }}>Manage Your</span>
-              <span style={{ display: 'block' }}>Subscription</span>
+              <span className="sub-hero-title-break">Manage Your</span>
+              <span className="sub-hero-title-break">Subscription</span>
             </h1>
           </div>
 
           <div className="sub-hero-bottom-row">
-            {/* Left Description */}
             <p className="sub-hero-desc">
-              All website subscriptions are managed through Razorpay. Sign in with the same mobile number you use in the app.
+              View your active subscription details, renewal date, or cancel auto-renewal. Sign in with your registered mobile number.
             </p>
 
-            {/* Right Side Note & Support */}
             <div className="sub-hero-right">
               <p className="sub-hero-right-note">
                 Need help? Email us at{' '}
@@ -69,192 +42,19 @@ export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute })
                   <span className="policy-animated-underline" />
                 </a>
               </p>
-              <p className="sub-tax-note">
-                All prices are in INR with applicable taxes included at checkout.
-              </p>
             </div>
           </div>
         </section>
 
         <div className="policy-divider" />
 
-        {/* Pricing Section with Top-Centered Toggle Switch */}
-        <section className="sub-pricing-section">
-          <div className="sub-toggle-wrapper">
-            <div className="sub-toggle-container">
-              <button
-                type="button"
-                className={`sub-toggle-option ${billingCycle === 'monthly' ? 'active' : ''}`}
-                onClick={() => setBillingCycle('monthly')}
-              >
-                Monthly
-              </button>
-
-              <button
-                type="button"
-                className={`sub-toggle-option ${billingCycle === 'annual' ? 'active' : ''}`}
-                onClick={() => setBillingCycle('annual')}
-              >
-                Annual <span className="sub-save-text">• Save 33%</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="sub-pricing-grid">
-          
-          {/* Card 1: Basic Free */}
-          <div className="sub-card">
-            <div>
-              <div className="sub-card-header">
-                <h2 className="sub-card-title">Basic Free</h2>
-                <p className="sub-card-desc">
-                  Get started instantly and explore the magical world of Temple Girl Kids with free previews.
-                </p>
-                <div className="sub-price-row">
-                  <span className="sub-price-num">₹0</span>
-                  <span className="sub-price-period">
-                    / {billingCycle === 'monthly' ? 'month' : 'year'}
-                  </span>
-                </div>
-                <div className="sub-price-subtext">Forever free. No credit card required.</div>
-              </div>
-
-              <button
-                type="button"
-                className="sub-cta-btn secondary"
-                onClick={handleListenFreeClick}
-              >
-                Listen Free in App
-              </button>
-            </div>
-
-            <div className="sub-feature-list">
-              <div className="sub-feature-item">
-                <span>1-minute audio previews of all stories</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item">
-                <span>Access to full catalog previews</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item disabled">
-                <span>Full-length story audio (5–8 mins)</span>
-                <span className="sub-icon-cross">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item disabled">
-                <span>Temple Girl Radio 24/7 continuous stream</span>
-                <span className="sub-icon-cross">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item disabled">
-                <span>Sleep timer & background playback</span>
-                <span className="sub-icon-cross">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Premium Plan (Featured) */}
-          <div className="sub-card featured">
-            <div>
-              <div className="sub-card-header">
-                <h2 className="sub-card-title">Premium Access</h2>
-                <p className="sub-card-desc">
-                  Unlock full-length audio stories, 24/7 Temple Girl Radio, sleep timer, and new weekly releases.
-                </p>
-                <div className="sub-price-row">
-                  <span className="sub-price-num">
-                    {billingCycle === 'monthly' ? '₹249' : '₹1,999'}
-                  </span>
-                  <span className="sub-price-period">
-                    / {billingCycle === 'monthly' ? 'month' : 'year'}
-                  </span>
-                </div>
-                <div className="sub-price-subtext">
-                  {billingCycle === 'monthly' 
-                    ? 'Billed every 30 days. Cancel anytime.' 
-                    : 'Billed once annually (equivalent to ~₹166/month).'}
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="sub-cta-btn primary"
-              >
-                Subscribe Now
-              </button>
-            </div>
-
-            <div className="sub-feature-list">
-              <div className="sub-feature-item">
-                <span>Full-length story audio (5–8 mins each)</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item">
-                <span>Temple Girl Radio 24/7 continuous streaming</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item">
-                <span>Sleep timer & uninterrupted audio</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item">
-                <span>100+ cultural & mythological audio stories</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-              <div className="sub-feature-item">
-                <span>Zero ads & child-safe audio experience</span>
-                <span className="sub-icon-check">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </div>
+        {/* Coming Soon Placeholder */}
+        <div className="manage-coming-soon">
+          coming soon
         </div>
-      </section>
 
       </main>
 
-      {/* Docked Footer Navigation */}
       <Footer onOpenQrSidebar={onOpenQrSidebar} onNavigateRoute={onNavigateRoute} currentPath="/manage-subscription" />
     </div>
   );

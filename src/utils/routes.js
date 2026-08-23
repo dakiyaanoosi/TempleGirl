@@ -11,6 +11,7 @@ export const ROUTES = {
   DELETE_ACCOUNT: '/delete-account',
   TERMS: '/terms',
   REFUND: '/refund',
+  SUBSCRIBE: '/subscribe',
   MANAGE_SUBSCRIPTION: '/manage-subscription',
 };
 
@@ -21,6 +22,7 @@ const ROUTE_ALIASES = {
   [ROUTES.DELETE_ACCOUNT]: ['/delete-account', '/pages/account-deletion.html'],
   [ROUTES.TERMS]: ['/terms', '/pages/terms.html'],
   [ROUTES.REFUND]: ['/refund', '/pages/refund.html'],
+  [ROUTES.SUBSCRIBE]: ['/subscribe', '/pages/subscribe.html', '/subscribe.html'],
   [ROUTES.MANAGE_SUBSCRIPTION]: ['/manage-subscription', '/pages/manage-subscription', '/pages/manage-subscription.html'],
 };
 

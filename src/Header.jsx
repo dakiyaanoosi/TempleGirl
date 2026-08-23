@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { handleRadialMouseMove } from './utils/radialMouseMove';
 import { useBodyScrollLock } from './hooks/useBodyScrollLock';
 import { useNavigation } from './NavigationContext';
+import { ROUTES, isRouteActive } from './utils/routes';
 import './Header.css';
 
 export default function Header({ currentPath }) {
@@ -92,6 +93,8 @@ export default function Header({ currentPath }) {
     const path = currentPath || window.location.pathname;
     if (path === '/contact' || path === '/pages/contact.html' || path.endsWith('/contact.html')) {
       setActiveNav('Contact');
+    } else if (path === '/subscribe' || path === '/pages/subscribe.html' || path.endsWith('/subscribe.html')) {
+      setActiveNav('Subscribe');
     } else if (path === '/manage-subscription' || path === '/pages/manage-subscription' || path === '/pages/manage-subscription.html' || path.endsWith('/manage-subscription.html')) {
       setActiveNav('Manage Subscriptions');
     } else if (path === '/') {
@@ -111,6 +114,8 @@ export default function Header({ currentPath }) {
       }
     } else if (label === 'Contact' || label === 'Contacts') {
       navigateTo('/contact');
+    } else if (label === 'Subscribe') {
+      navigateTo('/subscribe');
     } else if (label === 'Manage Subscriptions') {
       navigateTo('/manage-subscription');
     }
@@ -356,8 +361,8 @@ export default function Header({ currentPath }) {
                 <button
                   id="nav-subscribe"
                   type="button"
-                  className={`subscribe-btn ${activeNav === 'Manage Subscriptions' || activeNav === 'SUBSCRIBE' ? 'active' : ''}`}
-                  onClick={() => handleNavClick('Manage Subscriptions')}
+                  className={`subscribe-btn ${activeNav === 'Subscribe' || isRouteActive(currentPath || (typeof window !== 'undefined' ? window.location.pathname : ''), ROUTES.SUBSCRIBE) ? 'active' : ''}`}
+                  onClick={() => handleNavClick('Subscribe')}
                   onMouseMove={handleRadialMouseMove}
                   onMouseEnter={handleRadialMouseMove}
                   onMouseLeave={handleRadialMouseMove}
@@ -425,9 +430,9 @@ export default function Header({ currentPath }) {
               <div className="mobile-menu-footer">
                 <button
                   type="button"
-                  className="mobile-subscribe-btn"
+                  className={`mobile-subscribe-btn ${activeNav === 'Subscribe' || isRouteActive(currentPath || (typeof window !== 'undefined' ? window.location.pathname : ''), ROUTES.SUBSCRIBE) ? 'active' : ''}`}
                   onClick={() => {
-                    handleNavClick('Manage Subscriptions');
+                    handleNavClick('Subscribe');
                     closeMenu();
                   }}
                   onMouseMove={handleRadialMouseMove}

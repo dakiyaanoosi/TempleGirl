@@ -89,3 +89,24 @@ canvas#shader6-canvas {
   outline: 2px solid #000;
   outline-offset: 2px;
 }
+
+/* Page loader for lazy-loaded route Suspense fallback */
+.page-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.page-loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(242, 184, 75, 0.2);
+  border-top: 3px solid #F2B84B;
+  border-radius: 50%;
+  animation: page-loader-spin 0.75s linear infinite;
+}
+
+@keyframes page-loader-spin {
+  to { transform: rotate(360deg); }
+}

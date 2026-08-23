@@ -1,0 +1,559 @@
+/**
+ * CheckoutModal.css — Styling for Checkout & Phone OTP Modal
+ * Driven by TempleGirl's tokens.css design token system
+ */
+
+@import './tokens.css';
+
+.checkout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(10, 10, 15, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: var(--z-skip-link, 9999);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  animation: modal-fade-in 0.25s ease-out forwards;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.checkout-modal-card {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-card, 24px);
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 2rem;
+  position: relative;
+  color: var(--color-text-primary, #ffffff);
+  font-family: 'Manrope', sans-serif;
+  box-sizing: border-box;
+  animation: modal-scale-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom subtle scrollbar for mobile/desktop modal scrolling */
+.checkout-modal-card::-webkit-scrollbar {
+  width: 5px;
+}
+
+.checkout-modal-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.checkout-modal-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.checkout-modal-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes modal-scale-up {
+  from { transform: scale(0.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.checkout-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary, #ffffff);
+  padding: var(--space-1, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: var(--transition-hover);
+}
+
+.checkout-close-btn:hover {
+  background: transparent;
+  opacity: 1;
+}
+
+.checkout-step-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin-bottom: 1.75rem;
+}
+
+.checkout-step-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-menu-bg, #D8D8E2);
+  transition: all 0.3s ease;
+}
+
+.checkout-step-dot.active {
+  background: var(--color-text-primary, #ffffff);
+  width: 24px;
+  border-radius: var(--radius-sm, 4px);
+}
+
+.checkout-step-dot.completed {
+  background: #4ade80;
+}
+
+.checkout-title {
+  font-size: 1.65rem;
+  font-weight: 600;
+  margin: 0 0 var(--space-2, 0.5rem) 0;
+  color: var(--color-text-primary, #ffffff);
+  letter-spacing: -0.02em;
+}
+
+.checkout-subtitle {
+  font-size: var(--text-base, 0.95rem);
+  color: var(--color-text-faint, rgba(255, 255, 255, 0.7));
+  margin: 0 0 1.75rem 0;
+  line-height: 1.45;
+}
+
+/* Plan summary pill inside modal */
+.checkout-plan-summary {
+  background: var(--color-menu-bg, #D8D8E2);
+  border-radius: var(--radius-btn, 14px);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkout-plan-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #000000;
+}
+
+.checkout-plan-period {
+  font-size: var(--text-sm, 0.85rem);
+  color: #000000;
+}
+
+.checkout-plan-price {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #000000;
+}
+
+/* Phone input row & country code (Contact form minimal underline style) */
+.checkout-phone-field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-phone-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.6rem 0;
+  transition: border-color 0.25s ease;
+}
+
+.checkout-phone-input-container:focus-within {
+  border-bottom-color: var(--color-text-primary, #ffffff);
+}
+
+.checkout-phone-prefix {
+  color: var(--color-text-primary, #ffffff);
+  font-size: 1rem;
+  font-weight: 500;
+  user-select: none;
+}
+
+.checkout-minimal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary, #ffffff);
+  font-size: 1rem;
+  font-family: inherit;
+  width: 100%;
+  padding: 0;
+}
+
+.checkout-minimal-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.checkout-minimal-input:-webkit-autofill,
+.checkout-minimal-input:-webkit-autofill:hover, 
+.checkout-minimal-input:-webkit-autofill:focus,
+.checkout-minimal-input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-text-primary, #ffffff) !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 500000s ease-in-out 0s !important;
+  caret-color: var(--color-text-primary, #ffffff) !important;
+}
+
+.checkout-otp-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  gap: 1rem;
+}
+
+.checkout-action-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-faint, rgba(255, 255, 255, 0.7));
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition-color);
+  font-family: inherit;
+}
+
+.checkout-action-btn:hover:not(:disabled) {
+  color: var(--color-text-primary, #ffffff);
+}
+
+.checkout-action-btn:disabled {
+  color: rgba(255, 255, 255, 0.35);
+  cursor: not-allowed;
+}
+
+/* Order Breakdown Card */
+.checkout-breakdown-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-btn, 14px);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.checkout-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--color-text-primary, #fff);
+}
+
+.checkout-breakdown-row.discount {
+  color: #4ade80;
+}
+
+.checkout-breakdown-row.tax {
+  color: var(--color-text-dim, rgba(255, 255, 255, 0.6));
+  font-size: 0.875rem;
+}
+
+.checkout-breakdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0.75rem 0;
+}
+
+.checkout-breakdown-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--color-brand-amber, #f2b84b);
+}
+
+/* Input groups */
+.checkout-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  margin-bottom: 1.25rem;
+}
+
+.checkout-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.8));
+}
+
+/* Billing Details Section (embedded in Review & Pay step) */
+.checkout-billing-section {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-billing-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Static Billing Region label (Static text, no input focus box) */
+.checkout-billing-region-label {
+  color: var(--color-text-primary, #ffffff);
+  font-size: 1rem;
+  font-family: inherit;
+  padding: 0.25rem 0 var(--space-2, 0.5rem) 0;
+  user-select: none;
+}
+
+/* Minimal Select Dropdown with native options UI */
+.checkout-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.checkout-minimal-select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  padding: 0.75rem 1.8rem 0.75rem 0;
+  font-size: 1rem;
+  color: var(--color-text-primary, #ffffff);
+  outline: none;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border-bottom-color 0.25s ease;
+}
+
+.checkout-minimal-select:focus {
+  border-bottom-color: var(--color-text-primary, #ffffff);
+}
+
+.checkout-minimal-select:invalid,
+.checkout-minimal-select option[value=""] {
+  color: var(--color-text-primary, #ffffff);
+}
+
+/* Override Browser Autofill (Chrome/Safari/Edge) White Background on Select & Inputs */
+.checkout-minimal-select:-webkit-autofill,
+.checkout-minimal-select:-webkit-autofill:hover,
+.checkout-minimal-select:-webkit-autofill:focus,
+.checkout-minimal-select:-webkit-autofill:active,
+.checkout-minimal-select:autofill,
+.minimal-input:-webkit-autofill,
+.minimal-input:-webkit-autofill:hover,
+.minimal-input:-webkit-autofill:focus,
+.minimal-input:-webkit-autofill:active,
+.minimal-input:autofill {
+  -webkit-text-fill-color: var(--color-text-primary, #ffffff) !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 500000s ease-in-out 0s !important;
+  caret-color: var(--color-text-primary, #ffffff) !important;
+}
+
+.checkout-select-chevron {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  color: var(--color-text-primary, #ffffff);
+}
+
+.checkout-select-option {
+  background-color: #141414;
+  color: var(--color-text-primary, #ffffff);
+  padding: var(--space-2, 0.5rem);
+  font-size: 0.95rem;
+}
+
+.checkout-billing-tip {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: var(--space-2, 0.5rem);
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* OTP 6-Digit input container (Minimal contact form style single-bottom-line) */
+.checkout-otp-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.checkout-otp-input {
+  width: 42px;
+  height: 48px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  color: var(--color-text-primary, #ffffff);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.25s ease;
+}
+
+.checkout-otp-input:focus {
+  border-bottom-color: var(--color-text-primary, #ffffff);
+}
+
+/* Minimal Coupon Code row (Contact form style single bottom line) */
+.checkout-coupon-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.6rem 0;
+  transition: border-color 0.25s ease;
+  margin-top: 0.25rem;
+}
+
+.checkout-coupon-row:focus-within {
+  border-bottom-color: var(--color-text-primary, #ffffff);
+}
+
+.checkout-minimal-coupon-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary, #ffffff);
+  font-size: 1rem;
+  font-family: inherit;
+  width: 100%;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.checkout-minimal-coupon-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: none;
+}
+
+.checkout-coupon-apply-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-primary, #ffffff);
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+  transition: var(--transition-opacity);
+}
+
+.checkout-coupon-apply-btn:hover {
+  opacity: 0.8;
+}
+
+.checkout-coupon-apply-btn:active {
+  transform: scale(0.96);
+}
+
+/* Capsule Primary Action Button (Contact Form submit button design with grayish bg) */
+.checkout-primary-btn {
+  width: 100%;
+  background: #000;
+  color: var(--color-text-primary, #fff);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.1rem;
+  border-radius: var(--radius-full, 9999px);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 0.5rem);
+  margin-top: 1rem;
+  box-shadow: none;
+  outline: none;
+}
+
+.checkout-primary-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.checkout-primary-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.checkout-highlight-phone {
+  color: var(--color-text-primary, #ffffff);
+}
+
+.checkout-error-text {
+  color: #f87171;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.checkout-success-text {
+  color: #4ade80;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Mobile Responsiveness Overrides */
+@media (max-width: 576px) {
+  .checkout-modal-overlay {
+    padding: 0.75rem;
+  }
+
+  .checkout-modal-card {
+    padding: 1.5rem 1.15rem;
+    max-height: calc(100dvh - 1.5rem);
+    border-radius: 20px;
+  }
+
+  .checkout-title {
+    font-size: 1.4rem;
+  }
+
+  .checkout-subtitle {
+    margin-bottom: 1.25rem;
+  }
+
+  .checkout-billing-section {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .checkout-billing-fields {
+    gap: 1rem;
+  }
+
+  .checkout-otp-row {
+    margin: 1rem 0 1.5rem 0;
+    gap: 0.4rem;
+  }
+
+  .checkout-otp-input {
+    width: 38px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+
+  .checkout-breakdown-card {
+    padding: 1rem;
+  }
+}
