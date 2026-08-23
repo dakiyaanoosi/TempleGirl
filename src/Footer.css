@@ -39,7 +39,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: var(--space-4);
   width: 100%;
   padding: 10px 0;
   box-sizing: border-box;
@@ -51,7 +51,7 @@
   font-weight: 400;
   color: var(--color-text-primary);
   letter-spacing: -0.03em;
-  margin: 0 0 var(--space-5) 0;
+  margin: 0 0 var(--space-2) 0;
   line-height: 1.1;
   word-break: keep-all;   /* Issue 14: prevent awkward mid-word breaks */
 }
@@ -156,13 +156,13 @@
     padding: 0 5vw;
   }
   .footer-subtitle {
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--space-4);
   }
 }
 
 /* Issue 14: explicit small-mobile override to prevent orphan */
 @media (max-width: 480px) {
   .footer-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 }
