@@ -41,3 +41,12 @@ export function isRouteActive(currentPath, targetRoute) {
   const aliases = ROUTE_ALIASES[targetRoute] || [targetRoute];
   return aliases.some((alias) => currentPath === alias || currentPath.endsWith(alias));
 }
+
+/**
+ * Helper to check if currentPath is a valid registered route.
+ * @param {string} currentPath
+ * @returns {boolean}
+ */
+export function isValidRoute(currentPath) {
+  return Object.values(ROUTES).some((route) => isRouteActive(currentPath, route));
+}

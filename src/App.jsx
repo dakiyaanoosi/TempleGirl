@@ -16,7 +16,8 @@ import BlurFocusTransition from './BlurFocusTransition';
 import { useBlurFocusNavigation, BlurFocusContext } from './BlurFocusContext';
 import { NavigationContext } from './NavigationContext';
 
-import { ROUTES, isRouteActive } from './utils/routes';
+import { ROUTES, isRouteActive, isValidRoute } from './utils/routes';
+import NotFound from './NotFound';
 
 // Route-level components: lazy-loaded with explicit preloading helpers
 const loadPrivacyPolicy      = () => import('./PrivacyPolicy');
@@ -60,6 +61,8 @@ function AppInner({ currentPath, performDirectNavigate }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutPlanKey, setCheckoutPlanKey] = useState('annual');
+
+  const isKnownRoute = isValidRoute(currentPath);
 
   const navigateTo = useCallback((path) => {
     if (triggerTransition) {
@@ -157,26 +160,31 @@ function AppInner({ currentPath, performDirectNavigate }) {
       );
     }
 
-    return (
-      <>
-        <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-        <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
-        <Why />
-        <Steps />
-        <Reviews />
-        <Questions onNavigateRoute={navigateTo} />
-        <Footer
-          onOpenQrSidebar={() => setIsSidebarOpen(true)}
-          onNavigateRoute={navigateTo}
-          currentPath={currentPath}
-        />
-      </>
-    );
+    if (isRouteActive(currentPath, ROUTES.HOME)) {
+      return (
+        <>
+          <Hero onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+          <Music onOpenQrSidebar={() => setIsSidebarOpen(true)} />
+          <Why />
+          <Steps />
+          <Reviews />
+          <Questions onNavigateRoute={navigateTo} />
+          <Footer
+            onOpenQrSidebar={() => setIsSidebarOpen(true)}
+            onNavigateRoute={navigateTo}
+            currentPath={currentPath}
+          />
+        </>
+      );
+    }
+
+    // Default fallback for any undefined/unrecognized URL path (404 Lost Path)
+    return <NotFound />;
   };
 
   return (
     <NavigationContext.Provider value={navigateTo}>
-      <Header currentPath={currentPath} />
+      {isKnownRoute && <Header currentPath={currentPath} />}
 
       <main id="main-content">
         <Suspense fallback={<PageLoader />}>
@@ -184,7 +192,7 @@ function AppInner({ currentPath, performDirectNavigate }) {
         </Suspense>
       </main>
 
-      <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      {isKnownRoute && <QrSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />}
       <CheckoutModal
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
