@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
-import Footer from './Footer';
 import { useAnimatedUnderline } from './hooks/useAnimatedUnderline';
 import './styles/policy-shared.css';
 import './ManageSubscription.css';
 
-export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute }) {
+export default function ManageSubscription() {
   const { handleMouseEnter: handleLinkMouseEnter, handleMouseLeave: handleLinkMouseLeave } = useAnimatedUnderline();
 
   useEffect(() => {
@@ -54,8 +53,6 @@ export default function ManageSubscription({ onOpenQrSidebar, onNavigateRoute })
         </div>
 
       </main>
-
-      <Footer onOpenQrSidebar={onOpenQrSidebar} onNavigateRoute={onNavigateRoute} currentPath="/manage-subscription" />
     </div>
   );
 }

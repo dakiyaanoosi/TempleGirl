@@ -453,7 +453,7 @@
     -webkit-backdrop-filter: var(--blur-glass) !important;
     padding: var(--space-4) var(--space-4) !important;
     min-height: 84px !important;
-    height: 84px !important;
+    height: auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -470,7 +470,8 @@
   }
   .mobile-callout-container {
     margin-top: 12px !important;
-    height: 84px !important;
+    min-height: 84px !important;
+    height: auto !important;
   }
   .why-main-title {
     gap: var(--space-2);

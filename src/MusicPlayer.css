@@ -112,6 +112,7 @@
   letter-spacing: -0.01em;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   text-align: left;
+  overflow-wrap: break-word;
 }
 
 .player-track-artist {
@@ -122,6 +123,7 @@
   margin: 0;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
   text-align: left;
+  overflow-wrap: break-word;
 }
 
 /* Bottom Area: Unified Lockstep Upward Motion */
@@ -183,14 +185,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 46px;
+  min-height: 46px;
+  height: auto;
   background: #000000;
   border: 1.5px solid #A6A6A6;
   border-radius: 8px;
   color: #ffffff;
   cursor: pointer;
   outline: none;
-  padding: 0 24px;
+  padding: 10px 24px;
   font-family: 'Manrope', sans-serif;
   font-size: 0.92rem;
   font-weight: 700;
