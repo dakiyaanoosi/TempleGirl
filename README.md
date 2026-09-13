@@ -1,1 +1,2 @@
-# Redesign of [templegirl.com](https://templegirl.com/)
+# Redesign of <a href="https://templegirl.com/" target="_blank" rel="noopener noreferrer">templegirl.com</a>
+
