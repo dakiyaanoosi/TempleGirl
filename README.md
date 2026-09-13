@@ -1,1 +1,1 @@
-# Redesign of [templegirl.com](templegirl.com)
+# Redesign of [templegirl.com](https://templegirl.com/)
